@@ -89,12 +89,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\Test\StarBinder.csproj">
-      <Project>{0AFDB281-ACF1-4B60-8FCA-160A212EBB3D}</Project>
-      <Name>StarBinder</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidAsset Include="Assets\Content\fonts\arial-22.xnb" />
     <AndroidAsset Include="Assets\Content\images\ld\kosmos.png" />
     <AndroidAsset Include="Assets\Content\images\hd\back.png" />
@@ -119,5 +113,11 @@
     <AndroidAsset Include="Assets\Content\images\hd\lock.png" />
     <AndroidAsset Include="Assets\Content\images\hd\logo.png" />
     <AndroidAsset Include="Assets\Content\levels\level1.lvl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StarBinder\StarBinder.csproj">
+      <Project>{0AFDB281-ACF1-4B60-8FCA-160A212EBB3D}</Project>
+      <Name>StarBinder</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
