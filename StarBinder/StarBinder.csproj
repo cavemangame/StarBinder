@@ -45,7 +45,20 @@
     <Compile Include="Level.cs" />
     <Compile Include="GameManager.cs" />
     <Compile Include="Controls\LevelNode.cs" />
-    <Compile Include="Controls\PlayerName.cs" />
+    <Compile Include="CCControlExtension\CCControl.cs" />
+    <Compile Include="CCControlExtension\CCControlButton.cs" />
+    <Compile Include="CCControlExtension\CCControlColourPicker.cs" />
+    <Compile Include="CCControlExtension\CCControlHuePicker.cs" />
+    <Compile Include="CCControlExtension\CCControlPotentiometer.cs" />
+    <Compile Include="CCControlExtension\CCControlSaturationPicker.cs" />
+    <Compile Include="CCControlExtension\CCControlSlider.cs" />
+    <Compile Include="CCControlExtension\CCControlStepper.cs" />
+    <Compile Include="CCControlExtension\CCControlSwitch.cs" />
+    <Compile Include="CCControlExtension\CCControlUtils.cs" />
+    <Compile Include="CCControlExtension\CCInvocation.cs" />
+    <Compile Include="CCControlExtension\CCScale9Sprite.cs" />
+    <Compile Include="CCControlExtension\CCScale9SpriteFile.cs" />
+    <Compile Include="CCControlExtension\CCScale9SpriteFrame.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
@@ -70,5 +83,6 @@
   <ItemGroup>
     <Folder Include="Scenes\" />
     <Folder Include="Controls\" />
+    <Folder Include="CCControlExtension\" />
   </ItemGroup>
 </Project>

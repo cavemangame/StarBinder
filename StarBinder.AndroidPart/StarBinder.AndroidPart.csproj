@@ -113,6 +113,7 @@
     <AndroidAsset Include="Assets\Content\images\hd\lock.png" />
     <AndroidAsset Include="Assets\Content\images\hd\logo.png" />
     <AndroidAsset Include="Assets\Content\levels\level1.lvl" />
+    <AndroidAsset Include="Assets\Content\images\hd\kosmos.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StarBinder\StarBinder.csproj">

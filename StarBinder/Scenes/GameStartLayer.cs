@@ -14,8 +14,6 @@ namespace StarBinder
 		private CCSprite _achievementsBtn;
 		private CCSprite _exitBtn;
 
-		private PlayerName _playerName;
-
 		public GameStartLayer () : base ()
 		{
 			Color = CCColor3B.Black;
@@ -35,8 +33,7 @@ namespace StarBinder
 			_logo.Position = VisibleBoundsWorldspace.Center.Offset(0f, 200f);
 			CCRect rect = ScreenResolutionManager.Instance.GetRect (new CCRect (0.2f, 0.4f, 1f, 0.6f));
 			_logo.Scale = rect.Size.Width / _logo.BoundingBox.Size.Width;
-
-		//	_playerName = new PlayerName (100, ScreenResolutionManager.Instance.Height - 100);
+		
 
 			GameManager.Instance.Player.LoadPlayer ();
 			AddButtons();
@@ -49,7 +46,7 @@ namespace StarBinder
 			AddChild (_achievementsBtn);
 			AddChild (_exitBtn);
 			AddChild (_logo);
-		//	AddChild (_playerName);
+
 		}
 
 		private void AddButtons ()
@@ -58,6 +55,8 @@ namespace StarBinder
 			CCRect rect = ScreenResolutionManager.Instance.GetRect (new CCRect (0.1f, 0.1f, 0.14f, 0.14f));
 			_levelsBtn.Scale = rect.Size.Width / _levelsBtn.BoundingBox.Size.Width;
 			_levelsBtn.Position = new CCPoint (rect.MinX, rect.MinY);
+
+
 
 			_optionsBtn = new CCSprite ("options");
 			rect = ScreenResolutionManager.Instance.GetRect (new CCRect (0.3f, 0.1f, 0.14f, 0.14f));
@@ -123,17 +122,7 @@ namespace StarBinder
 				break;
 			}
 		}
-
-		private void OnTouchesEnded (List<CCTouch> touches, CCEvent touchEvent)
-		{
-			/* bool doesBallOverlapPaddle = ballSprite.BoundingBoxTransformedToParent.IntersectsRect(
-        paddleSprite.BoundingBoxTransformedToParent);*/
-
-			var location = touches [0].LocationOnScreen;
-			location = WorldToScreenspace (location);  //Layer.WorldToScreenspace(location); 
-
-		}
-
+			
 		public static CCScene GameStartLayerScene (CCWindow mainWindow)
 		{
 			var scene = new CCScene (mainWindow);

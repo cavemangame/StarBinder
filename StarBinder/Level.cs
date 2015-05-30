@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using PCLStorage;
+using System.Linq;
 
 namespace StarBinder
 {
@@ -41,6 +42,11 @@ namespace StarBinder
 			X = x;
 			Y = y;
 		}
+
+		public Star Clone()
+		{
+			return new Star (this.Number, this.State, this.X, this.Y);
+		}
 	}
 
 	/// <summary>
@@ -76,6 +82,16 @@ namespace StarBinder
 		{
 			StarNum1 = starNum1;
 			StarNum2 = starNum2;
+			StarBind1 = 0;
+			StarBind2 = 0;
+		}
+
+		public Bind Clone()
+		{
+			Bind bind = new Bind (this.StarNum1, this.StarNum2);
+			bind.StarBind1 = this.StarBind1;
+			bind.StarBind2 = this.StarBind2;
+			return bind;
 		}
 	}
 
@@ -120,10 +136,29 @@ namespace StarBinder
 		/// <value>The steps2.</value>
 		public int Steps2 { get; set; }
 
-		// stars and binds
+		/// <summary>
+		/// Level's stars.
+		/// </summary>
+		/// <value>The stars.</value>
 		public List<Star> Stars {get;set;}
 
+		/// <summary>
+		/// Level binds between stars
+		/// </summary>
+		/// <value>The binds.</value>
 		public List<Bind> Binds { get; set; }
+
+		/// <summary>
+		/// Max number of star state
+		/// </summary>
+		/// <value>The state of the max.</value>
+		public int MaxState { get; set; }
+
+		/// <summary>
+		/// Winning state of level (all stars should be in this state to win)
+		/// </summary>
+		/// <value>The state of the window.</value>
+		public int WinState { get; set; }
 
 		public Level (int number)
 		{
@@ -132,8 +167,7 @@ namespace StarBinder
 		}
 
 		public void InitLevel()
-		{
-			
+		{			
 			LoadFromFile ();
 		}
 
@@ -162,9 +196,81 @@ namespace StarBinder
 			}
 			catch (Exception ex) 
 			{
-				//
+				
 			}
 		}
+
+		/// <summary>
+		/// Gets the neighbors stars of current star.
+		/// </summary>
+		/// <returns>The neighbors.</returns>
+		/// <param name="star">Star.</param>
+		public List<Star> GetNeighbors(Star star)
+		{
+			int num = star.Number;
+			List<Star> neighbors = new List<Star> ();
+			foreach (Bind bind in Binds) 
+			{
+				if (bind.StarNum1 == star.Number)
+					neighbors.Add (Stars.FirstOrDefault (s => s.Number == bind.StarNum2));
+				if (bind.StarNum2 == star.Number)
+					neighbors.Add (Stars.FirstOrDefault (s => s.Number == bind.StarNum1));
+			}
+			return neighbors;
+		}
+
+		public void NextState (Star star)
+		{
+			var neighbors = GetNeighbors (star);
+			foreach (Star n in neighbors) 
+			{
+				if (n != null)
+				{
+					n.State++;
+					if (n.State > MaxState)
+						n.State = 0;
+				}
+			}
+		}
+
+		public bool IsWinLevel()
+		{
+			foreach (Star s in Stars)
+			{
+				if (s.State != WinState)
+					return false;
+			}
+			return true;
+		}
+
+		public Level Clone()
+		{
+			Level level = new Level (this.Number);
+			level.Chapter = this.Chapter;
+			level.Name = String.Format("{0}", this.Name);
+			level.Description =  String.Format("{0}", this.Description);
+			level.MaxState = this.MaxState;
+			level.Number = this.Number;
+			level.Steps1 = this.Steps1;
+			level.Steps2 = this.Steps2;
+			level.WinState = this.WinState;
+
+			level.Stars = new List<Star> ();
+			foreach (Star star in this.Stars)
+			{
+				level.Stars.Add (star.Clone ());
+			}
+
+			level.Binds = new List<Bind> ();
+			foreach (Bind bind in this.Binds)
+			{
+				level.Binds.Add (bind.Clone ());
+			}
+
+			return level;
+		}
+
+
 
 		private const string TestLevelInfo =
 @"LEVEL_NUM=1

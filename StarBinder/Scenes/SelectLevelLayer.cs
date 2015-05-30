@@ -32,7 +32,7 @@ namespace StarBinder
 
 			_levelNodes = new List<LevelNode> ();
 
-			_background = new CCSprite ("kosmos1");
+			_background = new CCSprite ("kosmos");
 			_background.Position = VisibleBoundsWorldspace.Center;
 
 			AddButtons ();	

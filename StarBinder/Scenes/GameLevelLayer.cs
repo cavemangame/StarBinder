@@ -6,6 +6,7 @@ namespace StarBinder
 {
 	public class GameLevelLayer: CCLayerColor, IPageScene
 	{
+		// buttons
 		private CCSprite _background;
 		private CCSprite _backBtn;
 		private CCSprite _optionsBtn;
@@ -13,8 +14,15 @@ namespace StarBinder
 		private CCSprite _achievementsBtn;
 		private CCSprite _restartBtn;
 
+		// stars on screen 
 		private Dictionary<int, CCSprite> _stars;
-		private List<CCSprite> _binds;
+		// binds in screen
+		private List<CCDrawingPrimitives> _binds;
+
+		// current level in intial state 
+		private Level _initLevel;
+		// current level
+		private Level _level;
 
 		public GameLevelLayer() : base()
 		{
@@ -27,8 +35,10 @@ namespace StarBinder
 			base.AddedToScene ();
 
 			Scene.SceneResolutionPolicy = CCSceneResolutionPolicy.ShowAll;
+			_stars = new Dictionary<int, CCSprite> ();
+			_binds = new List<CCDrawingPrimitives> ();
 
-			_background = new CCSprite ("kosmos1");
+			_background = new CCSprite ("kosmos");
 			_background.Position = VisibleBoundsWorldspace.Center;
 
 			AddButtons ();
@@ -39,6 +49,8 @@ namespace StarBinder
 			AddChild (_optionsBtn);
 			AddChild (_helpBtn);
 			AddChild (_achievementsBtn);
+
+			InitLevel ();
 		}
 
 		private void AddButtons ()
@@ -88,6 +100,40 @@ namespace StarBinder
 					//	NextScene (null);
 				}
 			});
+		}
+
+		private void InitLevel()
+		{
+			// load current level
+			_initLevel = new Level (GameManager.Instance.CurrentLevel);
+			_initLevel.InitLevel ();
+			RefreshLevel ();
+			DrawLevel ();
+		}
+
+		private void RefreshLevel()
+		{
+			_level = _initLevel.Clone();
+		}
+
+		private void DrawLevel()
+		{
+			// remove all
+			foreach (var pair in _stars) 
+			{
+				RemoveChild (pair.Value);
+			}
+
+			// add stars
+			foreach (var s in _level.Stars) 
+			{
+				CCSprite star = new CCSprite ("stars_0");
+				CCRect rect = ScreenResolutionManager.Instance.GetRect (new CCRect (s.X, s.Y, 0.1f, 0.1f));
+				star.Scale = rect.Size.Width / star.BoundingBox.Size.Width;
+				star.Position = new CCPoint (rect.MinX, rect.MinY);
+
+				AddChild (star);
+			}
 		}
 
 		public void NextScene(Scenes? nextScene)

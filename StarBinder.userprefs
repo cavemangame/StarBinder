@@ -1,12 +1,12 @@
 ﻿<Properties StartupItem="StarBinder.AndroidPart\StarBinder.AndroidPart.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.AVD_GalaxyNexus_ToolsForApacheCordova" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="StarBinder\Scenes\GameLevelLayer.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.Nexus 7 (KitKat)" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="StarBinder\Scenes\GameStartLayer.cs">
     <Files>
-      <File FileName="C:\Program Files (x86)\MSBuild\12.0\bin\Microsoft.Common.CurrentVersion.targets" Line="1492" Column="5" />
-      <File FileName="StarBinder\Player.cs" Line="55" Column="21" />
-      <File FileName="StarBinder\Level.cs" Line="163" Column="21" />
-      <File FileName="StarBinder\Scenes\GameStartLayer.cs" Line="17" Column="22" />
-      <File FileName="StarBinder\Scenes\GameLevelLayer.cs" Line="28" Column="4" />
+      <File FileName="StarBinder\CCControlExtension\CCScale9Sprite.cs" Line="316" Column="4" />
+      <File FileName="StarBinder\CCControlExtension\CCControl.cs" Line="174" Column="1" />
+      <File FileName="StarBinder\CCControlExtension\CCControlButton.cs" Line="148" Column="1" />
+      <File FileName="StarBinder\Scenes\GameStartLayer.cs" Line="120" Column="1" />
+      <File FileName="d:\Git\StarBinder\StarBinder.AndroidPart\MainActivity.cs" Line="42" Column="19" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
