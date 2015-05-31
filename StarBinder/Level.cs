@@ -160,9 +160,17 @@ namespace StarBinder
 		/// <value>The state of the window.</value>
 		public int WinState { get; set; }
 
+		/// <summary>
+		/// Solution path (star nums)
+		/// </summary>
+		/// <value>The solution path.</value>
+		public string SolutionPath { get; set; }
+
 		public Level (int number)
 		{
 			Number = number;
+			Stars = new List<Star> ();
+			Binds = new List<Bind> ();
 			Chapter = GetChapter (Number);
 		}
 
@@ -189,16 +197,106 @@ namespace StarBinder
 			IFolder rootFolder = FileSystem.Current.LocalStorage;
 			try
 			{
-				IFile file = await rootFolder.GetFileAsync(String.Format("/levels/level{0}.lvl", Number));
+				/*IFile file = await rootFolder.GetFileAsync(String.Format("/levels/level{0}.lvl", Number));
 				string text = await file.ReadAllTextAsync();
-				string[] lines = text.Split ('\n');
-			
+				LoadLevel(text);*/
+				LoadLevel(TestLevelInfo);
 			}
 			catch (Exception ex) 
 			{
 				
 			}
 		}
+
+		private void LoadLevel(string text)
+		{
+			string[] lines = text.Split ('\n');
+			// base level data
+			this.Number = Convert.ToInt32 (RightValue(lines [0]));
+			this.Name = String.Format ("{0}", RightValue(lines [1]));
+			this.Description = String.Format ("{0}", RightValue(lines [2]));
+			this.Steps1 = Convert.ToInt32 (RightValue(lines [3]));
+			this.Steps2 = Convert.ToInt32 (RightValue(lines [4]));
+			this.WinState = Convert.ToInt32 (RightValue(lines [5]));
+
+			// stars
+			int idx = 7;
+			Stars = new List<Star> ();
+			while (idx < lines.Length) 
+			{
+				if (lines [idx] == "[BINDS]")
+					break;
+				LoadStar (lines[idx]);
+				idx++;
+			}
+
+			idx++;
+			// binds
+			Binds = new List<Bind>();
+			while (idx < lines.Length) 
+			{
+				if (lines [idx] == "[SOLUTION]")
+					break;
+				LoadBind (lines[idx]);
+				idx++;
+			}
+				
+			GetSolution (lines [++idx]);
+		}
+
+		private string RightValue(string line)
+		{
+			return line.Substring (line.LastIndexOf ('=') + 1);
+		}
+
+		private void LoadStar(string text)
+		{
+			string[] strs = text.Split(';');
+			if (strs.Length != 4)
+				throw new ArgumentException ("Invalid data for the star!");
+			Stars.Add (new Star (
+				            Convert.ToInt32 (RightValue (strs [0])),
+				            Convert.ToInt32 (RightValue (strs [3])),
+				            Convert.ToSingle (RightValue (strs [1])),
+							Convert.ToSingle (RightValue (strs [2]))));
+		}
+
+		private void LoadBind(string text)
+		{
+			string[] strs = text.Split(';');
+			if (strs.Length != 4)
+				throw new ArgumentException ("Invalid data for the bind!");
+			Binds.Add (new Bind (
+				Convert.ToInt32 (RightValue (strs [0])),
+				Convert.ToInt32 (RightValue (strs [1]))) 
+				{
+					StarBind1 = Convert.ToInt32 (RightValue (strs [2])),
+					StarBind2 = Convert.ToInt32 (RightValue (strs [2]))
+				});
+		}
+
+		private void GetSolution(string text)
+		{
+			if (text != null)
+				SolutionPath = RightValue (text);
+		}
+
+
+		private const string TestLevelInfo =
+			@"LEVEL_NUM=1
+NAME=THREE STARS
+DESCRIPTION=Test level
+STEPS1=1
+STEPS2=3
+WIN_STATE=0
+[STARS]
+NUM=1;X=0.4;Y=0.75;STATE=1
+NUM=2;X=0.75;Y=0.5;STATE=1
+NUM=3;X=0.25;Y=0.35;STATE=0
+[BINDS]
+NUM1=1;NUM2=2;BIND1=0;BIND2=0
+NUM1=2;NUM2=3;BIND1=0;BIND2=0
+[SOLUTION]=1";
 
 		/// <summary>
 		/// Gets the neighbors stars of current star.
@@ -269,25 +367,6 @@ namespace StarBinder
 
 			return level;
 		}
-
-
-
-		private const string TestLevelInfo =
-@"LEVEL_NUM=1
-NAME=THREE STARS
-DESCRIPTION=Test level
-STEPS1=1
-STEPS2=3
-WIN_STATE=0
-[STARS]
-NUM=1;X=0.3;Y=0.6;STATE=1
-NUM=2;X=0.75;Y=0.4;STATE=1
-NUM=3;X=0.25;Y=0.25;STATE=0
-[BINDS]
-NUM1=1;NUM2=2;BIND1=0;BIND2=0
-NUM1=2;NUM2=3;BIND1=0;BIND2=0
-[SOLUTION]=1";
-
 	}
 }
 

@@ -124,10 +124,17 @@ namespace StarBinder
 				RemoveChild (pair.Value);
 			}
 
+			var r = new System.Random ();
 			// add stars
 			foreach (var s in _level.Stars) 
 			{
-				CCSprite star = new CCSprite ("stars_0");
+				double d = r.NextDouble();
+				int seed = 1;
+				if (d > 0.33)
+					seed = 2;
+				if (d > 0.66)
+					seed = 3;
+				CCSprite star = new CCSprite (String.Format("star_{0}_{1}", seed, s.State == _level.WinState ? 0 : 1));
 				CCRect rect = ScreenResolutionManager.Instance.GetRect (new CCRect (s.X, s.Y, 0.1f, 0.1f));
 				star.Scale = rect.Size.Width / star.BoundingBox.Size.Width;
 				star.Position = new CCPoint (rect.MinX, rect.MinY);

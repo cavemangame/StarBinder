@@ -114,6 +114,12 @@
     <AndroidAsset Include="Assets\Content\images\hd\logo.png" />
     <AndroidAsset Include="Assets\Content\levels\level1.lvl" />
     <AndroidAsset Include="Assets\Content\images\hd\kosmos.png" />
+    <AndroidAsset Include="Assets\Content\images\hd\star_1_0.png" />
+    <AndroidAsset Include="Assets\Content\images\hd\star_1_1.png" />
+    <AndroidAsset Include="Assets\Content\images\hd\star_2_0.png" />
+    <AndroidAsset Include="Assets\Content\images\hd\star_2_1.png" />
+    <AndroidAsset Include="Assets\Content\images\hd\star_3_0.png" />
+    <AndroidAsset Include="Assets\Content\images\hd\star_3_1.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StarBinder\StarBinder.csproj">

@@ -168,8 +168,24 @@ namespace StarBinder
 							AddLevels();
 						}
 					}
+					else 
+					{
+						CheckTouchLevel(location);
+					}
 				}
 			});
+		}
+
+		private void CheckTouchLevel(CCPoint location)
+		{
+			foreach (LevelNode level in _levelNodes) 
+			{
+				if (level.BoundingBoxTransformedToWorld.ContainsPoint (location)) 
+				{
+					GameManager.Instance.CurrentLevel = level.LevelNumber;
+					NextScene (Scenes.LEVEL);
+				}
+			}
 		}
 
 		public void NextScene(Scenes? nextScene)

@@ -12,6 +12,8 @@ namespace StarBinder
 		private CCSprite _lockSprite;
 		private int _levelNum;
 
+		public int LevelNumber {get { return _levelNum; }}
+
 		public LevelNode (int x, int y, int levelNum)
 		{
 			_x = x;
@@ -44,6 +46,8 @@ namespace StarBinder
 			// set bounding box for node
 			Position = new CCPoint (r1.MinX, r1.MinY);
 			Scale =  r1.Size.Width / _bgSprite.BoundingBox.Size.Width;
+
+			ContentSize = r1.Size;
 
 			// set player stars
 			string starName = "stars_0";
