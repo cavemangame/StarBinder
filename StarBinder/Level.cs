@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using PCLStorage;
 using System.Linq;
+using CocosSharp;
 
 namespace StarBinder
 {
@@ -41,6 +42,11 @@ namespace StarBinder
 			State = initState;
 			X = x;
 			Y = y;
+		}
+
+		public CCPoint GetPoint ()
+		{
+			return new CCPoint (X, Y);
 		}
 
 		public Star Clone()
@@ -218,13 +224,14 @@ namespace StarBinder
 			this.Steps1 = Convert.ToInt32 (RightValue(lines [3]));
 			this.Steps2 = Convert.ToInt32 (RightValue(lines [4]));
 			this.WinState = Convert.ToInt32 (RightValue(lines [5]));
+			this.MaxState = Convert.ToInt32 (RightValue(lines [6]));
 
 			// stars
-			int idx = 7;
+			int idx = 8;
 			Stars = new List<Star> ();
 			while (idx < lines.Length) 
 			{
-				if (lines [idx] == "[BINDS]")
+				if (lines [idx].StartsWith("[BINDS]"))
 					break;
 				LoadStar (lines[idx]);
 				idx++;
@@ -289,6 +296,7 @@ DESCRIPTION=Test level
 STEPS1=1
 STEPS2=3
 WIN_STATE=0
+MAX_STATE=1
 [STARS]
 NUM=1;X=0.4;Y=0.75;STATE=1
 NUM=2;X=0.75;Y=0.5;STATE=1
@@ -317,8 +325,27 @@ NUM1=2;NUM2=3;BIND1=0;BIND2=0
 			return neighbors;
 		}
 
-		public void NextState (Star star)
+		public List<Star> GetBindStars(Bind bind)
 		{
+			List<Star> stars = new List<Star> ();
+			foreach (Star star in Stars) 
+			{
+				if (star.Number == bind.StarNum1 || star.Number == bind.StarNum2)
+					stars.Add (star);
+			}
+			return stars;
+		}
+
+		/// <summary>
+		/// Set all neighbors of star and star itself to next state
+		/// </summary>
+		/// <param name="star">Star number.</param>
+		public void NextState (int number)
+		{
+			Star star = GetStar (number);
+			if (star == null)
+				return;
+			
 			var neighbors = GetNeighbors (star);
 			foreach (Star n in neighbors) 
 			{
@@ -329,6 +356,19 @@ NUM1=2;NUM2=3;BIND1=0;BIND2=0
 						n.State = 0;
 				}
 			}
+			star.State++;
+			if (star.State > MaxState)
+				star.State = 0;
+		}
+
+		public Star GetStar(int number)
+		{
+			foreach (Star star in Stars) 
+			{
+				if (star.Number == number)
+					return star;
+			}
+			return null;
 		}
 
 		public bool IsWinLevel()

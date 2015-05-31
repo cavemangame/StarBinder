@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using CocosSharp;
 
 namespace StarBinder
@@ -17,7 +18,7 @@ namespace StarBinder
 		// stars on screen 
 		private Dictionary<int, CCSprite> _stars;
 		// binds in screen
-		private List<CCDrawingPrimitives> _binds;
+		private List<CCDrawNode> _binds;
 
 		// current level in intial state 
 		private Level _initLevel;
@@ -36,7 +37,7 @@ namespace StarBinder
 
 			Scene.SceneResolutionPolicy = CCSceneResolutionPolicy.ShowAll;
 			_stars = new Dictionary<int, CCSprite> ();
-			_binds = new List<CCDrawingPrimitives> ();
+			_binds = new List<CCDrawNode> ();
 
 			_background = new CCSprite ("kosmos");
 			_background.Position = VisibleBoundsWorldspace.Center;
@@ -49,6 +50,7 @@ namespace StarBinder
 			AddChild (_optionsBtn);
 			AddChild (_helpBtn);
 			AddChild (_achievementsBtn);
+			AddChild (_restartBtn);
 
 			InitLevel ();
 		}
@@ -75,7 +77,7 @@ namespace StarBinder
 			_helpBtn.Scale = rect.Size.Width / _helpBtn.BoundingBox.Size.Width;
 			_helpBtn.Position = new CCPoint (rect.MinX, rect.MinY);
 
-			_restartBtn = new CCSprite ("restart");
+			_restartBtn = new CCSprite ("refresh");
 			rect = ScreenResolutionManager.Instance.GetRect (new CCRect (0.9f, 0.1f, 0.14f, 0.14f));
 			_restartBtn.Scale = rect.Size.Width / _restartBtn.BoundingBox.Size.Width;
 			_restartBtn.Position = new CCPoint (rect.MinX, rect.MinY);
@@ -96,10 +98,24 @@ namespace StarBinder
 						NextScene (Scenes.ACHIEVEMENTS);
 					else if (_helpBtn.BoundingBoxTransformedToWorld.ContainsPoint (location))
 						NextScene (Scenes.HELP);
-					//else if (_restartBtn.BoundingBoxTransformedToWorld.ContainsPoint (location))
-					//	NextScene (null);
+					else if (_restartBtn.BoundingBoxTransformedToWorld.ContainsPoint (location))
+						NextScene (null);
+					else CheckTouchGame(location);
 				}
 			});
+		}
+
+		private void CheckTouchGame(CCPoint location)
+		{
+			foreach (var pair in _stars) 
+			{
+				if (pair.Value.BoundingBoxTransformedToWorld.ContainsPoint (location)) 
+				{
+					_level.NextState (pair.Key);
+					DrawLevel ();
+					break;
+				}
+			}
 		}
 
 		private void InitLevel()
@@ -123,6 +139,12 @@ namespace StarBinder
 			{
 				RemoveChild (pair.Value);
 			}
+			foreach (var path in _binds) 
+			{
+				RemoveChild (path);
+			}
+			_stars = new Dictionary<int, CCSprite> ();
+			_binds = new List<CCDrawNode> ();
 
 			var r = new System.Random ();
 			// add stars
@@ -139,14 +161,39 @@ namespace StarBinder
 				star.Scale = rect.Size.Width / star.BoundingBox.Size.Width;
 				star.Position = new CCPoint (rect.MinX, rect.MinY);
 
-				AddChild (star);
+				_stars.Add (s.Number, star);
+	
+				foreach (Bind bind in _level.Binds)
+				{
+					var stars = _level.GetBindStars (bind);
+					CCDrawNode path = new CCDrawNode ();
+
+					CCRect rect1 = ScreenResolutionManager.Instance.GetRect (new CCRect (stars.First ().X, stars.First ().Y, 0.1f, 0.1f));
+					CCRect rect2 = ScreenResolutionManager.Instance.GetRect (new CCRect (stars.Last ().X, stars.Last ().Y, 0.1f, 0.1f));
+
+					path.DrawLine (new CCPoint(rect1.MinX, rect1.MinY), new CCPoint(rect2.MinX, rect2.MinY), 3.0f, CCColor4B.Green);
+					_binds.Add (path);
+				}
 			}
+
+			foreach (var path in _binds) 
+			{
+				AddChild (path);
+			}
+			foreach (var pair in _stars) 
+			{
+				AddChild (pair.Value);
+			}
+
 		}
 
 		public void NextScene(Scenes? nextScene)
 		{
-			if (nextScene == null)
-				Application.ExitGame ();
+			if (nextScene == null) 
+			{
+				RefreshLevel ();
+				DrawLevel ();
+			}
 
 			GameManager.Instance.OldScene = Scenes.LEVEL;
 			switch (nextScene) 
