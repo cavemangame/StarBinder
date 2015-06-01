@@ -18,6 +18,8 @@ namespace StarBinder.Core
         
         public double XRel { get; set; }
         public double YRel { get; set; }
+        public double WRel { get; set; }
+        public double HRel { get; set; }
 
         public IEnumerable<Link> Links { get; private set; }
 

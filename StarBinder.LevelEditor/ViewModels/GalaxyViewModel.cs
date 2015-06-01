@@ -22,7 +22,7 @@ namespace StarBinder.LevelEditor.ViewModels
         public GalaxyViewModel(Galaxy galaxy)
         {
             this.galaxy = galaxy;
-            this.galaxyState = new GalaxyState(this);
+            galaxyState = new GalaxyState(this);
             AllColors = typeof(Colors).GetProperties().Where(pi => pi.PropertyType == typeof (Color)).Select(pi => (pi.GetValue(null, null)).ToString()).ToList(); 
             
             States = new ObservableCollection<State>(galaxy.States);

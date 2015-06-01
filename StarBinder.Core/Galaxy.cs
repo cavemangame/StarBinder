@@ -10,12 +10,22 @@ namespace StarBinder.Core
         private readonly List<Link> links;
         private readonly List<int> solve;
         
-        public Galaxy()
+        Galaxy()
         {
             firstState = State.CreateInitial();
             
             stars = new List<Star>();
             links = new List<Link>();
+        }
+
+        public static Galaxy CreateNew()
+        {
+            return new Galaxy();
+        }
+
+        public static Galaxy Load()
+        {
+            throw new NotImplementedException();
         }
 
         public string Name { get; private set; }

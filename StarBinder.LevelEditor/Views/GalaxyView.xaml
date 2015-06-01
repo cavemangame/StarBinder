@@ -82,9 +82,9 @@
                 </ItemsControl>
             </Grid>
         </DockPanel>
-        
-        <ListBox ItemsSource="{Binding Stars}">
-            <ListBox.ItemTemplate>
+
+        <ItemsControl ItemsSource="{Binding Stars}">
+            <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
                         <ctr:StarControl BackgroundBrush="{Binding Model.FinalState.Color}" ForegroundBrush="{Binding Model.State.Color}">
@@ -100,8 +100,8 @@
                         </ctr:StarControl>
                     </StackPanel>
                 </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
         
         <ItemsControl Name="StateListBox" ItemsSource="{Binding States}">
             <ItemsControl.ItemTemplate>

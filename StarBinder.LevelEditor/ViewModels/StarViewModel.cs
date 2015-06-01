@@ -75,6 +75,10 @@ namespace StarBinder.LevelEditor.ViewModels
             }
         }
 
+
+
+
+
         private ICommand mouseRightCommand;
         public ICommand MouseRightCommand { get { return mouseRightCommand ?? (mouseRightCommand = new DelegateCommand<bool?>(OnMouseRightCommandExecuted)); } }
 

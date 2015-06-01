@@ -25,7 +25,7 @@ namespace StarBinder.LevelEditor.ViewModels
 
         private void OnNewCommandExecuted()
         {
-            GalaxyViewModel = new GalaxyViewModel(new Galaxy());
+            GalaxyViewModel = new GalaxyViewModel(Galaxy.CreateNew());
         }
 
         private ICommand saveCommand;
