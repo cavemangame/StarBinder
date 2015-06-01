@@ -25,6 +25,7 @@ namespace StarBinder.Core
             var state = new State();
             state.Next = state;
             state.Prevous = state;
+            state.Color = "#FFFFD700"; //todo
             
             return state;
         }
