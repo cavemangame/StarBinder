@@ -17,8 +17,8 @@ namespace StarBinder.Core
     
     public class SizeCalculator
     {
-        private readonly int width;
-        private readonly int height;
+        private int width;
+        private int height;
 
         public SizeCalculator(int width, int height)
         {
@@ -26,11 +26,52 @@ namespace StarBinder.Core
             this.height = height;
         }
 
+        public void Resize(int width, int height)
+        {
+            this.width = width;
+            this.height = height;
+        }
+
+        public double XAbsToRelative(double abs)
+        {
+            return abs/width;
+        }
+
+        public double YAbsToRelative(double abs)
+        {
+            return abs/height;
+        }
+
+        public int XRelativeToAbs(double abs)
+        {
+            return (int)(abs * width);
+        }
+
+        public int YRelativeToAbs(double abs)
+        {
+            return (int)(abs * height);
+        }
+
         public Point<int>[] GetCocosPoints(Star star)
         {
-            //todo брать путь из ресурсов
-            var pts = TestStarPath().Select(p => new Point<int>((int)((star.XRel + star.WRel*p.X)*width), (int)((1 - (star.YRel + star.HRel*p.Y))*height)));
-            return pts.ToArray();
+            return GetStarPath(star)
+                    .Select(p => new Point<int>(XRelativeToAbs(star.XRel + star.WRel * p.X),
+                                                YRelativeToAbs(1 - star.YRel - star.HRel * p.Y)))
+                    .ToArray();
+        }
+
+        public Point<int>[] GetWpfPoints(Star star)
+        {
+            return GetStarPath(star)
+                    .Select(p => new Point<int>(XRelativeToAbs(star.XRel + star.WRel*p.X),
+                                                YRelativeToAbs(star.YRel + star.HRel*p.Y)))
+                    .ToArray();
+        }
+
+        //todo
+        private IEnumerable<Point<double>> GetStarPath(Star star)
+        {
+            return TestStarPath();
         }
 
         private IEnumerable<Point<double>> TestStarPath()

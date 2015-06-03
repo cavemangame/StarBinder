@@ -86,7 +86,6 @@
       <DependentUpon>StarControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\BitmapHelper.cs" />
-    <Compile Include="Utils\GalaxyState.cs" />
     <Compile Include="Utils\InteractiveCommand.cs" />
     <Compile Include="ViewModels\GalaxyViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />

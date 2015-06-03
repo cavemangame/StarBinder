@@ -12,8 +12,6 @@
     <StackPanel Orientation="Horizontal">
         
         <StackPanel.Resources>
-            <cnv:RelativeToAbsoluteConverter x:Key="CoordConverter"/>
-            
             <DataTemplate x:Key="ComboBoxStarTemplate">
                 <ctr:StarControl ForegroundBrush="{Binding}"/>
             </DataTemplate>
@@ -23,6 +21,7 @@
             <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
                 <Button Content="LoadBack" Command="{Binding LoadBackCommand}"/>
                 <Button Content="AddStar" Command="{Binding AddStarCommand}"/>
+                <CheckBox Content="Make links"/>
             </StackPanel>
 
             <Grid Width="{Binding Width}" Height="{Binding Height}" Name="GameGrid">
@@ -31,22 +30,8 @@
                 <ItemsControl ItemsSource="{Binding Stars}">
                     <ItemsControl.ItemContainerStyle>
                         <Style>
-                            <Setter Property="Canvas.Left">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource CoordConverter}">
-                                        <Binding Path="XRel"/>
-                                        <Binding Path="Width" ElementName="GameGrid"/>
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Canvas.Top">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource CoordConverter}">
-                                        <Binding Path="YRel"/>
-                                        <Binding Path="Height" ElementName="GameGrid"/>
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
+                            <Setter Property="Canvas.Left" Value="{Binding X}"/>
+                            <Setter Property="Canvas.Top" Value="{Binding Y}"/>
                         </Style>
                     </ItemsControl.ItemContainerStyle>
 

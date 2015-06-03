@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using Microsoft.Practices.ObjectBuilder2;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using Microsoft.Win32;
@@ -17,36 +18,43 @@ namespace StarBinder.LevelEditor.ViewModels
     class GalaxyViewModel : BindableBase
     {
         private readonly Galaxy galaxy;
-        private readonly GalaxyState galaxyState;
+        private readonly SizeCalculator calculator;
         
         public GalaxyViewModel(Galaxy galaxy)
         {
             this.galaxy = galaxy;
-            galaxyState = new GalaxyState(this);
-            AllColors = typeof(Colors).GetProperties().Where(pi => pi.PropertyType == typeof (Color)).Select(pi => (pi.GetValue(null, null)).ToString()).ToList(); 
-            
-            States = new ObservableCollection<State>(galaxy.States);
-            Stars = new ObservableCollection<StarViewModel>(galaxy.Stars.Select(s => new StarViewModel(s, galaxyState)));
             Width = 200;
             Height = 200;
+            calculator = new SizeCalculator(Width, Height);
+            
+            AllColors = typeof(Colors).GetProperties().Where(pi => pi.PropertyType == typeof (Color)).Select(pi => (pi.GetValue(null, null)).ToString()).ToList(); 
+            States = new ObservableCollection<State>(galaxy.States);
+            Stars = new ObservableCollection<StarViewModel>(galaxy.Stars.Select(s => new StarViewModel(s, this, calculator)));
         }
 
         public List<string> AllColors { get; set; }
         public ObservableCollection<StarViewModel> Stars { get; private set; }
         public ObservableCollection<State> States { get; private set; }
 
-        private double height;
-        public double Height 
+        private int height;
+        public int Height 
         {
             get { return height; }
             set { SetProperty(ref height, value); } 
         }
-        
-        private double width;
-        public double Width 
+
+        private int width;
+        public int Width 
         { 
             get { return width; }
             set { SetProperty(ref width, value); } 
+        }
+
+        private bool isLinksMode;
+        public bool IsLinksMode
+        {
+            get { return isLinksMode; }
+            set { SetProperty(ref isLinksMode, value); }
         }
 
         private ImageSource backImage;
@@ -56,9 +64,16 @@ namespace StarBinder.LevelEditor.ViewModels
             private set
             {
                 SetProperty(ref backImage, value);
-                AddStarCommand.RaiseCanExecuteChanged();
+                OnBackChanged();
             }
         }
+
+        #region Links creation
+
+        
+
+        #endregion
+
 
         #region Commands
 
@@ -90,7 +105,7 @@ namespace StarBinder.LevelEditor.ViewModels
         private void OnAddStarCommandExecuted()
         {
             var star = galaxy.AddStar();
-            var starVm = new StarViewModel(star, galaxyState);
+            var starVm = new StarViewModel(star, this, calculator);
             Stars.Add(starVm);
         }
 
@@ -119,5 +134,14 @@ namespace StarBinder.LevelEditor.ViewModels
         }
 
         #endregion
+
+
+        private void OnBackChanged()
+        {
+            calculator.Resize(Width, Height);
+            Stars.ForEach(s => s.OnResize());
+
+            AddStarCommand.RaiseCanExecuteChanged();
+        }
     }
 }

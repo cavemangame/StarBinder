@@ -4,99 +4,111 @@ using System.Windows.Input;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using StarBinder.Core;
-using StarBinder.LevelEditor.Utils;
 
 namespace StarBinder.LevelEditor.ViewModels
 {
     class StarViewModel : BindableBase
     {
-        private readonly Star model;
-        private readonly GalaxyState galaxyState;
+        private readonly Star star;
+        private readonly GalaxyViewModel galaxy;
+        private readonly SizeCalculator calculator;
 
-        public StarViewModel(Star star, GalaxyState galaxyState)
+        public StarViewModel(Star star, GalaxyViewModel galaxy, SizeCalculator calculator)
         {
-            model = star;
-            this.galaxyState = galaxyState;
+            this.star = star;
+            this.galaxy = galaxy;
+            this.calculator = calculator;
         }
 
-        public double XRel
+        public int X
         {
-            get { return model.XRel; }
+            get { return calculator.XRelativeToAbs(star.XRel); }
             set
             {
-                if (Math.Abs(model.XRel - value) < 0.001) return;
-                model.XRel = value;
-                OnPropertyChanged("XRel");
+                star.XRel = calculator.XAbsToRelative(value);
+                OnPropertyChanged("X");
             }
         }
 
-        public double YRel
+        public int Y
         {
-            get { return model.YRel; }
+            get { return calculator.YRelativeToAbs(star.YRel); }
             set
             {
-                if (Math.Abs(model.YRel - value) < 0.001) return;
-                model.YRel = value;
-                OnPropertyChanged("YRel");
+                star.YRel = calculator.YAbsToRelative(value);
+                OnPropertyChanged("Y");
             }
         }
 
-        public Star Model { get { return model; } }
+        public Star Model { get { return star; } }
 
-        //public string CurrentStateColor { get { return model.State.Color; } }
-        //public string FinalStateColor { get { return model.FinalState.Color; } } 
+        public void OnResize()
+        {
+            OnPropertyChanged(null);
+        }
 
+
+        #region Commands
 
         private ICommand dragCommand;
         public ICommand DragCommand { get { return dragCommand ?? (dragCommand = new DelegateCommand<DragDeltaEventArgs>(OnDragCommandExecuted)); } }
 
-        private void OnDragCommandExecuted(DragDeltaEventArgs parametr)
+        private void OnDragCommandExecuted(DragDeltaEventArgs args)
         {
-            XRel += galaxyState.GetdXRel(parametr.HorizontalChange);
-            YRel += galaxyState.GetdYRel(parametr.VerticalChange);
+            var dx = (int)args.HorizontalChange;
+            var dy = (int)args.VerticalChange;
+            if (dx != 0) X += dx;
+            if (dy != 0) Y += dy;
         }
 
 
         private ICommand changeStateCommand;
-        public ICommand ChangeStateCommand { get { return changeStateCommand ?? (changeStateCommand = new DelegateCommand<MouseButton?>(OnChangeStateCommandExecuted)); } }
+        public ICommand ChangeStateCommand { get { return changeStateCommand ?? (changeStateCommand = new DelegateCommand<MouseButton?>(OnExecuteChangeState)); } }
 
-        private void OnChangeStateCommandExecuted(MouseButton? button)
+        private void OnExecuteChangeState(MouseButton? button)
         {
             if (button == MouseButton.Left)
             {
-                if (galaxyState.IsEditMode)
-                    Model.NextInitialState();
-                else
-                    Model.ChangeAll();
+                Model.NextInitialState();
             }
-            else if (button == MouseButton.Right && galaxyState.IsEditMode)
+            else if (button == MouseButton.Right)
             {
                 Model.NextFinalState();
             }
         }
 
+        private ICommand dragEnterCommand;
+        public ICommand DragEnterCommand { get { return dragEnterCommand ?? (dragEnterCommand = new DelegateCommand<object>(OnExecuteDragEnter)); } }
 
-
-
-
-        private ICommand mouseRightCommand;
-        public ICommand MouseRightCommand { get { return mouseRightCommand ?? (mouseRightCommand = new DelegateCommand<bool?>(OnMouseRightCommandExecuted)); } }
-
-        private void OnMouseRightCommandExecuted(bool? mouseUp)
+        private void OnExecuteDragEnter(object arg)
         {
-            if (!mouseUp.HasValue) return;
             
-            if (mouseUp == true)
-            {
-                if (galaxyState.InitialDragStar != null && galaxyState.InitialDragStar != this)
-                {
-                    
-                }
-            }
-            else
-            {
-                
-            }
         }
+
+        private ICommand dragLeaveCommand;
+        public ICommand DragLeaveCommand { get { return dragLeaveCommand ?? (dragLeaveCommand = new DelegateCommand<object>(OnExecuteDragLeave)); } }
+
+        private void OnExecuteDragLeave(object arg)
+        {
+            
+        }
+
+        private ICommand dragOverCommand;
+        public ICommand DragOverCommand { get { return dragOverCommand ?? (dragOverCommand = new DelegateCommand<object>(OnExecuteDragOver)); } }
+
+        private void OnExecuteDragOver(object arg)
+        {
+            
+        }
+
+        private ICommand dropCommand;
+        public ICommand DropCommand { get { return dropCommand ?? (dropCommand = new DelegateCommand<object>(OnExecuteDrop)); } }
+
+        private void OnExecuteDrop(object arg)
+        {
+
+        }
+
+        #endregion
     }
 }
