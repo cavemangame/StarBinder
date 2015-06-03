@@ -10,6 +10,7 @@ using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using Microsoft.Win32;
 using StarBinder.Core;
+using StarBinder.LevelEditor.Controls;
 using StarBinder.LevelEditor.Utils;
 using Color = System.Windows.Media.Color;
 
@@ -54,7 +55,16 @@ namespace StarBinder.LevelEditor.ViewModels
         public bool IsLinksMode
         {
             get { return isLinksMode; }
-            set { SetProperty(ref isLinksMode, value); }
+            set
+            {
+                SetProperty(ref isLinksMode, value);
+                OnPropertyChanged("DragMode");
+            }
+        }
+
+        public DragMode DragMode
+        {
+            get { return IsLinksMode ? DragMode.DragDrop : DragMode.Move; }
         }
 
         private ImageSource backImage;

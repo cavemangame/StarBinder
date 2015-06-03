@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using Microsoft.Practices.Prism.Commands;
@@ -50,18 +51,6 @@ namespace StarBinder.LevelEditor.ViewModels
 
         #region Commands
 
-        private ICommand dragCommand;
-        public ICommand DragCommand { get { return dragCommand ?? (dragCommand = new DelegateCommand<DragDeltaEventArgs>(OnDragCommandExecuted)); } }
-
-        private void OnDragCommandExecuted(DragDeltaEventArgs args)
-        {
-            var dx = (int)args.HorizontalChange;
-            var dy = (int)args.VerticalChange;
-            if (dx != 0) X += dx;
-            if (dy != 0) Y += dy;
-        }
-
-
         private ICommand changeStateCommand;
         public ICommand ChangeStateCommand { get { return changeStateCommand ?? (changeStateCommand = new DelegateCommand<MouseButton?>(OnExecuteChangeState)); } }
 
@@ -77,36 +66,40 @@ namespace StarBinder.LevelEditor.ViewModels
             }
         }
 
-        private ICommand dragEnterCommand;
-        public ICommand DragEnterCommand { get { return dragEnterCommand ?? (dragEnterCommand = new DelegateCommand<object>(OnExecuteDragEnter)); } }
+        private ICommand dragCommand;
+        public ICommand DragCommand { get { return dragCommand ?? (dragCommand = new DelegateCommand<DragDeltaEventArgs>(OnDragCommandExecuted)); } }
 
-        private void OnExecuteDragEnter(object arg)
+        private void OnDragCommandExecuted(DragDeltaEventArgs args)
         {
-            
+            var dx = (int)args.HorizontalChange;
+            var dy = (int)args.VerticalChange;
+            if (dx != 0) X += dx;
+            if (dy != 0) Y += dy;
+        }
+        
+
+        private ICommand dragEnterCommand;
+        public ICommand DragEnterCommand { get { return dragEnterCommand ?? (dragEnterCommand = new DelegateCommand<DragEventArgs>(OnExecuteDragEnter)); } }
+
+        private void OnExecuteDragEnter(DragEventArgs arg)
+        {
+            throw new NotImplementedException();
         }
 
         private ICommand dragLeaveCommand;
-        public ICommand DragLeaveCommand { get { return dragLeaveCommand ?? (dragLeaveCommand = new DelegateCommand<object>(OnExecuteDragLeave)); } }
+        public ICommand DragLeaveCommand { get { return dragLeaveCommand ?? (dragLeaveCommand = new DelegateCommand<DragEventArgs>(OnExecuteDragLeave)); } }
 
-        private void OnExecuteDragLeave(object arg)
+        private void OnExecuteDragLeave(DragEventArgs arg)
         {
-            
-        }
-
-        private ICommand dragOverCommand;
-        public ICommand DragOverCommand { get { return dragOverCommand ?? (dragOverCommand = new DelegateCommand<object>(OnExecuteDragOver)); } }
-
-        private void OnExecuteDragOver(object arg)
-        {
-            
+            throw new NotImplementedException();
         }
 
         private ICommand dropCommand;
-        public ICommand DropCommand { get { return dropCommand ?? (dropCommand = new DelegateCommand<object>(OnExecuteDrop)); } }
+        public ICommand DropCommand { get { return dropCommand ?? (dropCommand = new DelegateCommand<DragEventArgs>(OnExecuteDrop)); } }
 
-        private void OnExecuteDrop(object arg)
+        private void OnExecuteDrop(DragEventArgs arg)
         {
-
+            throw new NotImplementedException();
         }
 
         #endregion

@@ -21,7 +21,7 @@
             <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
                 <Button Content="LoadBack" Command="{Binding LoadBackCommand}"/>
                 <Button Content="AddStar" Command="{Binding AddStarCommand}"/>
-                <CheckBox Content="Make links"/>
+                <CheckBox Content="Make links" IsChecked="{Binding IsLinksMode}"/>
             </StackPanel>
 
             <Grid Width="{Binding Width}" Height="{Binding Height}" Name="GameGrid">
@@ -29,9 +29,14 @@
                 
                 <ItemsControl ItemsSource="{Binding Stars}">
                     <ItemsControl.ItemContainerStyle>
-                        <Style>
+                        <Style TargetType="FrameworkElement">
                             <Setter Property="Canvas.Left" Value="{Binding X}"/>
                             <Setter Property="Canvas.Top" Value="{Binding Y}"/>
+                            <Setter Property="AllowDrop" Value="True"/>
+
+                            <!--<EventSetter Event="PreviewDragEnter" Handler="UIElement_OnPreviewDragEnter"/>
+                            <EventSetter Event="PreviewDragLeave" Handler="UIElement_OnPreviewDragLeave"/>
+                            <EventSetter Event="PreviewDrop" Handler="UIElement_OnPreviewDrop"/>-->
                         </Style>
                     </ItemsControl.ItemContainerStyle>
 
@@ -43,25 +48,25 @@
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="vm:StarViewModel">
-                            <Thumb>
-                                <Thumb.Template>
+                            <ctr:ExtendedThumb AllowDrop="True"
+                                               Mode="{Binding DataContext.DragMode, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}"
+                                               DragDeltaCommand="{Binding DragCommand}"
+                                               DropCommand="{Binding DropCommand}"
+                                               DragLeaveCommand="{Binding DragLeaveCommand}"
+                                               DragEnterCommand="{Binding DragEnterCommand}">
+
+                                <ctr:ExtendedThumb.Template>
                                     <ControlTemplate>
                                         <ctr:StarControl BackgroundBrush="{Binding Model.FinalState.Color}" ForegroundBrush="{Binding Model.State.Color}"/>
                                     </ControlTemplate>
-                                </Thumb.Template>
+                                </ctr:ExtendedThumb.Template>
 
-                                <i:Interaction.Triggers>
+                                <!--<i:Interaction.Triggers>
                                     <i:EventTrigger EventName="DragDelta">
                                         <u:InteractiveCommand Command="{Binding DragCommand}"/>
                                     </i:EventTrigger>
-                                    <i:EventTrigger EventName="MouseRightButtonDown">
-                                        <i:InvokeCommandAction Command="{Binding ChangeStateCommand}" CommandParameter="{x:Static MouseButton.Right}"/>
-                                    </i:EventTrigger>
-                                    <i:EventTrigger EventName="MouseRightButtonUp">
-                                        <i:InvokeCommandAction Command="{Binding ChangeStateCommand}" CommandParameter="{x:Static MouseButton.Right}"/>
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                            </Thumb>
+                                </i:Interaction.Triggers>-->
+                            </ctr:ExtendedThumb>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

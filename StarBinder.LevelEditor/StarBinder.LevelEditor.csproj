@@ -82,12 +82,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controls\ExtendedThumb.cs" />
     <Compile Include="Controls\StarControl.xaml.cs">
       <DependentUpon>StarControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\BitmapHelper.cs" />
     <Compile Include="Utils\InteractiveCommand.cs" />
     <Compile Include="ViewModels\GalaxyViewModel.cs" />
+    <Compile Include="ViewModels\LinkViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\StarViewModel.cs" />
     <Compile Include="Views\GalaxyView.xaml.cs">
