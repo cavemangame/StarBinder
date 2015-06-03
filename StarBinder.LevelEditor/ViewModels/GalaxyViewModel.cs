@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -28,14 +30,10 @@ namespace StarBinder.LevelEditor.ViewModels
             Height = 200;
             calculator = new SizeCalculator(Width, Height);
             
-            AllColors = typeof(Colors).GetProperties().Where(pi => pi.PropertyType == typeof (Color)).Select(pi => (pi.GetValue(null, null)).ToString()).ToList(); 
-            States = new ObservableCollection<State>(galaxy.States);
-            Stars = new ObservableCollection<StarViewModel>(galaxy.Stars.Select(s => new StarViewModel(s, this, calculator)));
+            InitStates();
+            InitStars();
+            InitLinks();
         }
-
-        public List<string> AllColors { get; set; }
-        public ObservableCollection<StarViewModel> Stars { get; private set; }
-        public ObservableCollection<State> States { get; private set; }
 
         private int height;
         public int Height 
@@ -62,10 +60,7 @@ namespace StarBinder.LevelEditor.ViewModels
             }
         }
 
-        public DragMode DragMode
-        {
-            get { return IsLinksMode ? DragMode.DragDrop : DragMode.Move; }
-        }
+        public DragMode DragMode { get { return IsLinksMode ? DragMode.DragDrop : DragMode.Move; } }
 
         private ImageSource backImage;
         public ImageSource BackImage
@@ -74,25 +69,19 @@ namespace StarBinder.LevelEditor.ViewModels
             private set
             {
                 SetProperty(ref backImage, value);
-                OnBackChanged();
+                
+                calculator.Resize(Width, Height);
+                Stars.ForEach(s => s.OnResize());
+                AddStarCommand.RaiseCanExecuteChanged();
             }
         }
-
-        #region Links creation
-
-        
-
-        #endregion
-
-
-        #region Commands
 
         private ICommand loadBackCommand;
         public ICommand LoadBackCommand { get { return loadBackCommand ?? (loadBackCommand = new DelegateCommand(OnLoadBackCommandExecuted)); } }
 
         private void OnLoadBackCommandExecuted()
         {
-            var dlg = new OpenFileDialog{ CheckFileExists = true, DefaultExt = ".png", Multiselect = false };
+            var dlg = new OpenFileDialog { CheckFileExists = true, DefaultExt = ".png", Multiselect = false };
             if (dlg.ShowDialog() == true)
             {
                 try
@@ -109,20 +98,101 @@ namespace StarBinder.LevelEditor.ViewModels
             }
         }
 
+        
+        #region Stars
+
+        private Dictionary<Star, StarViewModel> stars;
+
+        private void InitStars()
+        {
+            stars = new Dictionary<Star, StarViewModel>();
+            Stars = new ObservableCollection<StarViewModel>(galaxy.Stars.Select(s => CreateStar(s)));
+        }
+
+        public ObservableCollection<StarViewModel> Stars { get; private set; }
+
+        private StarViewModel CreateStar(Star star)
+        {
+            var svm = new StarViewModel(star, this, calculator);
+            stars.Add(star, svm);
+            return svm;
+        }
+        
+
         private DelegateCommand addStarCommand;
         public DelegateCommand AddStarCommand { get { return addStarCommand ?? (addStarCommand = new DelegateCommand(OnAddStarCommandExecuted, CanAddStarCommandExecuted)); } }
 
         private void OnAddStarCommandExecuted()
         {
-            var star = galaxy.AddStar();
-            var starVm = new StarViewModel(star, this, calculator);
-            Stars.Add(starVm);
+            Stars.Add(CreateStar(galaxy.AddStar()));
         }
 
         private bool CanAddStarCommandExecuted()
         {
             return BackImage != null;
         }
+
+        #endregion
+
+        #region Links
+
+        private void InitLinks()
+        {
+            Links = new ObservableCollection<LinkViewModel>(galaxy.Links.Select(l => CreateLink(l)));
+        }
+
+        public ObservableCollection<LinkViewModel> Links { get; private set; }
+
+        private LinkViewModel tempLink;
+        public LinkViewModel TempLink
+        {
+            get { return tempLink; }
+            set 
+            { 
+                if (tempLink == value) return;
+                tempLink = value;
+                OnPropertyChanged("TempLink");
+            }
+        }
+
+        internal void CreateTempLink(StarViewModel firstStar, StarViewModel secondStar)
+        {
+            TempLink = new LinkViewModel(firstStar, secondStar, null);
+        }
+
+        internal void RemoveTempLink()
+        {
+            TempLink = null;
+        }
+
+        internal void ConfirmLincCreation()
+        {
+            if (TempLink == null)
+                throw new InvalidOperationException("Temporary link not founded");
+
+            Links.Add(CreateLink(galaxy.AddLink(TempLink.SourceStar.Model, TempLink.TargetStar.Model)));
+
+            TempLink = null;
+        }
+
+        private LinkViewModel CreateLink(Link link)
+        {
+            return new LinkViewModel(stars[link.From], stars[link.To], link);
+        }
+
+        #endregion
+
+        #region States
+
+        private void InitStates()
+        {
+            AllColors = typeof(Colors).GetProperties().Where(pi => pi.PropertyType == typeof(Color)).Select(pi => (pi.GetValue(null, null)).ToString()).ToList();
+            States = new ObservableCollection<State>(galaxy.States);
+        }
+
+        public List<string> AllColors { get; set; }
+        public ObservableCollection<State> States { get; private set; }
+
 
         private ICommand addStateCommand;
         public ICommand AddStateCommand { get { return addStateCommand ?? (addStateCommand = new DelegateCommand<State>(OnAddStateCommandExecuted)); } }
@@ -144,14 +214,5 @@ namespace StarBinder.LevelEditor.ViewModels
         }
 
         #endregion
-
-
-        private void OnBackChanged()
-        {
-            calculator.Resize(Width, Height);
-            Stars.ForEach(s => s.OnResize());
-
-            AddStarCommand.RaiseCanExecuteChanged();
-        }
     }
 }

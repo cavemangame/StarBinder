@@ -21,6 +21,8 @@ namespace StarBinder.LevelEditor.ViewModels
             this.calculator = calculator;
         }
 
+        public Point Point { get { return new Point(X, Y);} }
+
         public int X
         {
             get { return calculator.XRelativeToAbs(star.XRel); }
@@ -75,6 +77,8 @@ namespace StarBinder.LevelEditor.ViewModels
             var dy = (int)args.VerticalChange;
             if (dx != 0) X += dx;
             if (dy != 0) Y += dy;
+
+            OnPropertyChanged("Point");
         }
         
 
@@ -83,7 +87,7 @@ namespace StarBinder.LevelEditor.ViewModels
 
         private void OnExecuteDragEnter(DragEventArgs arg)
         {
-            throw new NotImplementedException();
+            galaxy.CreateTempLink(arg.Data.GetData(typeof(object)) as StarViewModel, this);
         }
 
         private ICommand dragLeaveCommand;
@@ -91,7 +95,7 @@ namespace StarBinder.LevelEditor.ViewModels
 
         private void OnExecuteDragLeave(DragEventArgs arg)
         {
-            throw new NotImplementedException();
+            galaxy.RemoveTempLink();
         }
 
         private ICommand dropCommand;
@@ -99,7 +103,7 @@ namespace StarBinder.LevelEditor.ViewModels
 
         private void OnExecuteDrop(DragEventArgs arg)
         {
-            throw new NotImplementedException();
+            galaxy.ConfirmLincCreation();
         }
 
         #endregion

@@ -78,5 +78,12 @@ namespace StarBinder.Core
                 star.OnStateRemoved(state, replace);
             }
         }
+
+        public Link AddLink(Star source, Star target, LinkDirection direction = LinkDirection.Both)
+        {
+            var link = new Link(source, target, direction);
+            links.Add(link);
+            return link;
+        }
     }
 }

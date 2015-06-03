@@ -72,7 +72,7 @@ namespace StarBinder.LevelEditor.Controls
             }
             else
             {
-               DragDrop.DoDragDrop(this, new DataObject(typeof(object), DataContext), DragDropEffects.Link);
+                DragDrop.DoDragDrop(this, new DataObject(typeof(object), DataContext), DragDropEffects.Link);
             }
         }
 

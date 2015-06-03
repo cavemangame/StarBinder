@@ -27,16 +27,52 @@
             <Grid Width="{Binding Width}" Height="{Binding Height}" Name="GameGrid">
                 <Image Source="{Binding BackImage}" HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="None"/>
                 
+                <ItemsControl ItemsSource="{Binding Links}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas IsItemsHost="True"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="vm:LinkViewModel">
+                            <Line X1="{Binding SourceStar.X}"
+                                  Y1="{Binding SourceStar.Y}"
+                                  X2="{Binding TargetStar.X}"
+                                  Y2="{Binding TargetStar.Y}"
+                                  StrokeThickness="2">
+                                <Line.Stroke>
+                                    <LinearGradientBrush StartPoint="{Binding SourceStar.Point}" EndPoint="{Binding TargetStar.Point}" MappingMode="Absolute">
+                                        <GradientStopCollection>
+                                            <GradientStop Color="{Binding SourceStar.Model.FinalState.Color}" Offset="0"/>
+                                            <GradientStop Color="{Binding TargetStar.Model.FinalState.Color}" Offset="1"/>
+                                        </GradientStopCollection>
+                                    </LinearGradientBrush>
+                                </Line.Stroke>
+                            </Line>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                
                 <ItemsControl ItemsSource="{Binding Stars}">
+                    <ItemsControl.Template>
+                        <ControlTemplate>
+                            <Canvas>
+                                <Line X1="{Binding TempLink.SourceStar.X}"
+                                      Y1="{Binding TempLink.SourceStar.Y}"
+                                      X2="{Binding TempLink.TargetStar.X}"
+                                      Y2="{Binding TempLink.TargetStar.Y}"
+                                      StrokeThickness="2" Stroke="Black" StrokeDashArray="5 2" />
+                                <ItemsPresenter/>
+                            </Canvas>
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+                    
                     <ItemsControl.ItemContainerStyle>
                         <Style TargetType="FrameworkElement">
                             <Setter Property="Canvas.Left" Value="{Binding X}"/>
                             <Setter Property="Canvas.Top" Value="{Binding Y}"/>
                             <Setter Property="AllowDrop" Value="True"/>
-
-                            <!--<EventSetter Event="PreviewDragEnter" Handler="UIElement_OnPreviewDragEnter"/>
-                            <EventSetter Event="PreviewDragLeave" Handler="UIElement_OnPreviewDragLeave"/>
-                            <EventSetter Event="PreviewDrop" Handler="UIElement_OnPreviewDrop"/>-->
                         </Style>
                     </ItemsControl.ItemContainerStyle>
 
@@ -60,12 +96,6 @@
                                         <ctr:StarControl BackgroundBrush="{Binding Model.FinalState.Color}" ForegroundBrush="{Binding Model.State.Color}"/>
                                     </ControlTemplate>
                                 </ctr:ExtendedThumb.Template>
-
-                                <!--<i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="DragDelta">
-                                        <u:InteractiveCommand Command="{Binding DragCommand}"/>
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>-->
                             </ctr:ExtendedThumb>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
