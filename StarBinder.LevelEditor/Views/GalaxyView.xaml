@@ -6,7 +6,6 @@
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:vm="clr-namespace:StarBinder.LevelEditor.ViewModels"
              xmlns:u="clr-namespace:StarBinder.LevelEditor.Utils"
-             xmlns:cnv="clr-namespace:StarBinder.LevelEditor.Converters"
              xmlns:ctr="clr-namespace:StarBinder.LevelEditor.Controls"
              xmlns:core="clr-namespace:StarBinder.Core;assembly=StarBinder.Core"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:GalaxyViewModel}">
