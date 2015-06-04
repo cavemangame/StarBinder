@@ -54,7 +54,7 @@ namespace StarBinder.Core
 
         public Star AddStar()
         {
-            var star = new Star(firstState, firstState.Prevous);
+            var star = new Star(firstState, firstState.Prevous) { Number = stars.Count };
             stars.Add(star);
             return star;
         }
@@ -67,6 +67,11 @@ namespace StarBinder.Core
             }
 
             stars.Remove(star);
+
+            for (int i = 0; i < stars.Count; i++)
+            {
+                stars[i].Number = i;
+            }
         }
 
         public State AddState(State previuos = null)

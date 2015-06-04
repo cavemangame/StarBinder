@@ -20,7 +20,20 @@ namespace StarBinder.Core
             XRel = 0.25;
             YRel = 0.25;
         }
-        
+
+
+        private int number;
+        public int Number
+        {
+            get { return number; }
+            set
+            {
+                if (number == value) return;
+                number = value;
+                OnPropertyChanged();
+            }
+        }
+
         public double XRel { get; set; }
         public double YRel { get; set; }
 
