@@ -14,12 +14,28 @@ namespace StarBinder.Core
             InitialState = initialState;
             FinalState = finalState;
             Links = new List<Link>();
+
+            //default values 
+            WRel = 0.25;
+            XRel = 0.25;
+            YRel = 0.25;
+
+            Beams = 4;
+            IsSubBeams = true;
+            InnerCoeff = 0.3;
+            SubBeamsCoeff = 0.5;
+            RotateAngle = 15;
         }
         
         public double XRel { get; set; }
         public double YRel { get; set; }
         public double WRel { get; set; }
-        public double HRel { get; set; }
+
+        public int Beams { get; set; }
+        public bool IsSubBeams { get; set; }
+        public double InnerCoeff { get; set; }
+        public double SubBeamsCoeff { get; set; }
+        public int RotateAngle { get; set; }
 
         public IEnumerable<Link> Links { get; private set; }
 

@@ -93,8 +93,12 @@
 
                                 <ctr:ExtendedThumb.Template>
                                     <ControlTemplate>
-                                        <ctr:StarControl BackgroundBrush="{Binding Model.FinalState.Color}" ForegroundBrush="{Binding Model.State.Color}"/>
+                                        <Path Data="{Binding Geometry}" Fill="{Binding Model.FinalState.Color}"/>
                                     </ControlTemplate>
+                                    
+                                    <!--<ControlTemplate>
+                                        <ctr:StarControl BackgroundBrush="{Binding Model.FinalState.Color}" ForegroundBrush="{Binding Model.State.Color}"/>
+                                    </ControlTemplate>-->
                                 </ctr:ExtendedThumb.Template>
                             </ctr:ExtendedThumb>
                         </DataTemplate>

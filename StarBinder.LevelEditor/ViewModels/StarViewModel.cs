@@ -2,9 +2,11 @@
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using StarBinder.Core;
+using StarBinder.LevelEditor.Utils;
 
 namespace StarBinder.LevelEditor.ViewModels
 {
@@ -21,25 +23,37 @@ namespace StarBinder.LevelEditor.ViewModels
             this.calculator = calculator;
         }
 
+        public Geometry Geometry { get { return calculator.GetWpfPoints(Model).ToPathGeometry(); } }
+
         public Point Point { get { return new Point(X, Y);} }
 
         public int X
         {
-            get { return calculator.XRelativeToAbs(star.XRel); }
+            get { return calculator.XRelToAbs(star.XRel); }
             set
             {
-                star.XRel = calculator.XAbsToRelative(value);
+                star.XRel = calculator.XAbsToRel(value);
                 OnPropertyChanged("X");
             }
         }
 
         public int Y
         {
-            get { return calculator.YRelativeToAbs(star.YRel); }
+            get { return calculator.YRelToAbs(star.YRel); }
             set
             {
-                star.YRel = calculator.YAbsToRelative(value);
+                star.YRel = calculator.YAbsToRel(value);
                 OnPropertyChanged("Y");
+            }
+        }
+
+        public int Width
+        {
+            get { return calculator.RelToAbsByMinSize(star.WRel); }
+            set
+            {
+                star.WRel = calculator.AbsToRelByMinSize(value);
+                OnPropertyChanged("Width");
             }
         }
 
@@ -49,7 +63,6 @@ namespace StarBinder.LevelEditor.ViewModels
         {
             OnPropertyChanged(null);
         }
-
 
         #region Commands
 
