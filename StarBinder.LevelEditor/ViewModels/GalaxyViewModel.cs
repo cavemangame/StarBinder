@@ -115,6 +115,7 @@ namespace StarBinder.LevelEditor.ViewModels
         {
             var svm = new StarViewModel(star, this, calculator);
             stars.Add(star, svm);
+            svm.Model.XRel += 0.02 * Stars.Count;
             return svm;
         }
         
@@ -150,6 +151,7 @@ namespace StarBinder.LevelEditor.ViewModels
         private void InitLinks()
         {
             Links = new ObservableCollection<LinkViewModel>(galaxy.Links.Select(l => CreateLink(l)));
+            OnPropertyChanged("Links");
         }
 
         public ObservableCollection<LinkViewModel> Links { get; private set; }
@@ -201,8 +203,8 @@ namespace StarBinder.LevelEditor.ViewModels
 
         private void OnExecuteDelLink(LinkViewModel link)
         {
-            galaxy.RemoveLink(link.Model);
             Links.Remove(link);
+            galaxy.RemoveLink(link.Model);
         }
 
         #endregion

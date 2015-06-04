@@ -16,9 +16,9 @@ namespace StarBinder.Core
             InitialState = initialState;
             FinalState = finalState;
             links = new List<Link>();
-
-            XRel = 0.25;
-            YRel = 0.25;
+            
+            YRel = 0.1;
+            XRel = 0.1;
         }
 
 

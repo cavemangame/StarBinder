@@ -61,7 +61,7 @@ namespace StarBinder.Core
 
         public void RemoveStar(Star star)
         {
-            foreach (var link in star.Links)
+            foreach (var link in star.Links.ToList())
             {
                 RemoveLink(link);
             }
