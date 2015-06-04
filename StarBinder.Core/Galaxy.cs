@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace StarBinder.Core
 {
@@ -60,7 +61,12 @@ namespace StarBinder.Core
 
         public void RemoveStar(Star star)
         {
-            throw new NotImplementedException();
+            foreach (var link in star.Links)
+            {
+                RemoveLink(link);
+            }
+
+            stars.Remove(star);
         }
 
         public State AddState(State previuos = null)
@@ -83,7 +89,21 @@ namespace StarBinder.Core
         {
             var link = new Link(source, target, direction);
             links.Add(link);
+            source.AddLink(link);
+            target.AddLink(link);
             return link;
+        }
+
+        public void RemoveLink(Link link)
+        {
+            link.To.RemoveLink(link);
+            link.From.RemoveLink(link);
+            links.Remove(link);
+        }
+
+        public bool CanAddLink(Star source, Star target)
+        {
+            return source != target && !source.Links.Any(l => l.From == target || l.To == target);
         }
     }
 }

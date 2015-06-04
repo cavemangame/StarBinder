@@ -8,6 +8,7 @@
         xmlns:v="clr-namespace:StarBinder.LevelEditor.Views"
         xmlns:prism="clr-namespace:Microsoft.Practices.Prism.Mvvm;assembly=Microsoft.Practices.Prism.Mvvm.Desktop"
         mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:MainWindowViewModel}"
+        SizeToContent="WidthAndHeight"
         prism:ViewModelLocator.AutoWireViewModel="True">
     <DockPanel>
         <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
@@ -15,6 +16,8 @@
             <Button Command="{Binding SaveCommand}" Content="Save"/>
         </StackPanel>
         
-        <v:GalaxyView DataContext="{Binding GalaxyViewModel}"/>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <v:GalaxyView DataContext="{Binding GalaxyViewModel}"/>
+        </ScrollViewer>
     </DockPanel>
 </Window>

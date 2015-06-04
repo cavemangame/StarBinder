@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
@@ -21,9 +22,17 @@ namespace StarBinder.LevelEditor.ViewModels
             this.star = star;
             this.galaxy = galaxy;
             this.calculator = calculator;
+            
+            star.GeometryChanged += (s, a) =>
+            {
+                OnPropertyChanged("GeometryBack");
+                OnPropertyChanged("GeometryFront");
+                OnPropertyChanged("HalfWidth");
+            };
         }
 
-        public Geometry Geometry { get { return calculator.GetWpfPoints(Model).ToPathGeometry(); } }
+        public Geometry GeometryBack { get { return calculator.GetWpfPoints(Model, true).ToPathGeometry(); } }
+        public Geometry GeometryFront { get { return calculator.GetWpfPoints(Model, false).ToPathGeometry(); } }
 
         public Point Point { get { return new Point(X, Y);} }
 
@@ -47,13 +56,13 @@ namespace StarBinder.LevelEditor.ViewModels
             }
         }
 
-        public int Width
+        public int HalfWidth
         {
-            get { return calculator.RelToAbsByMinSize(star.WRel); }
+            get { return calculator.RelToAbsByMinSize(star.HalfWidthRel); }
             set
             {
-                star.WRel = calculator.AbsToRelByMinSize(value);
-                OnPropertyChanged("Width");
+                star.HalfWidthRel = calculator.AbsToRelByMinSize(value);
+                OnPropertyChanged("HalfWidth");
             }
         }
 
@@ -93,14 +102,33 @@ namespace StarBinder.LevelEditor.ViewModels
 
             OnPropertyChanged("Point");
         }
-        
+
+        private bool canDrop;
 
         private ICommand dragEnterCommand;
-        public ICommand DragEnterCommand { get { return dragEnterCommand ?? (dragEnterCommand = new DelegateCommand<DragEventArgs>(OnExecuteDragEnter)); } }
+        public ICommand DragEnterCommand { get { return dragEnterCommand ?? (dragEnterCommand = new DelegateCommand<DragEventArgs>(OnExecuteDragEnter, CanExecuteDragEnter)); } }
 
         private void OnExecuteDragEnter(DragEventArgs arg)
         {
             galaxy.CreateTempLink(arg.Data.GetData(typeof(object)) as StarViewModel, this);
+        }
+
+        private bool CanExecuteDragEnter(DragEventArgs arg)
+        {
+            var source = arg.Data.GetData(typeof (object)) as StarViewModel;
+            return (canDrop = galaxy.CanAddLink(this, source));
+        }
+
+        private ICommand dragOverCommand;
+        public ICommand DragOverCommand { get { return dragOverCommand ?? (dragOverCommand = new DelegateCommand<DragEventArgs>(OnExecuteDragOver, CanExecuteDragOver)); } }
+
+        private void OnExecuteDragOver(DragEventArgs arg)
+        {
+        }
+
+        private bool CanExecuteDragOver(DragEventArgs arg)
+        {
+            return canDrop;
         }
 
         private ICommand dragLeaveCommand;
@@ -109,14 +137,21 @@ namespace StarBinder.LevelEditor.ViewModels
         private void OnExecuteDragLeave(DragEventArgs arg)
         {
             galaxy.RemoveTempLink();
+            canDrop = false;
         }
 
         private ICommand dropCommand;
-        public ICommand DropCommand { get { return dropCommand ?? (dropCommand = new DelegateCommand<DragEventArgs>(OnExecuteDrop)); } }
+        public ICommand DropCommand { get { return dropCommand ?? (dropCommand = new DelegateCommand<DragEventArgs>(OnExecuteDrop, CanExecuteDrop)); } }
 
         private void OnExecuteDrop(DragEventArgs arg)
         {
             galaxy.ConfirmLincCreation();
+            canDrop = false;
+        }
+
+        private bool CanExecuteDrop(DragEventArgs arg)
+        {
+            return galaxy.TempLink != null;
         }
 
         #endregion

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace StarBinder.Core
 {
@@ -7,37 +8,23 @@ namespace StarBinder.Core
         private State state;
         private State finalState;
         private State initialState;
+        private List<Link> links;
 
         internal Star(State initialState, State finalState)
         {
             State = initialState;
             InitialState = initialState;
             FinalState = finalState;
-            Links = new List<Link>();
+            links = new List<Link>();
 
-            //default values 
-            WRel = 0.25;
             XRel = 0.25;
             YRel = 0.25;
-
-            Beams = 4;
-            IsSubBeams = true;
-            InnerCoeff = 0.3;
-            SubBeamsCoeff = 0.5;
-            RotateAngle = 15;
         }
         
         public double XRel { get; set; }
         public double YRel { get; set; }
-        public double WRel { get; set; }
 
-        public int Beams { get; set; }
-        public bool IsSubBeams { get; set; }
-        public double InnerCoeff { get; set; }
-        public double SubBeamsCoeff { get; set; }
-        public int RotateAngle { get; set; }
-
-        public IEnumerable<Link> Links { get; private set; }
+        public IEnumerable<Link> Links { get { return links; } }
 
         public State State
         {
@@ -122,5 +109,78 @@ namespace StarBinder.Core
         {
             State = State.Prevous;
         }
+
+        internal void AddLink(Link link)
+        {
+            links.Add(link);
+        }
+
+        internal void RemoveLink(Link link)
+        {
+            links.Remove(link);
+        }
+
+        #region Star geometry
+
+        private double rotateAngle = 15;
+        private double subBeamsCoeff = 0.5;
+        private double innerCoeff = 0.3;
+        private bool isSubBeams = true;
+        private int beams = 4;
+        private double halfWidthRel = 0.1;
+        private double frontAngle = 2;
+        private double frontScale = 0.7;
+
+        public double FrontAngle
+        {
+            get { return frontAngle; }
+            set { frontAngle = value; GeometryChanged(this, null); }
+        }
+
+        public double FrontScale
+        {
+            get { return frontScale; }
+            set { frontScale = value; GeometryChanged(this, null); }
+        }
+
+        public double HalfWidthRel
+        {
+            get { return halfWidthRel; }
+            set { halfWidthRel = value; GeometryChanged(this, null); }
+        }
+
+        public int Beams
+        {
+            get { return beams; }
+            set { beams = value; GeometryChanged(this, null); }
+        }
+
+        public bool IsSubBeams
+        {
+            get { return isSubBeams; }
+            set { isSubBeams = value; GeometryChanged(this, null); }
+        }
+
+        public double InnerCoeff
+        {
+            get { return innerCoeff; }
+            set { innerCoeff = value; GeometryChanged(this, null); }
+        }
+
+        public double SubBeamsCoeff
+        {
+            get { return subBeamsCoeff; }
+            set { subBeamsCoeff = value; GeometryChanged(this, null); }
+        }
+
+        public double RotateAngle
+        {
+            get { return rotateAngle; }
+            set { rotateAngle = value; GeometryChanged(this, null); }
+        }
+
+        public event EventHandler GeometryChanged = (s, a) => {};
+
+        #endregion
     }
 }

@@ -16,6 +16,7 @@ namespace StarBinder.Core
             
             state.Next = newState;
             newState.Next.Prevous = newState;
+            newState.Color = state.Color;
 
             return newState;
         }

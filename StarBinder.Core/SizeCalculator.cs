@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 
 namespace StarBinder.Core
 {
@@ -17,7 +16,7 @@ namespace StarBinder.Core
         }
     }
 
-    public static class PointExtension
+    public static class PointExtensions
     {
         public static Point<double> Multiply (this Point<double> point, double coeff)
         {
@@ -80,29 +79,30 @@ namespace StarBinder.Core
             return abs/size;
         }
 
-        public Point<int>[] GetCocosPoints(Star star, double scale = 1)
+        public Point<int>[] GetCocosPoints(Star star, bool isBack)
         {
-            return GetStarPoints(star, scale)
-                    .Select(p => new Point<int>(RelToAbsByMinSize(star.XRel + star.WRel/2 * p.X),
-                                                RelToAbsByMinSize(1 - star.YRel - star.WRel/2 * p.Y)))
+            return GetStarPoints(star, isBack)
+                    .Select(p => new Point<int>(RelToAbsByMinSize(star.XRel + star.HalfWidthRel * p.X),
+                                                RelToAbsByMinSize(1 - star.YRel - star.HalfWidthRel * p.Y)))
                     .ToArray();
         }
 
-        public Point<int>[] GetWpfPoints(Star star, double scale = 1)
+        public Point<int>[] GetWpfPoints(Star star, bool isBack)
         {
-            return GetStarPoints(star, scale).Select(p => new Point<int>(RelToAbsByMinSize(star.WRel * p.X / 2),
-                RelToAbsByMinSize(star.WRel * p.Y / 2))).ToArray();
+            return GetStarPoints(star, isBack).Select(p => new Point<int>(RelToAbsByMinSize(star.HalfWidthRel * p.X), RelToAbsByMinSize(star.HalfWidthRel * p.Y))).ToArray();
         }
 
-        private IEnumerable<Point<double>> GetStarPoints(Star star, double scale)
+        private IEnumerable<Point<double>> GetStarPoints(Star star, bool isBack)
         {
             var num = star.IsSubBeams ? star.Beams*4 : star.Beams*2;
             var angle = 2 * Math.PI/num;
             var sbRad = star.InnerCoeff + (1 - star.InnerCoeff) * star.SubBeamsCoeff;
+            var scale = isBack ? 1 : star.FrontScale;
+            var rotate = isBack ? star.RotateAngle : star.RotateAngle + star.FrontAngle;
 
-            for (int i = 0; i < num; i++)
+            for (var i = 0; i < num; i++)
             {
-                var point = new Point<double>(Math.Cos(i*angle), Math.Sin(i*angle)).Multiply(scale).Rotate(star.RotateAngle);
+                var point = new Point<double>(Math.Cos(i * angle), Math.Sin(i * angle)).Multiply(scale).Rotate(rotate);
                 
                 if (i % 2 == 1)
                 {
@@ -118,7 +118,7 @@ namespace StarBinder.Core
                 }
             }
 
-            yield return new Point<double>(1, 0).Multiply(scale).Rotate(star.RotateAngle);
+            yield return new Point<double>(1, 0).Multiply(scale).Rotate(rotate);
         }
     }
 }

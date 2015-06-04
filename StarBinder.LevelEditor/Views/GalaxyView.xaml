@@ -10,13 +10,6 @@
              xmlns:ctr="clr-namespace:StarBinder.LevelEditor.Controls"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:GalaxyViewModel}">
     <StackPanel Orientation="Horizontal">
-        
-        <StackPanel.Resources>
-            <DataTemplate x:Key="ComboBoxStarTemplate">
-                <ctr:StarControl ForegroundBrush="{Binding}"/>
-            </DataTemplate>
-        </StackPanel.Resources>
-           
         <DockPanel>
             <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
                 <Button Content="LoadBack" Command="{Binding LoadBackCommand}"/>
@@ -24,7 +17,7 @@
                 <CheckBox Content="Make links" IsChecked="{Binding IsLinksMode}"/>
             </StackPanel>
 
-            <Grid Width="{Binding Width}" Height="{Binding Height}" Name="GameGrid">
+            <Grid Width="{Binding Width}" Height="{Binding Height}" Name="GameGrid" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <Image Source="{Binding BackImage}" HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="None"/>
                 
                 <ItemsControl ItemsSource="{Binding Links}">
@@ -33,14 +26,9 @@
                             <Canvas IsItemsHost="True"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
-
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="vm:LinkViewModel">
-                            <Line X1="{Binding SourceStar.X}"
-                                  Y1="{Binding SourceStar.Y}"
-                                  X2="{Binding TargetStar.X}"
-                                  Y2="{Binding TargetStar.Y}"
-                                  StrokeThickness="2">
+                            <Line X1="{Binding SourceStar.X}" Y1="{Binding SourceStar.Y}" X2="{Binding TargetStar.X}" Y2="{Binding TargetStar.Y}" StrokeThickness="2">
                                 <Line.Stroke>
                                     <LinearGradientBrush StartPoint="{Binding SourceStar.Point}" EndPoint="{Binding TargetStar.Point}" MappingMode="Absolute">
                                         <GradientStopCollection>
@@ -58,16 +46,12 @@
                     <ItemsControl.Template>
                         <ControlTemplate>
                             <Canvas>
-                                <Line X1="{Binding TempLink.SourceStar.X}"
-                                      Y1="{Binding TempLink.SourceStar.Y}"
-                                      X2="{Binding TempLink.TargetStar.X}"
-                                      Y2="{Binding TempLink.TargetStar.Y}"
+                                <Line X1="{Binding TempLink.SourceStar.X}" Y1="{Binding TempLink.SourceStar.Y}" X2="{Binding TempLink.TargetStar.X}" Y2="{Binding TempLink.TargetStar.Y}"
                                       StrokeThickness="2" Stroke="Black" StrokeDashArray="5 2" />
                                 <ItemsPresenter/>
                             </Canvas>
                         </ControlTemplate>
                     </ItemsControl.Template>
-                    
                     <ItemsControl.ItemContainerStyle>
                         <Style TargetType="FrameworkElement">
                             <Setter Property="Canvas.Left" Value="{Binding X}"/>
@@ -75,30 +59,23 @@
                             <Setter Property="AllowDrop" Value="True"/>
                         </Style>
                     </ItemsControl.ItemContainerStyle>
-
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Canvas IsItemsHost="True"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
-
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="vm:StarViewModel">
-                            <ctr:ExtendedThumb AllowDrop="True"
-                                               Mode="{Binding DataContext.DragMode, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}"
-                                               DragDeltaCommand="{Binding DragCommand}"
-                                               DropCommand="{Binding DropCommand}"
-                                               DragLeaveCommand="{Binding DragLeaveCommand}"
-                                               DragEnterCommand="{Binding DragEnterCommand}">
-
+                            <ctr:ExtendedThumb Mode="{Binding DataContext.DragMode, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}"  
+                                               DragDeltaCommand="{Binding DragCommand}" DropCommand="{Binding DropCommand}" DragOverCommand="{Binding DragOverCommand}"
+                                               DragLeaveCommand="{Binding DragLeaveCommand}" DragEnterCommand="{Binding DragEnterCommand}" AllowDrop="True">
                                 <ctr:ExtendedThumb.Template>
                                     <ControlTemplate>
-                                        <Path Data="{Binding Geometry}" Fill="{Binding Model.FinalState.Color}"/>
+                                        <Grid>
+                                            <Path Data="{Binding GeometryBack}" Fill="{Binding Model.FinalState.Color}"/>
+                                            <Path Data="{Binding GeometryFront}" Fill="{Binding Model.State.Color}"/>
+                                        </Grid>
                                     </ControlTemplate>
-                                    
-                                    <!--<ControlTemplate>
-                                        <ctr:StarControl BackgroundBrush="{Binding Model.FinalState.Color}" ForegroundBrush="{Binding Model.State.Color}"/>
-                                    </ControlTemplate>-->
                                 </ctr:ExtendedThumb.Template>
                             </ctr:ExtendedThumb>
                         </DataTemplate>
@@ -107,45 +84,124 @@
             </Grid>
         </DockPanel>
 
-        <ItemsControl ItemsSource="{Binding Stars}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel>
-                        <ctr:StarControl BackgroundBrush="{Binding Model.FinalState.Color}" ForegroundBrush="{Binding Model.State.Color}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="MouseLeftButtonUp">
-                                    <i:InvokeCommandAction Command="{Binding ChangeStateCommand}" CommandParameter="{x:Static MouseButton.Left}"/>
-                                </i:EventTrigger>
+        <GroupBox Header="States" Margin="5">
+            <ItemsControl Name="StateListBox" ItemsSource="{Binding States}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <ComboBox ItemsSource="{Binding DataContext.AllColors, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}" 
+                                  SelectedItem="{Binding Color}" VerticalAlignment="Center" Margin="2">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Ellipse Width="30" Height="30" Fill="{Binding}" Stroke="Black" StrokeThickness="1"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
 
-                                <i:EventTrigger EventName="MouseRightButtonUp">
-                                    <i:InvokeCommandAction Command="{Binding ChangeStateCommand}" CommandParameter="{x:Static MouseButton.Right}"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </ctr:StarControl>
-                    </StackPanel>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+                            <StackPanel>
+                                <Button Command="{Binding DataContext.AddStateCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}"
+                                    CommandParameter="{Binding}" Content="Add"/>
+                                <Button Command="{Binding DataContext.DelStateCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}"
+                                    CommandParameter="{Binding}" Content="Del"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </GroupBox>
         
-        <ItemsControl Name="StateListBox" ItemsSource="{Binding States}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <ComboBox ItemsSource="{Binding DataContext.AllColors, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}" 
-                                  ItemTemplate="{StaticResource ComboBoxStarTemplate}"
-                                  SelectedItem="{Binding Color}"/>
+        <GroupBox Header="Stars" Margin="5" MinWidth="200">
+            <ItemsControl ItemsSource="{Binding Stars}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <StackPanel.Resources>
+                                <Style TargetType="TextBox">
+                                    <Setter Property="Width" Value="30"/>
+                                    <Setter Property="Margin" Value="2,0,5,0"/>
+                                </Style>
+                            </StackPanel.Resources>
 
-                        <Button Command="{Binding DataContext.AddStateCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}"
-                                CommandParameter="{Binding}"
-                                Content=" + "/>
+                            <StackPanel>
+                                <Viewbox Width="40" Height="40" Margin="5">
+                                    <Grid Background="Transparent">
+                                        <Path Data="{Binding GeometryBack}" Fill="{Binding Model.FinalState.Color}">
+                                            <Path.RenderTransform>
+                                                <TransformGroup>
+                                                    <TranslateTransform X="{Binding HalfWidth}" Y="{Binding HalfWidth}"/>
+                                                    <ScaleTransform ScaleX="0.5" ScaleY="0.5"/>
+                                                </TransformGroup>
+                                            </Path.RenderTransform>
+                                        </Path>
+                                        <Path Data="{Binding GeometryFront}" Fill="{Binding Model.InitialState.Color}">
+                                            <Path.RenderTransform>
+                                                <TransformGroup>
+                                                    <TranslateTransform X="{Binding HalfWidth}" Y="{Binding HalfWidth}"/>
+                                                    <ScaleTransform ScaleX="0.5" ScaleY="0.5"/>
+                                                </TransformGroup>
+                                            </Path.RenderTransform>
+                                        </Path>
 
-                        <Button Command="{Binding DataContext.DelStateCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}"
-                                CommandParameter="{Binding}"
-                                Content=" - "/>
-                    </StackPanel>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="MouseLeftButtonUp">
+                                                <i:InvokeCommandAction Command="{Binding ChangeStateCommand}" CommandParameter="{x:Static MouseButton.Left}"/>
+                                            </i:EventTrigger>
+
+                                            <i:EventTrigger EventName="MouseRightButtonUp">
+                                                <i:InvokeCommandAction Command="{Binding ChangeStateCommand}" CommandParameter="{x:Static MouseButton.Right}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </Grid>
+                                </Viewbox>
+
+                                <Button Command="{Binding DataContext.DelStarCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}"
+                                        CommandParameter="{Binding}" Content=" Delete"/>
+                            </StackPanel>
+
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Width:"/>
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Angle:"/>
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="fAngle:"/>
+                                <TextBlock Grid.Row="3" Grid.Column="0" Text="fScale:"/>
+
+                                <TextBlock Grid.Row="0" Grid.Column="2" Text="Beams:"/>
+                                <TextBlock Grid.Row="1" Grid.Column="2" Text="InRad:"/>
+                                <TextBlock Grid.Row="2" Grid.Column="2" Text="IsSub:"/>
+                                <TextBlock Grid.Row="3" Grid.Column="2" Text="SbRad:"/>
+
+                                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Model.HalfWidthRel, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Model.RotateAngle, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Model.FrontAngle, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Model.FrontScale, UpdateSourceTrigger=PropertyChanged}"/>
+
+                                <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding Model.Beams, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Model.InnerCoeff, UpdateSourceTrigger=PropertyChanged}"/>
+                                <CheckBox Grid.Row="2" Grid.Column="3" IsChecked="{Binding Model.IsSubBeams, UpdateSourceTrigger=PropertyChanged}" Margin="2"/>
+                                <TextBox Grid.Row="3" Grid.Column="3" Text="{Binding Model.SubBeamsCoeff, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Model.IsSubBeams}"/>
+                            </Grid>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </GroupBox>
+        
+        <GroupBox Header="Links" Margin="5" MinWidth="200">
+            
+        </GroupBox>
     </StackPanel>
 </UserControl>
 

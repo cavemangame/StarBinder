@@ -132,6 +132,17 @@ namespace StarBinder.LevelEditor.ViewModels
             return BackImage != null;
         }
 
+        private ICommand delStarCommand;
+        public ICommand DelStarCommand { get { return delStarCommand ?? (delStarCommand = new DelegateCommand<StarViewModel>(OnExecuteDelStar)); } }
+
+        private void OnExecuteDelStar(StarViewModel star)
+        {
+            galaxy.RemoveStar(star.Model);
+            Stars.Remove(star);
+            stars.Remove(star.Model);
+            InitLinks();
+        }
+
         #endregion
 
         #region Links
@@ -175,9 +186,23 @@ namespace StarBinder.LevelEditor.ViewModels
             TempLink = null;
         }
 
+        internal bool CanAddLink(StarViewModel firstStar, StarViewModel secondStar)
+        {
+            return galaxy.CanAddLink(firstStar.Model, secondStar.Model);
+        }
+
         private LinkViewModel CreateLink(Link link)
         {
             return new LinkViewModel(stars[link.From], stars[link.To], link);
+        }
+
+        private ICommand delLinkCommand;
+        public ICommand DelLinkCommand { get { return delLinkCommand ?? (delLinkCommand = new DelegateCommand<LinkViewModel>(OnExecuteDelLink)); } }
+
+        private void OnExecuteDelLink(LinkViewModel link)
+        {
+            galaxy.RemoveLink(link.Model);
+            Links.Remove(link);
         }
 
         #endregion
