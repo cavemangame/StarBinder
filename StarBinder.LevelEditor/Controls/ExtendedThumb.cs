@@ -15,9 +15,10 @@ namespace StarBinder.LevelEditor.Controls
         static ExtendedThumb()
         {
             EventManager.RegisterClassHandler(typeof(Thumb), DragDrop.DragEnterEvent, new DragEventHandler(OnDragEnter));
+            EventManager.RegisterClassHandler(typeof(Thumb), DragDrop.DragOverEvent, new DragEventHandler(OnDragOver));
             EventManager.RegisterClassHandler(typeof(Thumb), DragDrop.DragLeaveEvent, new DragEventHandler(OnDragLeave));
             EventManager.RegisterClassHandler(typeof(Thumb), DragDrop.DropEvent, new DragEventHandler(OnDrop));
-            EventManager.RegisterClassHandler(typeof(Thumb), Thumb.DragDeltaEvent, new DragDeltaEventHandler(OnDragDelta));
+            EventManager.RegisterClassHandler(typeof(Thumb), ExtendedThumb.DragDeltaEvent, new DragDeltaEventHandler(OnDragDelta));
         }
 
         public static readonly DependencyProperty ModeProperty = DependencyProperty.Register(
@@ -46,6 +47,15 @@ namespace StarBinder.LevelEditor.Controls
             set { SetValue(DragEnterCommandProperty, value); }
         }
 
+        public static readonly DependencyProperty DragOverCommandProperty = DependencyProperty.Register(
+            "DragOverCommand", typeof (ICommand), typeof (ExtendedThumb), new PropertyMetadata(default(ICommand)));
+
+        public ICommand DragOverCommand
+        {
+            get { return (ICommand) GetValue(DragOverCommandProperty); }
+            set { SetValue(DragOverCommandProperty, value); }
+        }
+
         public static readonly DependencyProperty DragLeaveCommandProperty = DependencyProperty.Register(
             "DragLeaveCommand", typeof (ICommand), typeof (ExtendedThumb), new PropertyMetadata(default(ICommand)));
 
@@ -72,52 +82,101 @@ namespace StarBinder.LevelEditor.Controls
             }
             else
             {
-                DragDrop.DoDragDrop(this, new DataObject(typeof(object), DataContext), DragDropEffects.Link);
+                DragDrop.DoDragDrop(this, new DataObject(typeof(object), DataContext), DragDropEffects.All);
             }
         }
 
         private static void OnDragEnter(object sender, DragEventArgs dragEventArgs)
         {
-            var thumb = (ExtendedThumb)sender;
+            var thumb = sender as ExtendedThumb;
+            if (thumb == null) return;
 
             if (dragEventArgs.Data.GetData(typeof(object)) == thumb.DataContext) return;
 
-            if (thumb.DragEnterCommand != null && thumb.DragEnterCommand.CanExecute(dragEventArgs))
+            if (thumb.DragEnterCommand != null)
             {
-                thumb.DragEnterCommand.Execute(dragEventArgs);
+                if(thumb.DragEnterCommand.CanExecute(dragEventArgs))
+                {
+                    thumb.DragEnterCommand.Execute(dragEventArgs);
+                }
+                else
+                {
+                    dragEventArgs.Effects = DragDropEffects.None;
+                }
+    
+                dragEventArgs.Handled = true;
+            }
+        }
+
+        private static void OnDragOver(object sender, DragEventArgs dragEventArgs)
+        {
+            var thumb = sender as ExtendedThumb;
+            if (thumb == null) return;
+
+            if (dragEventArgs.Data.GetData(typeof(object)) == thumb.DataContext) return;
+
+            if (thumb.DragOverCommand != null)
+            {
+                if (thumb.DragOverCommand.CanExecute(dragEventArgs))
+                {
+                    thumb.DragOverCommand.Execute(dragEventArgs);
+                }
+                else
+                {
+                    dragEventArgs.Effects = DragDropEffects.None;
+                }
+                
                 dragEventArgs.Handled = true;
             }
         }
 
         private static void OnDragLeave(object sender, DragEventArgs dragEventArgs)
         {
-            var thumb = (ExtendedThumb)sender;
+            var thumb = sender as ExtendedThumb;
+            if (thumb == null) return;
 
             if (dragEventArgs.Data.GetData(typeof(object)) == thumb.DataContext) return;
 
-            if (thumb.DragLeaveCommand != null && thumb.DragLeaveCommand.CanExecute(dragEventArgs))
+            if (thumb.DragLeaveCommand != null)
             {
-                thumb.DragLeaveCommand.Execute(dragEventArgs);
+                if (thumb.DragLeaveCommand.CanExecute(dragEventArgs))
+                {
+                    thumb.DragLeaveCommand.Execute(dragEventArgs);
+                }
+                else
+                {
+                    dragEventArgs.Effects = DragDropEffects.None;
+                }
+
                 dragEventArgs.Handled = true;
             }
         }
 
         private static void OnDrop(object sender, DragEventArgs dragEventArgs)
         {
-            var thumb = (ExtendedThumb)sender;
+            var thumb = sender as ExtendedThumb;
+            if (thumb == null) return;
 
             if (dragEventArgs.Data.GetData(typeof(object)) == thumb.DataContext) return;
-            
-            if (thumb.DropCommand != null && thumb.DropCommand.CanExecute(dragEventArgs))
+            if (thumb.DragLeaveCommand != null)
             {
-                thumb.DropCommand.Execute(dragEventArgs);
+                if (thumb.DropCommand.CanExecute(dragEventArgs))
+                {
+                    thumb.DropCommand.Execute(dragEventArgs);
+                }
+                else
+                {
+                    dragEventArgs.Effects = DragDropEffects.None;
+                }
+
                 dragEventArgs.Handled = true;
             }
         }
 
         private static void OnDragDelta(object sender, DragDeltaEventArgs darDeltaEventArgs)
         {
-            var thumb = (ExtendedThumb)sender;
+            var thumb = sender as ExtendedThumb;
+            if (thumb == null) return;
 
             if (thumb.DragDeltaCommand != null && thumb.DragDeltaCommand.CanExecute(darDeltaEventArgs))
             {
