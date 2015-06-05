@@ -30,7 +30,14 @@ namespace StarBinder.LevelEditor.ViewModels
         private void OnNewCommandExecuted()
         {
             galaxy = Galaxy.CreateNew();
-            GalaxyViewModel = new GalaxyViewModel(galaxy);
+            var vm = new GalaxyViewModel(galaxy);
+            if (GalaxyViewModel != null)
+            {
+                vm.BackImage = GalaxyViewModel.BackImage;
+                vm.Width = GalaxyViewModel.Width;
+                vm.Height = GalaxyViewModel.Height;
+            }
+            GalaxyViewModel = vm;
         }
 
         private ICommand saveCommand;
