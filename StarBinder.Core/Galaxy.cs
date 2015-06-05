@@ -35,7 +35,7 @@ namespace StarBinder.Core
         }
     }
 
-    
+
     public class Galaxy
     {
         private State firstState;
@@ -45,6 +45,11 @@ namespace StarBinder.Core
         
         Galaxy()
         {
+        }
+
+        public Galaxy Clone()
+        {
+            return Create(new GalaxyData(this));
         }
 
         public static Galaxy CreateNew()
@@ -103,7 +108,9 @@ namespace StarBinder.Core
         }
 
         public IEnumerable<int> BestSolve { get { return solve; }  }
-
+        
+        public bool IsComplete { get { return Stars.All(s => s.State == s.FinalState); } }
+        
         public Star AddStar(State first = null, State final = null, State current = null)
         {
             var star = new Star(first ?? firstState, final ?? firstState.Prevous, current) { Number = stars.Count };
