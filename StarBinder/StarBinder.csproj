@@ -42,7 +42,6 @@
     <Compile Include="Controls\ScreenResolutionManager.cs" />
     <Compile Include="StarBinderApplicationDelegate.cs" />
     <Compile Include="Player.cs" />
-    <Compile Include="Level.cs" />
     <Compile Include="GameManager.cs" />
     <Compile Include="Controls\LevelNode.cs" />
     <Compile Include="CCControlExtension\CCControl.cs" />
@@ -84,5 +83,11 @@
     <Folder Include="Scenes\" />
     <Folder Include="Controls\" />
     <Folder Include="CCControlExtension\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StarBinder.Core\StarBinder.Core.csproj">
+      <Project>{18EAA6BB-DACC-4219-A52C-C4982E73AC00}</Project>
+      <Name>StarBinder.Core</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

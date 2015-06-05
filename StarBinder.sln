@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarBinder.AndroidPart", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarBinder", "StarBinder\StarBinder.csproj", "{0AFDB281-ACF1-4B60-8FCA-160A212EBB3D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarBinder.Core", "StarBinder.Core\StarBinder.Core.csproj", "{18EAA6BB-DACC-4219-A52C-C4982E73AC00}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{0AFDB281-ACF1-4B60-8FCA-160A212EBB3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0AFDB281-ACF1-4B60-8FCA-160A212EBB3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0AFDB281-ACF1-4B60-8FCA-160A212EBB3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18EAA6BB-DACC-4219-A52C-C4982E73AC00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18EAA6BB-DACC-4219-A52C-C4982E73AC00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18EAA6BB-DACC-4219-A52C-C4982E73AC00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18EAA6BB-DACC-4219-A52C-C4982E73AC00}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AAE3DA32-38F5-46BA-81EE-B35CE85F9F01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AAE3DA32-38F5-46BA-81EE-B35CE85F9F01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AAE3DA32-38F5-46BA-81EE-B35CE85F9F01}.Release|Any CPU.ActiveCfg = Release|Any CPU

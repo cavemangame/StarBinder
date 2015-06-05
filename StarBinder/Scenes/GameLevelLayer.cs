@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CocosSharp;
+using StarBinder.Core;
 
 namespace StarBinder
 {
@@ -16,14 +17,14 @@ namespace StarBinder
 		private CCSprite _restartBtn;
 
 		// stars on screen 
-		private Dictionary<int, CCSprite> _stars;
+		private Dictionary<int, CCDrawNode> _stars;
 		// binds in screen
 		private List<CCDrawNode> _binds;
 
 		// current level in intial state 
-		private Level _initLevel;
+		private Galaxy _initLevel;
 		// current level
-		private Level _level;
+		private Galaxy _level;
 
 		public GameLevelLayer() : base()
 		{
@@ -36,7 +37,7 @@ namespace StarBinder
 			base.AddedToScene ();
 
 			Scene.SceneResolutionPolicy = CCSceneResolutionPolicy.ShowAll;
-			_stars = new Dictionary<int, CCSprite> ();
+			_stars = new Dictionary<int, CCDrawNode> ();
 			_binds = new List<CCDrawNode> ();
 
 			_background = new CCSprite ("kosmos");
@@ -118,18 +119,18 @@ namespace StarBinder
 			}
 		}
 
+		string json = "{\"Name\":null,\"Description\":null,\"Number\":0,\"StepsSilver\":0,\"StepsGold\":0,\"BestSolve\":[],\"States\":[{\"Id\":\"691f3970-1c9f-45a9-8217-d8687f841424\",\"Color\":\"#FFF0FFF0\"},{\"Id\":\"d36569aa-cc0d-4b61-8e0d-66a080236d48\",\"Color\":\"#FF808080\"}],\"Stars\":[{\"StateId\":\"691f3970-1c9f-45a9-8217-d8687f841424\",\"FinalStateId\":\"d36569aa-cc0d-4b61-8e0d-66a080236d48\",\"InitialStateId\":\"691f3970-1c9f-45a9-8217-d8687f841424\",\"RotateAngle\":30.0,\"SubBeamsCoeff\":1.0,\"InnerCoeff\":0.3,\"IsSubBeams\":false,\"Beams\":5,\"HalfWidthRel\":0.1,\"FrontAngle\":2.0,\"FrontScale\":0.7,\"XRel\":0.2925,\"YRel\":0.24833333333333332,\"Number\":0},{\"StateId\":\"d36569aa-cc0d-4b61-8e0d-66a080236d48\",\"FinalStateId\":\"d36569aa-cc0d-4b61-8e0d-66a080236d48\",\"InitialStateId\":\"d36569aa-cc0d-4b61-8e0d-66a080236d48\",\"RotateAngle\":15.0,\"SubBeamsCoeff\":0.5,\"InnerCoeff\":0.3,\"IsSubBeams\":true,\"Beams\":4,\"HalfWidthRel\":0.1,\"FrontAngle\":2.0,\"FrontScale\":0.7,\"XRel\":0.46,\"YRel\":0.59166666666666667,\"Number\":1},{\"StateId\":\"691f3970-1c9f-45a9-8217-d8687f841424\",\"FinalStateId\":\"d36569aa-cc0d-4b61-8e0d-66a080236d48\",\"InitialStateId\":\"691f3970-1c9f-45a9-8217-d8687f841424\",\"RotateAngle\":15.0,\"SubBeamsCoeff\":0.5,\"InnerCoeff\":0.3,\"IsSubBeams\":false,\"Beams\":6,\"HalfWidthRel\":0.12,\"FrontAngle\":2.0,\"FrontScale\":0.7,\"XRel\":0.7325,\"YRel\":0.27333333333333332,\"Number\":2}],\"Links\":[{\"From\":2,\"To\":1,\"Direction\":0},{\"From\":2,\"To\":0,\"Direction\":0}]}";
 		private void InitLevel()
 		{
 			// load current level
-			_initLevel = new Level (GameManager.Instance.CurrentLevel);
-			_initLevel.InitLevel ();
+			_initLevel = SerializationHelper.GalaxyFromJson(json);
 			RefreshLevel ();
 			DrawLevel ();
 		}
 
 		private void RefreshLevel()
 		{
-			_level = _initLevel.Clone();
+			//_level = Galaxy.Create(_initLevel.;
 		}
 
 		private void DrawLevel()
@@ -143,36 +144,43 @@ namespace StarBinder
 			{
 				RemoveChild (path);
 			}
-			_stars = new Dictionary<int, CCSprite> ();
+			_stars = new Dictionary<int, CCDrawNode> ();
 			_binds = new List<CCDrawNode> ();
 
 			var r = new System.Random ();
 			// add stars
 			foreach (var s in _level.Stars) 
 			{
-				double d = r.NextDouble();
-				int seed = 1;
-				if (d > 0.33)
-					seed = 2;
-				if (d > 0.66)
-					seed = 3;
-				CCSprite star = new CCSprite (String.Format("star_{0}_{1}", seed, s.State == _level.WinState ? 0 : 1));
 				CCRect rect = ScreenResolutionManager.Instance.GetRect (new CCRect (s.X, s.Y, 0.1f, 0.1f));
-				star.Scale = rect.Size.Width / star.BoundingBox.Size.Width;
-				star.Position = new CCPoint (rect.MinX, rect.MinY);
+				CCDrawNode pStar = new CCDrawNode ();
+				float k = 3;
+				List<CCPoint> points = new List<CCPoint> ();
+				points.Add(new CCPoint (rect.MinX + 22 * k, rect.MinY + 12 * k));
+				points.Add(new CCPoint (rect.MinX + 36 * k, rect.MinY + 12 * k));
+				points.Add(new CCPoint (rect.MinX + 24 * k, rect.MinY + 22 * k));
+				points.Add(new CCPoint (rect.MinX + 28 * k, rect.MinY + 34 * k));
+				points.Add(new CCPoint (rect.MinX + 18 * k, rect.MinY + 24 * k));
+				points.Add(new CCPoint (rect.MinX + 8 * k, rect.MinY + 34 * k));
+				points.Add(new CCPoint (rect.MinX + 12 * k, rect.MinY + 22 * k));
+				points.Add(new CCPoint (rect.MinX + 0 * k, rect.MinY + 12 * k));
+				points.Add(new CCPoint (rect.MinX + 14 * k, rect.MinY + 12 * k));
+				points.Add(new CCPoint (rect.MinX + 18 * k, rect.MinY + 0 * k));
 
-				_stars.Add (s.Number, star);
+				pStar.DrawPolygon (points.ToArray(), points.Count(), CCColor4B.Green, 2, CCColor4B.Gray);
+				_stars.Add (s.Number, pStar);
 	
 				foreach (Bind bind in _level.Binds)
 				{
+					//M 18,0 L 14,12 L 0,12 L 12,22 L 8,34 L 18,24 L 28,34 L 24,22 L 36,12 L 22,12 L 18,0
+
 					var stars = _level.GetBindStars (bind);
-					CCDrawNode path = new CCDrawNode ();
+					CCDrawNode pBind = new CCDrawNode ();
 
 					CCRect rect1 = ScreenResolutionManager.Instance.GetRect (new CCRect (stars.First ().X, stars.First ().Y, 0.1f, 0.1f));
 					CCRect rect2 = ScreenResolutionManager.Instance.GetRect (new CCRect (stars.Last ().X, stars.Last ().Y, 0.1f, 0.1f));
 
-					path.DrawLine (new CCPoint(rect1.MinX, rect1.MinY), new CCPoint(rect2.MinX, rect2.MinY), 3.0f, CCColor4B.Green);
-					_binds.Add (path);
+					pBind.DrawLine (new CCPoint(rect1.MinX, rect1.MinY), new CCPoint(rect2.MinX, rect2.MinY), 3.0f, CCColor4B.Green);
+					_binds.Add (pBind);
 				}
 			}
 
