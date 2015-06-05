@@ -100,9 +100,9 @@ namespace StarBinder.LevelEditor.ViewModels
 
         private async void OnExecuteResolve()
         {
-            MessageBox.Show(string.Join("; ", await galaxy.Resolve(30)));
+            var res = await galaxy.Resolve(30);
+            MessageBox.Show(res.Any() ? string.Join("; ", res) : "В пределах 30 ходов решений не найдено");
         }
-
 
         #region Stars
 
