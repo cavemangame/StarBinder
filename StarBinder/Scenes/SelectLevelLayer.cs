@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using CocosSharp;
+using StarBinder.Core;
 
 namespace StarBinder
 {
@@ -108,9 +109,9 @@ namespace StarBinder
 			_levelNodes.Clear ();
 
 			int i = 0;
-			foreach (Level lvl in GameManager.Instance.GameLevels.Values)
+			foreach (Galaxy lvl in GameManager.Instance.GameLevels.Values)
 			{
-				if (lvl.Chapter == _currentChapter)
+				if (lvl.Number / 10 == _currentChapter - 1)
 				{
 					int x = i % 4;
 					int y = i / 4;

@@ -19,7 +19,7 @@ namespace StarBinder
 		// stars on screen 
 		private Dictionary<int, CCDrawNode> _stars;
 		// binds in screen
-		private List<CCDrawNode> _binds;
+		private List<CCDrawNode> _links;
 
 		// current level in intial state 
 		private Galaxy _initLevel;
@@ -38,7 +38,7 @@ namespace StarBinder
 
 			Scene.SceneResolutionPolicy = CCSceneResolutionPolicy.ShowAll;
 			_stars = new Dictionary<int, CCDrawNode> ();
-			_binds = new List<CCDrawNode> ();
+			_links = new List<CCDrawNode> ();
 
 			_background = new CCSprite ("kosmos");
 			_background.Position = VisibleBoundsWorldspace.Center;
@@ -112,7 +112,7 @@ namespace StarBinder
 			{
 				if (pair.Value.BoundingBoxTransformedToWorld.ContainsPoint (location)) 
 				{
-					_level.NextState (pair.Key);
+					_level.Star(pair.Key).ChangeAll();
 					DrawLevel ();
 					break;
 				}
@@ -130,7 +130,7 @@ namespace StarBinder
 
 		private void RefreshLevel()
 		{
-			//_level = Galaxy.Create(_initLevel.;
+			_level = _initLevel.Clone();
 		}
 
 		private void DrawLevel()
@@ -140,18 +140,18 @@ namespace StarBinder
 			{
 				RemoveChild (pair.Value);
 			}
-			foreach (var path in _binds) 
+			foreach (var path in _links) 
 			{
 				RemoveChild (path);
 			}
 			_stars = new Dictionary<int, CCDrawNode> ();
-			_binds = new List<CCDrawNode> ();
+			_links = new List<CCDrawNode> ();
 
 			var r = new System.Random ();
 			// add stars
 			foreach (var s in _level.Stars) 
 			{
-				CCRect rect = ScreenResolutionManager.Instance.GetRect (new CCRect (s.X, s.Y, 0.1f, 0.1f));
+				/*CCRect rect = ScreenResolutionManager.Instance.GetRect (new CCRect (s.X, s.Y, 0.1f, 0.1f));
 				CCDrawNode pStar = new CCDrawNode ();
 				float k = 3;
 				List<CCPoint> points = new List<CCPoint> ();
@@ -169,7 +169,7 @@ namespace StarBinder
 				pStar.DrawPolygon (points.ToArray(), points.Count(), CCColor4B.Green, 2, CCColor4B.Gray);
 				_stars.Add (s.Number, pStar);
 	
-				foreach (Bind bind in _level.Binds)
+				foreach (Link link in _level.Links)
 				{
 					//M 18,0 L 14,12 L 0,12 L 12,22 L 8,34 L 18,24 L 28,34 L 24,22 L 36,12 L 22,12 L 18,0
 
@@ -180,11 +180,11 @@ namespace StarBinder
 					CCRect rect2 = ScreenResolutionManager.Instance.GetRect (new CCRect (stars.Last ().X, stars.Last ().Y, 0.1f, 0.1f));
 
 					pBind.DrawLine (new CCPoint(rect1.MinX, rect1.MinY), new CCPoint(rect2.MinX, rect2.MinY), 3.0f, CCColor4B.Green);
-					_binds.Add (pBind);
-				}
+					_links.Add (pBind);
+				}*/
 			}
 
-			foreach (var path in _binds) 
+			foreach (var path in _links) 
 			{
 				AddChild (path);
 			}
@@ -227,7 +227,6 @@ namespace StarBinder
 			var layer = new GameLevelLayer ();
 
 			scene.AddChild (layer);
-
 			return scene;
 		}
 	}

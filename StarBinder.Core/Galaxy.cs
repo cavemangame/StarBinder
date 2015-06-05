@@ -89,7 +89,7 @@ namespace StarBinder.Core
 
         public string Name { get; private set; }
         public string Description { get; private set; }
-        public int Number { get; private set; }
+        public int Number { get; set; }
         public int StepsSilver { get; private set; }
         public int StepsGold { get; private set; }
 
@@ -111,6 +111,11 @@ namespace StarBinder.Core
         public IEnumerable<int> BestSolve { get { return solve; }  }
         
         public bool IsComplete { get { return Stars.All(s => s.State == s.FinalState); } }
+
+		public Star Star(int number)
+		{
+			return Stars.FirstOrDefault(s => s.Number == number);
+		}
         
         public Star AddStar(State first = null, State final = null, State current = null)
         {

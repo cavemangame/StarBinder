@@ -95,9 +95,9 @@ namespace StarBinder
 				int steps = Levels [i]; 
 				if (steps > 0) 
 				{
-					if (steps <= GameManager.Instance.GameLevels [i].Steps1)
+					if (steps <= GameManager.Instance.GameLevels [i].StepsGold)
 						stars += 3;
-					else if (steps <= GameManager.Instance.GameLevels [i].Steps2)
+					else if (steps <= GameManager.Instance.GameLevels [i].StepsSilver)
 						stars += 2;
 					else
 						stars += 1;

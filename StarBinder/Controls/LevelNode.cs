@@ -55,9 +55,9 @@ namespace StarBinder
 			int steps = player.Levels [_levelNum];
 			if (steps != 0) 
 			{
-				if (steps <= GameManager.Instance.GameLevels [_levelNum].Steps1)
+				if (steps <= GameManager.Instance.GameLevels [_levelNum].StepsGold)
 					starName = "stars_3";
-				else if (steps <= GameManager.Instance.GameLevels [_levelNum].Steps2)
+				else if (steps <= GameManager.Instance.GameLevels [_levelNum].StepsSilver)
 					starName = "stars_2";
 				else starName = "stars_1";
 			}
