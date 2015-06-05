@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using CocosSharp;
+using StarBinder.Core;
 
 namespace StarBinder
 {
@@ -15,7 +16,7 @@ namespace StarBinder
 
 		protected GameManager () 
 		{
-			GameLevels = new Dictionary<int, Level> ();
+			GameLevels = new Dictionary<int, Galaxy> ();
 			InitLevels ();
 			InitPlayer ();
 		}
@@ -29,7 +30,7 @@ namespace StarBinder
 		public Player Player { get; set; }
 
 		// all game levels (lazy loading)
-		public Dictionary<int, Level> GameLevels {get; private set;}
+		public Dictionary<int, Galaxy> GameLevels {get; private set;}
 
 		public int CurrentLevel { get; set; }
 
@@ -37,7 +38,9 @@ namespace StarBinder
 		{
 			for (int i = 1; i <= LevelsCount; i++) 
 			{
-				GameLevels.Add (i, new Level (i));
+				Galaxy g = Galaxy.CreateNew ();
+				g.Number = i;
+				GameLevels.Add (i, g);
 			}
 			/*GameLevels [1].Steps1 = 1;
 			GameLevels [1].Steps2 = 2;
