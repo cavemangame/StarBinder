@@ -1,13 +1,17 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Input;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
+using Microsoft.Win32;
 using StarBinder.Core;
 
 namespace StarBinder.LevelEditor.ViewModels
 {
     class MainWindowViewModel : BindableBase
     {
+        private Galaxy galaxy;
+
         public MainWindowViewModel()
         {
             OnNewCommandExecuted();
@@ -25,7 +29,8 @@ namespace StarBinder.LevelEditor.ViewModels
 
         private void OnNewCommandExecuted()
         {
-            GalaxyViewModel = new GalaxyViewModel(Galaxy.CreateNew());
+            galaxy = Galaxy.CreateNew();
+            GalaxyViewModel = new GalaxyViewModel(galaxy);
         }
 
         private ICommand saveCommand;
@@ -33,7 +38,41 @@ namespace StarBinder.LevelEditor.ViewModels
 
         private void OnSaveCommandExecuted()
         {
-            throw new NotImplementedException();
+            var json = galaxy.ToJson();
+            var dlg = new SaveFileDialog();
+
+            if (dlg.ShowDialog() == true)
+            {
+                using (var writer = new StreamWriter(dlg.FileName, false))
+                {
+                    writer.Write(json);
+                }
+            }
+        }
+
+        private ICommand loadCommand;
+        public ICommand LoadCommand { get { return loadCommand ?? (loadCommand = new DelegateCommand(OnExecuteLoad)); } }
+
+        private void OnExecuteLoad()
+        {
+            var dlg = new OpenFileDialog();
+
+            if (dlg.ShowDialog() == true)
+            {
+                string json;
+                using (var reader = new StreamReader(dlg.FileName))
+                {
+                    json = reader.ReadToEnd();
+                }
+               
+                galaxy = SerializationHelper.GalaxyFromJson(json);
+                GalaxyViewModel = new GalaxyViewModel(galaxy)
+                {
+                    Width = GalaxyViewModel.Width,
+                    Height = GalaxyViewModel.Height,
+                    BackImage = GalaxyViewModel.BackImage
+                };
+            }
         }
     }
 }

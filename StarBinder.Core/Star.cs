@@ -3,6 +3,57 @@ using System.Collections.Generic;
 
 namespace StarBinder.Core
 {
+    public class StarData
+    {
+        public string StateId;
+        public string FinalStateId;
+        public string InitialStateId;
+        public double RotateAngle;
+        public double SubBeamsCoeff;
+        public double InnerCoeff;
+        public bool IsSubBeams;
+        public int Beams;
+        public double HalfWidthRel;
+        public double FrontAngle;
+        public double FrontScale;
+        public double XRel;
+        public double YRel;
+        public int Number;
+
+        public StarData()
+        {
+            
+        }
+
+        public StarData(Star star)
+        {
+            StateId = star.State.Id;
+            InitialStateId = star.InitialState.Id;
+            FinalStateId = star.FinalState.Id;
+            RotateAngle = star.RotateAngle;
+            SubBeamsCoeff = star.SubBeamsCoeff;
+            InnerCoeff = star.InnerCoeff;
+            IsSubBeams = star.IsSubBeams;
+            Beams = star.Beams;
+            HalfWidthRel = star.HalfWidthRel;
+            FrontAngle = star.FrontAngle;
+            FrontScale = star.FrontScale;
+            XRel = star.XRel;
+            YRel = star.YRel;
+            Number = star.Number;
+        }
+
+        public Star CreateStar(Dictionary<string, State> states)
+        {
+            return new Star(states[InitialStateId], states[FinalStateId], states[StateId])
+            {
+                RotateAngle = RotateAngle, SubBeamsCoeff = SubBeamsCoeff, InnerCoeff = InnerCoeff, IsSubBeams = IsSubBeams,
+                Beams = Beams, HalfWidthRel = HalfWidthRel, FrontAngle = FrontAngle, FrontScale = FrontScale, 
+                XRel = XRel, YRel = YRel, Number = Number
+            };
+        }
+    }
+    
     public class Star : ViewObject
     {
         private State state;
@@ -10,17 +61,13 @@ namespace StarBinder.Core
         private State initialState;
         private List<Link> links;
 
-        internal Star(State initialState, State finalState)
+        internal Star(State initialState, State finalState, State state)
         {
-            State = initialState;
+            State = state ?? initialState;
             InitialState = initialState;
             FinalState = finalState;
             links = new List<Link>();
-            
-            YRel = 0.1;
-            XRel = 0.1;
         }
-
 
         private int number;
         public int Number

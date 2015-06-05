@@ -66,7 +66,7 @@ namespace StarBinder.LevelEditor.ViewModels
         public ImageSource BackImage
         {
             get { return backImage; }
-            private set
+            internal set
             {
                 SetProperty(ref backImage, value);
                 
@@ -115,7 +115,7 @@ namespace StarBinder.LevelEditor.ViewModels
         {
             var svm = new StarViewModel(star, this, calculator);
             stars.Add(star, svm);
-            svm.Model.XRel += 0.02 * Stars.Count;
+            
             return svm;
         }
         
@@ -125,7 +125,9 @@ namespace StarBinder.LevelEditor.ViewModels
 
         private void OnAddStarCommandExecuted()
         {
-            Stars.Add(CreateStar(galaxy.AddStar()));
+            var star = CreateStar(galaxy.AddStar());
+            star.Model.XRel += 0.02 * Stars.Count;
+            Stars.Add(star);
         }
 
         private bool CanAddStarCommandExecuted()

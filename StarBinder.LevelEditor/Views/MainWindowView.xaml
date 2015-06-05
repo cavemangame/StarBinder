@@ -12,7 +12,15 @@
         prism:ViewModelLocator.AutoWireViewModel="True">
     <DockPanel>
         <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
+            <StackPanel.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Margin" Value="3"/>
+                    <Setter Property="Width" Value="90"/>
+                </Style>
+            </StackPanel.Resources>
+            
             <Button Command="{Binding NewCommand}" Content="New"/>
+            <Button Command="{Binding LoadCommand}" Content="Load"/>
             <Button Command="{Binding SaveCommand}" Content="Save"/>
         </StackPanel>
         

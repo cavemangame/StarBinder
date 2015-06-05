@@ -4,29 +4,81 @@ using System.Linq;
 
 namespace StarBinder.Core
 {
+    public class GalaxyData
+    {
+        public string Name;
+        public string Description;
+        public int Number;
+        public int StepsSilver;
+        public int StepsGold;
+        public List<int> BestSolve;
+        public List<StateData> States;
+        public List<StarData> Stars;
+        public List<LinkData> Links;
+
+        public GalaxyData()
+        {
+            
+        }
+
+        public GalaxyData(Galaxy galaxy)
+        {
+            Name = galaxy.Name;
+            Description = galaxy.Description;
+            Number = galaxy.Number;
+            StepsSilver = galaxy.StepsSilver;
+            StepsGold = galaxy.StepsGold;
+            BestSolve = galaxy.BestSolve.ToList();
+            States = new List<StateData>(galaxy.States.Select(state => new StateData(state)));
+            Stars = new List<StarData>(galaxy.Stars.Select(star => new StarData(star)));
+            Links = new List<LinkData>(galaxy.Links.Select(link => new LinkData(link)));
+        }
+    }
+
+    
     public class Galaxy
     {
-        private readonly State firstState;
-        private readonly List<Star> stars;
-        private readonly List<Link> links;
-        private readonly List<int> solve;
+        private State firstState;
+        private List<Star> stars;
+        private List<Link> links;
+        private List<int> solve;
         
         Galaxy()
         {
-            firstState = State.CreateInitial();
-            
-            stars = new List<Star>();
-            links = new List<Link>();
         }
 
         public static Galaxy CreateNew()
         {
-            return new Galaxy();
+            return new Galaxy
+            {
+                firstState = State.CreateInitial(),
+                stars = new List<Star>(),
+                links = new List<Link>(),
+                solve = new List<int>()
+            };
         }
 
-        public static Galaxy Load()
+        public static Galaxy Create(GalaxyData data)
         {
-            throw new NotImplementedException();
+            var galaxy = new Galaxy
+            {
+                Name = data.Name, Number = data.Number, Description = data.Description, 
+                StepsGold = data.StepsGold, StepsSilver = data.StepsSilver, solve = data.BestSolve
+            };
+
+            var statesCache = new Dictionary<string, State>();
+            galaxy.firstState = State.CreateInitial(data.States[0].Color);
+            statesCache.Add(data.States[0].Id, galaxy.firstState);
+            
+            for (var i = 1; i < data.States.Count; i++)
+            {
+                statesCache.Add(data.States[i].Id, galaxy.AddState(null, data.States[i].Color));
+            }
+
+            galaxy.stars = new List<Star>(data.Stars.Select(starData => starData.CreateStar(statesCache)));
+            galaxy.links = new List<Link>(data.Links.Select(linkData => galaxy.CreateLink(galaxy.stars[linkData.From], galaxy.stars[linkData.To], linkData.Direction)));
+
+            return galaxy;
         }
 
         public string Name { get; private set; }
@@ -52,11 +104,16 @@ namespace StarBinder.Core
 
         public IEnumerable<int> BestSolve { get { return solve; }  }
 
-        public Star AddStar()
+        public Star AddStar(State first = null, State final = null, State current = null)
         {
-            var star = new Star(firstState, firstState.Prevous) { Number = stars.Count };
-            stars.Add(star);
+            var star = new Star(first ?? firstState, final ?? firstState.Prevous, current) { Number = stars.Count };
+            AddStar(star);
             return star;
+        }
+
+        private void AddStar(Star star)
+        {
+            stars.Add(star);
         }
 
         public void RemoveStar(Star star)
@@ -74,10 +131,10 @@ namespace StarBinder.Core
             }
         }
 
-        public State AddState(State previuos = null)
+        public State AddState(State previuos = null, string color = null)
         {
-            previuos = previuos ?? firstState;
-            return State.CreateAfter(previuos);
+            previuos = previuos ?? firstState.Prevous;
+            return State.CreateAfter(previuos, color);
         }
 
         public void RemoveState(State state)
@@ -92,8 +149,14 @@ namespace StarBinder.Core
 
         public Link AddLink(Star source, Star target, LinkDirection direction = LinkDirection.Both)
         {
-            var link = new Link(source, target, direction);
+            var link = CreateLink(source, target, direction);
             links.Add(link);
+            return link;
+        }
+
+        private Link CreateLink(Star source, Star target, LinkDirection direction = LinkDirection.Both)
+        {
+            var link = new Link(source, target, direction);
             source.AddLink(link);
             target.AddLink(link);
             return link;
