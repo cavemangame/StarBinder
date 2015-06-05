@@ -37,7 +37,7 @@ namespace StarBinder.Core
             maxSteps = max;
             
             ProcessState(new StateInfo(galaxy.InitialState, new int[0]));
-            return allStates.ContainsKey(galaxy.FinalState) ? allStates[galaxy.FinalState].Clicks : null;
+            return allStates.ContainsKey(galaxy.FinalState) ? allStates[galaxy.FinalState].Clicks : new int[0];
         }
 
         private void ProcessState(StateInfo stateInfo)

@@ -100,7 +100,7 @@ namespace StarBinder.LevelEditor.ViewModels
 
         private async void OnExecuteResolve()
         {
-            MessageBox.Show(string.Join("; ", await galaxy.Resolve(20)));
+            MessageBox.Show(string.Join("; ", await galaxy.Resolve(30)));
         }
 
 
