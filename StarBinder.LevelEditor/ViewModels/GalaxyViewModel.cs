@@ -95,7 +95,15 @@ namespace StarBinder.LevelEditor.ViewModels
             }
         }
 
-        
+        private ICommand resolveCommand;
+        public ICommand ResolveCommand { get { return resolveCommand ?? (resolveCommand = new DelegateCommand(OnExecuteResolve)); } }
+
+        private async void OnExecuteResolve()
+        {
+            MessageBox.Show(string.Join("; ", await galaxy.Resolve(20)));
+        }
+
+
         #region Stars
 
         private Dictionary<Star, StarViewModel> stars;

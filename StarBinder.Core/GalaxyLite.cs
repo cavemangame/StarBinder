@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace StarBinder.Core
@@ -47,10 +48,10 @@ namespace StarBinder.Core
         public int StarClick(int star, int state)
         {
             var result = state;
-            
-            for (int i = 0; i < links[state].Length; i++)
+
+            for (int i = 0; i < links[star].Length; i++)
             {
-                result = NextStarState(links[state][i], result);
+                result = NextStarState(links[star][i], result);
             }
 
             return result;
@@ -63,7 +64,7 @@ namespace StarBinder.Core
 
         private int SetStarState(int star, int state, int galaxyState)
         {
-            return galaxyState - GetStarState(state, galaxyState) * powers[star] + state * powers[star];
+            return galaxyState - GetStarState(star, galaxyState) * powers[star] + state * powers[star];
         }
 
         private int NextStarState(int star, int galaxyState)

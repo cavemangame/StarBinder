@@ -12,9 +12,18 @@
     <StackPanel Orientation="Horizontal">
         <DockPanel>
             <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
+                <StackPanel.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="Margin" Value="3"/>
+                        <Setter Property="Width" Value="90"/>
+                    </Style>
+                </StackPanel.Resources>
+                
                 <Button Content="LoadBack" Command="{Binding LoadBackCommand}"/>
                 <Button Content="AddStar" Command="{Binding AddStarCommand}"/>
-                <CheckBox Content="Make links" IsChecked="{Binding IsLinksMode}"/>
+                <Button Content="Resolve" Command="{Binding ResolveCommand}"/>
+                
+                <CheckBox Content="Make links" IsChecked="{Binding IsLinksMode}" Margin="3"/>
             </StackPanel>
 
             <Grid Width="{Binding Width}" Height="{Binding Height}" Name="GameGrid" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top">

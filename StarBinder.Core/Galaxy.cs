@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace StarBinder.Core
 {
@@ -179,6 +180,17 @@ namespace StarBinder.Core
         public bool CanAddLink(Star source, Star target)
         {
             return source != target && !source.Links.Any(l => l.From == target || l.To == target);
+        }
+
+        public Task<IEnumerable<int>> Resolve(int maxSteps)
+        {
+            var resolver = new GalaxyResolver(this);
+            
+            return Task.Factory.StartNew(() =>
+            {
+                solve = resolver.Resolve(maxSteps).ToList();
+                return BestSolve;
+            });
         }
     }
 }
