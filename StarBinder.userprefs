@@ -1,10 +1,14 @@
 ﻿<Properties StartupItem="StarBinder.AndroidPart\StarBinder.AndroidPart.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.Nexus 7 (KitKat)" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="StarBinder.Core\Galaxy.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="StarBinder\Controls\LevelNode.cs">
     <Files>
-      <File FileName="StarBinder\Scenes\GameLevelLayer.cs" Line="127" Column="20" />
+      <File FileName="StarBinder\Scenes\GameLevelLayer.cs" Line="1" Column="1" />
       <File FileName="StarBinder\Scenes\SelectLevelLayer.cs" Line="1" Column="1" />
-      <File FileName="StarBinder.Core\Galaxy.cs" Line="81" Column="97" />
+      <File FileName="StarBinder.Core\Galaxy.cs" Line="1" Column="1" />
+      <File FileName="StarBinder.Core\Star.cs" Line="57" Column="5" />
+      <File FileName="StarBinder\GameManager.cs" Line="1" Column="1" />
+      <File FileName="StarBinder\Player.cs" Line="1" Column="1" />
+      <File FileName="StarBinder\Controls\LevelNode.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

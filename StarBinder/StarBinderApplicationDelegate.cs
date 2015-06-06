@@ -34,7 +34,7 @@ namespace StarBinder
 		
 			//CCSimpleAudioEngine.SharedEngine.PreloadEffect ("Sounds/tap");
 
-			ScreenResolutionManager.CreateResolutionManager (windowSize.Width, windowSize.Height);
+			GameManager.Instance.Calculator = new StarBinder.Core.SizeCalculator ((int)windowSize.Width, (int)windowSize.Height);
 			CCScene scene = GameStartLayer.GameStartLayerScene(mainWindow);
 			mainWindow.RunWithScene (scene);
 		}

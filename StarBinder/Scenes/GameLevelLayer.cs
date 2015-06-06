@@ -59,27 +59,27 @@ namespace StarBinder
 		private void AddButtons ()
 		{
 			_backBtn = new CCSprite ("back");
-			CCRect rect = ScreenResolutionManager.Instance.GetRect (new CCRect (0.1f, 0.1f, 0.14f, 0.14f));
+			CCRect rect = GetRect(0.1f, 0.1f, 0.14f, 0.14f);
 			_backBtn.Scale = rect.Size.Width / _backBtn.BoundingBox.Size.Width;
 			_backBtn.Position = new CCPoint (rect.MinX, rect.MinY);
 
 			_optionsBtn = new CCSprite ("options");
-			rect = ScreenResolutionManager.Instance.GetRect (new CCRect (0.3f, 0.1f, 0.14f, 0.14f));
+			rect = GetRect(0.3f, 0.1f, 0.14f, 0.14f);
 			_optionsBtn.Scale = rect.Size.Width / _optionsBtn.BoundingBox.Size.Width;
 			_optionsBtn.Position = new CCPoint (rect.MinX, rect.MinY);
 
 			_achievementsBtn = new CCSprite ("star");
-			rect = ScreenResolutionManager.Instance.GetRect (new CCRect (0.5f, 0.1f, 0.14f, 0.14f));
+			rect = GetRect(0.5f, 0.1f, 0.14f, 0.14f);
 			_achievementsBtn.Scale = rect.Size.Width / _achievementsBtn.BoundingBox.Size.Width;
 			_achievementsBtn.Position = new CCPoint (rect.MinX, rect.MinY);
 
 			_helpBtn = new CCSprite ("help");
-			rect = ScreenResolutionManager.Instance.GetRect (new CCRect (0.7f, 0.1f, 0.14f, 0.14f));
+			rect = GetRect(0.7f, 0.1f, 0.14f, 0.14f);
 			_helpBtn.Scale = rect.Size.Width / _helpBtn.BoundingBox.Size.Width;
 			_helpBtn.Position = new CCPoint (rect.MinX, rect.MinY);
 
 			_restartBtn = new CCSprite ("refresh");
-			rect = ScreenResolutionManager.Instance.GetRect (new CCRect (0.9f, 0.1f, 0.14f, 0.14f));
+			rect = GetRect(0.9f, 0.1f, 0.14f, 0.14f);
 			_restartBtn.Scale = rect.Size.Width / _restartBtn.BoundingBox.Size.Width;
 			_restartBtn.Position = new CCPoint (rect.MinX, rect.MinY);
 		}
@@ -151,6 +151,7 @@ namespace StarBinder
 			// add stars
 			foreach (var s in _level.Stars) 
 			{
+			//	Point[] pt = SizeCalculator.
 				/*CCRect rect = ScreenResolutionManager.Instance.GetRect (new CCRect (s.X, s.Y, 0.1f, 0.1f));
 				CCDrawNode pStar = new CCDrawNode ();
 				float k = 3;
@@ -228,6 +229,12 @@ namespace StarBinder
 
 			scene.AddChild (layer);
 			return scene;
+		}
+
+
+		public CCRect GetRect(float x, float y, float width, float height)
+		{
+			return GameManager.Instance.Calculator.RectRelToAbsByMinSize (x, y, width, height).Convert (); 
 		}
 	}
 }
