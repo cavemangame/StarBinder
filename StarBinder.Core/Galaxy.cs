@@ -112,6 +112,14 @@ namespace StarBinder.Core
         
         public bool IsComplete { get { return Stars.All(s => s.State == s.FinalState); } }
 
+        public void ResetStarStates()
+        {
+            foreach (var star in Stars)
+            {
+                star.Reset();
+            }
+        }
+
 		public Star Star(int number)
 		{
 			return Stars.FirstOrDefault(s => s.Number == number);
@@ -193,8 +201,24 @@ namespace StarBinder.Core
             
             return Task.Factory.StartNew(() =>
             {
-                solve = resolver.Resolve(maxSteps).ToList();
+                resolver.TryWithMax(maxSteps, out solve);
                 return BestSolve;
+            });
+        }
+
+        public Task<IEnumerable<int>> Mix(int steps)
+        {
+            var mixer = new GalaxyMixer(this);
+
+            return Task.Factory.StartNew(() =>
+            {
+                List<int> result;
+                if (mixer.Mix(steps, out result))
+                {
+                    solve = result;
+                    return BestSolve;
+                }
+                return new int[0];
             });
         }
     }

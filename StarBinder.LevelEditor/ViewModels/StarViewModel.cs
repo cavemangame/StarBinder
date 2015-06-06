@@ -75,6 +75,14 @@ namespace StarBinder.LevelEditor.ViewModels
 
         #region Commands
 
+        private ICommand nextStateCommand;
+        public ICommand NextStateCommand { get { return nextStateCommand ?? (nextStateCommand = new DelegateCommand(OnExecuteNextState)); } }
+
+        private void OnExecuteNextState()
+        {
+            Model.ChangeAll();
+        }
+
         private ICommand changeStateCommand;
         public ICommand ChangeStateCommand { get { return changeStateCommand ?? (changeStateCommand = new DelegateCommand<MouseButton?>(OnExecuteChangeState)); } }
 

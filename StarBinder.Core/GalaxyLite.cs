@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace StarBinder.Core
@@ -45,6 +45,28 @@ namespace StarBinder.Core
             }
         }
 
+        GalaxyLite(int stars, int states, int initial, int final, int[] powers, int[][] links)
+        {
+            StarsCount = stars;
+            statesCount = states;
+            InitialState = initial;
+            FinalState = final;
+            this.powers = powers;
+            this.links = links;
+        }
+
+        public GalaxyLite CreateWithNewInitial(int initial)
+        {
+            if (initial < 0 || initial > MaxState)
+                throw new ArgumentException("Incorrect state value");
+
+            return new GalaxyLite(StarsCount, statesCount, initial, FinalState, powers, links);
+        }
+
+        private int maxState = -1;
+        public int MaxState { get { return maxState != -1 ? maxState : (maxState = (int)(Math.Pow(statesCount, StarsCount) - 0.5)); } }
+        
+
         public int StarClick(int star, int state)
         {
             var result = state;
@@ -57,7 +79,7 @@ namespace StarBinder.Core
             return result;
         }
 
-        private int GetStarState(int star, int galaxyState)
+        internal int GetStarState(int star, int galaxyState)
         {
             return galaxyState % powers[star + 1] / powers[star];
         }

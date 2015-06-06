@@ -32,6 +32,13 @@ namespace StarBinder.LevelEditor.ViewModels
             InitLinks();
         }
 
+        private bool isEnabled = true;
+        public bool IsEnabled
+        {
+            get { return isEnabled; }
+            set { SetProperty(ref isEnabled, value); }
+        }
+
         private int height;
         public int Height 
         {
@@ -73,6 +80,13 @@ namespace StarBinder.LevelEditor.ViewModels
             }
         }
 
+        private bool isGameMode;
+        public bool IsGameMode
+        {
+            get { return isGameMode; }
+            set { SetProperty(ref isGameMode, value); }
+        }
+
         private ICommand loadBackCommand;
         public ICommand LoadBackCommand { get { return loadBackCommand ?? (loadBackCommand = new DelegateCommand(OnLoadBackCommandExecuted)); } }
 
@@ -95,14 +109,54 @@ namespace StarBinder.LevelEditor.ViewModels
             }
         }
 
-        private ICommand resolveCommand;
-        public ICommand ResolveCommand { get { return resolveCommand ?? (resolveCommand = new DelegateCommand(OnExecuteResolve)); } }
+        private ICommand testCommand;
+        public ICommand TestCommand { get { return testCommand ?? (testCommand = new DelegateCommand(OnExecuteTest)); } }
 
-        private async void OnExecuteResolve()
+        private void OnExecuteTest()
         {
-            var res = await galaxy.Resolve(30);
-            MessageBox.Show(res.Any() ? string.Join("; ", res) : "В пределах 30 ходов решений не найдено");
+            galaxy.ResetStarStates();
+            IsGameMode = true;
         }
+
+        private ICommand editCommand;
+        public ICommand EditCommand { get { return editCommand ?? (editCommand = new DelegateCommand(OnExecuteEdit)); } }
+
+        private void OnExecuteEdit()
+        {
+            IsGameMode = false;
+            galaxy.ResetStarStates();
+        }
+
+        private ICommand resolveCommand;
+        public ICommand ResolveCommand { get { return resolveCommand ?? (resolveCommand = new DelegateCommand<string>(OnExecuteResolve, CanExecuteMixResolve)); } }
+
+        private async void OnExecuteResolve(string arg)
+        {
+            var steps = int.Parse(arg);
+            IsEnabled = false;
+            var res = await galaxy.Resolve(steps);
+            MessageBox.Show(res.Any() ? string.Join("; ", res) : string.Format("В пределах {0} ходов решений не найдено", steps));
+            IsEnabled = true;
+        }
+
+        private ICommand mixCommand;
+        public ICommand MixCommand { get { return mixCommand ?? (mixCommand = new DelegateCommand<string>(OnExecuteMix, CanExecuteMixResolve)); } }
+
+        private async void OnExecuteMix(string arg)
+        {
+            var steps = int.Parse(arg);
+            IsEnabled = false;
+            var res = await galaxy.Mix(steps);
+            MessageBox.Show(res.Any() ? string.Join("; ", res) : string.Format("Не удалось подобрать расстановку, \nрешающуюся за {0} ходов.", steps));
+            IsEnabled = true;
+        }
+
+        private bool CanExecuteMixResolve(string arg)
+        {
+            int res;
+            return (int.TryParse(arg, out res) && res > 0 && res < 50);
+        }
+
 
         #region Stars
 

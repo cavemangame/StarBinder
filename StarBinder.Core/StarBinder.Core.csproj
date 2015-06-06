@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="Galaxy.cs" />
     <Compile Include="GalaxyLite.cs" />
+    <Compile Include="GalaxyMixer.cs" />
     <Compile Include="GalaxyResolver.cs" />
     <Compile Include="Link.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

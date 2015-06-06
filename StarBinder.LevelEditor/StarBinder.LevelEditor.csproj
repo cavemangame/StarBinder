@@ -86,6 +86,7 @@
     <Compile Include="Controls\StarControl.xaml.cs">
       <DependentUpon>StarControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Utils\BitmapHelper.cs" />
     <Compile Include="Utils\EnumExtensions.cs" />
     <Compile Include="Utils\GeometryExtensions.cs" />
@@ -147,9 +148,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Converters\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -119,6 +119,11 @@ namespace StarBinder.Core
             }
         }
 
+        internal void Reset()
+        {
+            State = InitialState;
+        }
+
         internal void OnStateRemoved(State stateForRemove, State replaceBy)
         {
             if (State == stateForRemove) 
@@ -137,6 +142,11 @@ namespace StarBinder.Core
             State = InitialState;
         }
 
+        internal void SetInitialState(State newInitial)
+        {
+            InitialState = newInitial;
+        }
+
         public void NextFinalState()
         {
             FinalState = FinalState.Next;
@@ -151,7 +161,7 @@ namespace StarBinder.Core
             }
         }
 
-        public void ChangeSingle()
+        internal void ChangeSingle()
         {
             State = State.Next;
         }
@@ -165,7 +175,7 @@ namespace StarBinder.Core
             }
         }
 
-        public void RevertSingle()
+        internal void RevertSingle()
         {
             State = State.Prevous;
         }
