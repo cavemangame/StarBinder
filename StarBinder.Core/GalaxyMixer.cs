@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StarBinder.Core
 {
@@ -21,21 +19,19 @@ namespace StarBinder.Core
             var stars = galaxy.Stars.ToList();
             var current = new GalaxyLite(galaxy);
             var max = current.MaxState;
-            var initials = new HashSet<int>();
+            var computed = new HashSet<int>();
             var complete = false;
             var rnd = new Random();
+            var state = current.InitialState;
 
             solve = new List<int>();
-
-            while (!complete && initials.Count < max)
+            
+            while (!complete && state != -1)
             {
-                var state = rnd.Next(max);
-                if (initials.Add(state))
-                {
-                    current = current.CreateWithNewInitial(state);
-                    var resolver = new GalaxyResolver(current);
-                    complete = resolver.TryDirect(bestSolveLength, out solve);
-                }
+                current = current.CreateWithNewInitial(state);
+                var resolver = new GalaxyResolver(current);
+                complete = resolver.TryDirect(bestSolveLength, out solve);
+                state = GetNextState(computed, max, rnd);
             }
 
             if (!complete) return false;
@@ -46,6 +42,29 @@ namespace StarBinder.Core
             }
 
             return true;
+        }
+
+        private int GetNextState(HashSet<int> computed, int max, Random rnd)
+        {
+            if (computed.Count == max + 1) return -1;
+
+            int i;
+
+            //если хэш наполовину заполнен, то идем подряд
+            if (computed.Count > max >> 1)
+            {
+                for (i = 0; i <= max; i++)
+                {
+                    if (computed.Add(i)) return i;
+                }
+            }
+
+            //выбираем случайное состояние
+            while (true)
+            {
+                i = rnd.Next(max);
+                if (computed.Add(i)) return i;
+            }
         }
     }
 }

@@ -80,6 +80,18 @@ namespace StarBinder.LevelEditor.ViewModels
             }
         }
 
+        private int steps = 10;
+        public int Steps
+        {
+            get { return steps; }
+            set
+            {
+                SetProperty(ref steps, value);
+                MixCommand.RaiseCanExecuteChanged();
+                ResolveCommand.RaiseCanExecuteChanged();
+            }
+        }
+
         private bool isGameMode;
         public bool IsGameMode
         {
@@ -127,34 +139,31 @@ namespace StarBinder.LevelEditor.ViewModels
             galaxy.ResetStarStates();
         }
 
-        private ICommand resolveCommand;
-        public ICommand ResolveCommand { get { return resolveCommand ?? (resolveCommand = new DelegateCommand<string>(OnExecuteResolve, CanExecuteMixResolve)); } }
+        private DelegateCommand resolveCommand;
+        public DelegateCommand ResolveCommand { get { return resolveCommand ?? (resolveCommand = new DelegateCommand(OnExecuteResolve, CanExecuteMixResolve)); } }
 
-        private async void OnExecuteResolve(string arg)
+        private async void OnExecuteResolve()
         {
-            var steps = int.Parse(arg);
             IsEnabled = false;
-            var res = await galaxy.Resolve(steps);
-            MessageBox.Show(res.Any() ? string.Join("; ", res) : string.Format("В пределах {0} ходов решений не найдено", steps));
+            var res = await galaxy.Resolve(Steps);
+            MessageBox.Show(res.Any() ? string.Join("; ", res) : string.Format("В пределах {0} ходов решений не найдено", Steps));
             IsEnabled = true;
         }
 
-        private ICommand mixCommand;
-        public ICommand MixCommand { get { return mixCommand ?? (mixCommand = new DelegateCommand<string>(OnExecuteMix, CanExecuteMixResolve)); } }
+        private DelegateCommand mixCommand;
+        public DelegateCommand MixCommand { get { return mixCommand ?? (mixCommand = new DelegateCommand(OnExecuteMix, CanExecuteMixResolve)); } }
 
-        private async void OnExecuteMix(string arg)
+        private async void OnExecuteMix()
         {
-            var steps = int.Parse(arg);
             IsEnabled = false;
-            var res = await galaxy.Mix(steps);
-            MessageBox.Show(res.Any() ? string.Join("; ", res) : string.Format("Не удалось подобрать расстановку, \nрешающуюся за {0} ходов.", steps));
+            var res = await galaxy.Mix(Steps);
+            MessageBox.Show(res.Any() ? string.Join("; ", res) : string.Format("Не удалось подобрать расстановку, \nрешающуюся за {0} ходов.", Steps));
             IsEnabled = true;
         }
 
-        private bool CanExecuteMixResolve(string arg)
+        private bool CanExecuteMixResolve()
         {
-            int res;
-            return (int.TryParse(arg, out res) && res > 0 && res < 50);
+            return Steps > 0 && Steps < 50;
         }
 
 
