@@ -48,17 +48,17 @@ namespace StarBinder
 		private void AddButtons()
 		{
 			_backBtn = new CCSprite ("back");
-			CCRect rect = ScreenResolutionManager.Instance.GetRect (new CCRect (0.1f, 0.1f, 0.14f, 0.14f));
+			CCRect rect = GetRect(0.1f, 0.1f, 0.14f, 0.14f);
 			_backBtn.Scale = rect.Size.Width / _backBtn.BoundingBox.Size.Width;
 			_backBtn.Position = new CCPoint(rect.MinX, rect.MinY);
 
 			_applyBtn = new CCSprite ("apply");
-			rect = ScreenResolutionManager.Instance.GetRect (new CCRect (0.5f, 0.1f, 0.14f, 0.14f));
+			rect = GetRect(0.5f, 0.1f, 0.14f, 0.14f);
 			_applyBtn.Scale = rect.Size.Width / _applyBtn.BoundingBox.Size.Width;
 			_applyBtn.Position = new CCPoint(rect.MinX, rect.MinY);
 
 			_defaultBtn = new CCSprite ("close");
-			rect = ScreenResolutionManager.Instance.GetRect (new CCRect (0.7f, 0.1f, 0.14f, 0.14f));
+			rect = GetRect(0.7f, 0.1f, 0.14f, 0.14f);
 			_defaultBtn.Scale = rect.Size.Width / _defaultBtn.BoundingBox.Size.Width;
 			_defaultBtn.Position = new CCPoint(rect.MinX, rect.MinY);
 		}
@@ -94,6 +94,11 @@ namespace StarBinder
 			scene.AddChild (layer);
 
 			return scene;
+		}
+
+		public CCRect GetRect(float x, float y, float width, float height)
+		{
+			return GameManager.Instance.Calculator.RectRelToAbsByMinSize (x, y, width, height).Convert (); 
 		}
 	}
 

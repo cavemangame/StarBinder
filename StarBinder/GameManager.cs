@@ -34,6 +34,8 @@ namespace StarBinder
 
 		public int CurrentLevel { get; set; }
 
+		public SizeCalculator Calculator { get; set; }
+
 		private void InitLevels()
 		{
 			for (int i = 1; i <= LevelsCount; i++) 
@@ -65,4 +67,20 @@ namespace StarBinder
 			return false;
 		}
 	}
+
+	public static class RectExtensions
+	{
+		public static CCRect Convert (this Rect<float> rect)
+		{
+			return new CCRect(rect.Point.X, rect.Point.Y, rect.Width, rect.Height);
+		}
+	}
+
+	/*public static class CCLayerColorExtensions
+	{
+		public static CCRect GetRect(this CCLayerColor layer, float x, float y, float width, float height)
+		{
+			return GameManager.Instance.Calculator.RectRelToAbsByMinSize (x, y, width, height).Convert (); 
+		}
+	}*/
 }

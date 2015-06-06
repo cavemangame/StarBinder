@@ -34,20 +34,19 @@ namespace StarBinder
 				levelName += "1";
 
 		
-			CCRect rect1 = new CCRect (0.15f + _x * 0.235f, 0.75f - _y * 0.2f, 0.2f, 0.2f);
-			if (_levelNum <= 8) rect1 = new CCRect (0.15f + _x * 0.235f, 0.75f - _y * 0.2f, 0.2f, 0.2f);
-			else if (_levelNum <= 10) rect1 = new CCRect (0.15f + (_x + 1) * 0.235f, 0.72f - _y * 0.2f, 0.2f, 0.2f);
+			CCRect rect1 = GetRect(0.15f + _x * 0.235f, 0.75f - _y * 0.2f, 0.2f, 0.2f);
+			if (_levelNum <= 8) rect1 = GetRect(0.15f + _x * 0.235f, 0.75f - _y * 0.2f, 0.2f, 0.2f);
+			else if (_levelNum <= 10) rect1 = GetRect(0.15f + (_x + 1) * 0.235f, 0.72f - _y * 0.2f, 0.2f, 0.2f);
 
-			CCRect r1 = ScreenResolutionManager.Instance.GetRect (rect1);
 			// set background sprite
 			_bgSprite = new CCSprite (levelName);
-			_bgSprite.Scale = r1.Size.Width / _bgSprite.BoundingBox.Size.Width;
+			_bgSprite.Scale = rect1.Size.Width / _bgSprite.BoundingBox.Size.Width;
 
 			// set bounding box for node
-			Position = new CCPoint (r1.MinX, r1.MinY);
-			Scale =  r1.Size.Width / _bgSprite.BoundingBox.Size.Width;
+			Position = new CCPoint (rect1.MinX, rect1.MinY);
+			Scale =  rect1.Size.Width / _bgSprite.BoundingBox.Size.Width;
 
-			ContentSize = r1.Size;
+			ContentSize = rect1.Size;
 
 			// set player stars
 			string starName = "stars_0";
@@ -61,15 +60,13 @@ namespace StarBinder
 					starName = "stars_2";
 				else starName = "stars_1";
 			}
-
-			CCRect rect2 = new CCRect (0f, 0.062f, 0.175f, 0.03f);
-			CCRect r2 = ScreenResolutionManager.Instance.GetRect (rect2);
+				
+			CCRect r2 = GetRect(0f, 0.062f, 0.175f, 0.03f);
 			_starSprite = new CCSprite (starName);
 			_starSprite.Scale = r2.Size.Width / _starSprite.BoundingBox.Size.Width;
 			_starSprite.Position = new CCPoint (r2.MinX, r2.MinY);
 
-			CCRect rect3 = new CCRect (0.004f, 0.004f, 0.15f, 0.15f);
-			CCRect r3 = ScreenResolutionManager.Instance.GetRect (rect3);
+			CCRect r3 = GetRect (0.004f, 0.004f, 0.15f, 0.15f);
 			_lockSprite = new CCSprite ("lock");
 			_lockSprite.Scale = r3.Size.Width / _lockSprite.BoundingBox.Size.Width;
 			_lockSprite.Position = new CCPoint (r3.MinX, r3.MinY);
@@ -78,6 +75,11 @@ namespace StarBinder
 			AddChild (_bgSprite);
 			AddChild (_starSprite);
 			AddChild (_lockSprite);
+		}
+
+		public CCRect GetRect(float x, float y, float width, float height)
+		{
+			return GameManager.Instance.Calculator.RectRelToAbsByMinSize (x, y, width, height).Convert (); 
 		}
 	}
 }

@@ -39,7 +39,6 @@
     <Compile Include="Scenes\AchievementsLayer.cs" />
     <Compile Include="Scenes\Scenes.cs" />
     <Compile Include="Scenes\IPageScene.cs" />
-    <Compile Include="Controls\ScreenResolutionManager.cs" />
     <Compile Include="StarBinderApplicationDelegate.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="GameManager.cs" />

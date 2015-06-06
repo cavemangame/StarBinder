@@ -16,6 +16,20 @@ namespace StarBinder.Core
         }
     }
 
+	public struct Rect<T>
+	{
+		public readonly Point<T> Point;
+		public readonly T Width;
+		public readonly T Height;
+
+		public Rect(Point<T> p, T w, T h)
+		{
+			Point = p;
+			Width = w;
+			Height = h;
+		}
+	}
+
     public static class PointExtensions
     {
         public static Point<double> Multiply (this Point<double> point, double coeff)
@@ -67,6 +81,7 @@ namespace StarBinder.Core
         {
             return (int)(abs * height);
         }
+
         public int RelToAbsByMinSize(double relative)
         {
             var size = Math.Min(width, height);
@@ -120,5 +135,11 @@ namespace StarBinder.Core
 
             yield return new Point<double>(1, 0).Multiply(scale).Rotate(rotate);
         }
+
+		public Rect<float> RectRelToAbsByMinSize(float x, float y, float width, float height)
+		{
+			float min = Math.Min (width, height);
+			return new Rect<float> (new Point<float> (x * min, y * min), width * min, height * min);
+		}
     }
 }
