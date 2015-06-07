@@ -153,12 +153,42 @@ namespace StarBinder
 			{
 				CCDrawNode pStar = new CCDrawNode ();
 				Point<int>[] pts = GameManager.Instance.Calculator.GetCocosPoints (s, true);
+				Point<int>[] pts2 = GameManager.Instance.Calculator.GetCocosPoints (s, false);
 				List<CCPoint> ccpts = new List<CCPoint> ();
-				for (int i = pts.Length - 2; i >= 0; i--) 
+				List<CCPoint> ccpts2 = new List<CCPoint> ();
+
+				for (int i = 0; i < pts.Length-1; i++) 
 				{
 					ccpts.Add(new CCPoint (pts[i].X, pts[i].Y));
 				}
-				pStar.DrawPolygon (ccpts.ToArray(), ccpts.Count(), CCColor4B.Green, 3, CCColor4B.Gray);
+				for (int i = 0; i < pts2.Length-1; i++) 
+				{
+					ccpts2.Add(new CCPoint (pts2[i].X, pts2[i].Y));
+				}
+
+				Triangulator tris = new Triangulator(ccpts.ToArray());
+				int [] indices = tris.Triangulate();
+				CCPoint [] newVerts = new CCPoint[3];
+				for (int i = 0; i < indices.Length; i += 3)
+				{
+					newVerts[0] = ccpts[indices[i]];
+					newVerts[1] = ccpts[indices[i + 1]];
+					newVerts[2] = ccpts[indices[i + 2]];
+					pStar.DrawPolygon(newVerts, 3, CCColor4B.Gray, 0, CCColor4B.White);
+				}
+
+				tris = new Triangulator(ccpts2.ToArray());
+				indices = tris.Triangulate();
+				newVerts = new CCPoint[3];
+				for (int i = 0; i < indices.Length; i += 3)
+				{
+					newVerts[0] = ccpts2[indices[i]];
+					newVerts[1] = ccpts2[indices[i + 1]];
+					newVerts[2] = ccpts2[indices[i + 2]];
+		
+					pStar.DrawPolygon(newVerts, 3, CCColor4B.Green, 0, CCColor4B.White);
+				}
+
 				_stars.Add (s.Number, pStar);
 
 				/*CCRect rect = ScreenResolutionManager.Instance.GetRect (new CCRect (s.X, s.Y, 0.1f, 0.1f));

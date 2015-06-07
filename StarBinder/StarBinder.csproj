@@ -57,6 +57,7 @@
     <Compile Include="CCControlExtension\CCScale9Sprite.cs" />
     <Compile Include="CCControlExtension\CCScale9SpriteFile.cs" />
     <Compile Include="CCControlExtension\CCScale9SpriteFrame.cs" />
+    <Compile Include="CCControlExtension\Triangulator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
