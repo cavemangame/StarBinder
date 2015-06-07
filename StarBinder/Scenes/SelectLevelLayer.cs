@@ -42,9 +42,9 @@ namespace StarBinder
 			string starText = String.Format ("Gained {0} stars!", GameManager.Instance.Player.AllStarsCount ());
 			_label = new CCLabel (starText, "arial", 28) {
 				PositionX = GameManager.Instance.Calculator.RelToAbsByMinSize(0.1),
-				PositionY = GameManager.Instance.Calculator.RelToAbsByMinSize(0.8),
+				PositionY = GameManager.Instance.Calculator.RelToAbsByMaxSize(0.98),
 				Color = CCColor3B.Green,
-				AnchorPoint =  CCPoint.AnchorMiddle,
+				AnchorPoint =  CCPoint.AnchorUpperLeft,
 			};
 
 			AddChild (_background);
@@ -111,7 +111,7 @@ namespace StarBinder
 			int i = 0;
 			foreach (Galaxy lvl in GameManager.Instance.GameLevels.Values)
 			{
-				if (lvl.Number / 10 == _currentChapter - 1)
+				if ((lvl.Number - 1) / 10 == _currentChapter - 1)
 				{
 					int x = i % 4;
 					int y = i / 4;

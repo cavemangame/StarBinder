@@ -34,9 +34,9 @@ namespace StarBinder
 				levelName += "1";
 
 		
-			CCRect rect1 = GetRect(0.15f + _x * 0.235f, 0.75f - _y * 0.2f, 0.2f, 0.2f);
-			if (_levelNum <= 8) rect1 = GetRect(0.15f + _x * 0.235f, 0.75f - _y * 0.2f, 0.2f, 0.2f);
-			else if (_levelNum <= 10) rect1 = GetRect(0.15f + (_x + 1) * 0.235f, 0.72f - _y * 0.2f, 0.2f, 0.2f);
+			CCRect rect1 = GetRect(0.15f + _x * 0.235f, 1.05f - _y * 0.28f, 0.2f, 0.2f);
+			if (_levelNum <= 8) rect1 = GetRect(0.15f + _x * 0.235f, 1.05f - _y * 0.28f, 0.2f, 0.2f);
+			else if (_levelNum <= 10) rect1 = GetRect(0.15f + (_x + 1) * 0.235f, 1.0f - _y * 0.28f, 0.2f, 0.2f);
 
 			// set background sprite
 			_bgSprite = new CCSprite (levelName);
@@ -61,12 +61,12 @@ namespace StarBinder
 				else starName = "stars_1";
 			}
 				
-			CCRect r2 = GetRect(0f, 0.062f, 0.175f, 0.03f);
+			CCRect r2 = GetRect(0f, 0.09f, 0.175f, 0.03f);
 			_starSprite = new CCSprite (starName);
 			_starSprite.Scale = r2.Size.Width / _starSprite.BoundingBox.Size.Width;
 			_starSprite.Position = new CCPoint (r2.MinX, r2.MinY);
 
-			CCRect r3 = GetRect (0.004f, 0.004f, 0.15f, 0.15f);
+			CCRect r3 = GetRect (0f, 0f, 0.15f, 0.15f);
 			_lockSprite = new CCSprite ("lock");
 			_lockSprite.Scale = r3.Size.Width / _lockSprite.BoundingBox.Size.Width;
 			_lockSprite.Position = new CCPoint (r3.MinX, r3.MinY);

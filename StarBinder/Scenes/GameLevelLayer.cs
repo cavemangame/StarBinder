@@ -151,7 +151,16 @@ namespace StarBinder
 			// add stars
 			foreach (var s in _level.Stars) 
 			{
-			//	Point[] pt = SizeCalculator.
+				CCDrawNode pStar = new CCDrawNode ();
+				Point<int>[] pts = GameManager.Instance.Calculator.GetCocosPoints (s, true);
+				List<CCPoint> ccpts = new List<CCPoint> ();
+				for (int i = pts.Length - 2; i >= 0; i--) 
+				{
+					ccpts.Add(new CCPoint (pts[i].X, pts[i].Y));
+				}
+				pStar.DrawPolygon (ccpts.ToArray(), ccpts.Count(), CCColor4B.Green, 3, CCColor4B.Gray);
+				_stars.Add (s.Number, pStar);
+
 				/*CCRect rect = ScreenResolutionManager.Instance.GetRect (new CCRect (s.X, s.Y, 0.1f, 0.1f));
 				CCDrawNode pStar = new CCDrawNode ();
 				float k = 3;

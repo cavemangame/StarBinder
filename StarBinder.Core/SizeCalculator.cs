@@ -88,6 +88,12 @@ namespace StarBinder.Core
             return (int)(size * relative);
         }
 
+		public int RelToAbsByMaxSize(double relative)
+		{
+			var size = Math.Max(width, height);
+			return (int)(size * relative);
+		}
+
         public double AbsToRelByMinSize(double abs)
         {
             var size = Math.Min(width, height);
@@ -136,10 +142,10 @@ namespace StarBinder.Core
             yield return new Point<double>(1, 0).Multiply(scale).Rotate(rotate);
         }
 
-		public Rect<float> RectRelToAbsByMinSize(float x, float y, float width, float height)
+		public Rect<float> RectRelToAbsByMinSize(float x, float y, float w, float h)
 		{
 			float min = Math.Min (width, height);
-			return new Rect<float> (new Point<float> (x * min, y * min), width * min, height * min);
+			return new Rect<float> (new Point<float> (x * min, y * min), w * min, h * min);
 		}
     }
 }
