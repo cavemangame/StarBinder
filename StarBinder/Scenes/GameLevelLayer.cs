@@ -59,27 +59,27 @@ namespace StarBinder
 		private void AddButtons ()
 		{
 			_backBtn = new CCSprite ("back");
-			CCRect rect = GetRect(0.1f, 0.1f, 0.14f, 0.14f);
+			CCRect rect = Utils.GetRect(0.1f, 0.1f, 0.14f, 0.14f);
 			_backBtn.Scale = rect.Size.Width / _backBtn.BoundingBox.Size.Width;
 			_backBtn.Position = new CCPoint (rect.MinX, rect.MinY);
 
 			_optionsBtn = new CCSprite ("options");
-			rect = GetRect(0.3f, 0.1f, 0.14f, 0.14f);
+			rect = Utils.GetRect(0.3f, 0.1f, 0.14f, 0.14f);
 			_optionsBtn.Scale = rect.Size.Width / _optionsBtn.BoundingBox.Size.Width;
 			_optionsBtn.Position = new CCPoint (rect.MinX, rect.MinY);
 
 			_achievementsBtn = new CCSprite ("star");
-			rect = GetRect(0.5f, 0.1f, 0.14f, 0.14f);
+			rect = Utils.GetRect(0.5f, 0.1f, 0.14f, 0.14f);
 			_achievementsBtn.Scale = rect.Size.Width / _achievementsBtn.BoundingBox.Size.Width;
 			_achievementsBtn.Position = new CCPoint (rect.MinX, rect.MinY);
 
 			_helpBtn = new CCSprite ("help");
-			rect = GetRect(0.7f, 0.1f, 0.14f, 0.14f);
+			rect = Utils.GetRect(0.7f, 0.1f, 0.14f, 0.14f);
 			_helpBtn.Scale = rect.Size.Width / _helpBtn.BoundingBox.Size.Width;
 			_helpBtn.Position = new CCPoint (rect.MinX, rect.MinY);
 
 			_restartBtn = new CCSprite ("refresh");
-			rect = GetRect(0.9f, 0.1f, 0.14f, 0.14f);
+			rect = Utils.GetRect(0.9f, 0.1f, 0.14f, 0.14f);
 			_restartBtn.Scale = rect.Size.Width / _restartBtn.BoundingBox.Size.Width;
 			_restartBtn.Position = new CCPoint (rect.MinX, rect.MinY);
 		}
@@ -119,7 +119,7 @@ namespace StarBinder
 			}
 		}
 
-		string json = "{\"Name\":null,\"Description\":null,\"Number\":0,\"StepsSilver\":0,\"StepsGold\":0,\"BestSolve\":[],\"States\":[{\"Id\":\"691f3970-1c9f-45a9-8217-d8687f841424\",\"Color\":\"#FFF0FFF0\"},{\"Id\":\"d36569aa-cc0d-4b61-8e0d-66a080236d48\",\"Color\":\"#FF808080\"}],\"Stars\":[{\"StateId\":\"691f3970-1c9f-45a9-8217-d8687f841424\",\"FinalStateId\":\"d36569aa-cc0d-4b61-8e0d-66a080236d48\",\"InitialStateId\":\"691f3970-1c9f-45a9-8217-d8687f841424\",\"RotateAngle\":30.0,\"SubBeamsCoeff\":1.0,\"InnerCoeff\":0.3,\"IsSubBeams\":false,\"Beams\":5,\"HalfWidthRel\":0.1,\"FrontAngle\":2.0,\"FrontScale\":0.7,\"XRel\":0.2925,\"YRel\":0.24833333333333332,\"Number\":0},{\"StateId\":\"d36569aa-cc0d-4b61-8e0d-66a080236d48\",\"FinalStateId\":\"d36569aa-cc0d-4b61-8e0d-66a080236d48\",\"InitialStateId\":\"d36569aa-cc0d-4b61-8e0d-66a080236d48\",\"RotateAngle\":15.0,\"SubBeamsCoeff\":0.5,\"InnerCoeff\":0.3,\"IsSubBeams\":true,\"Beams\":4,\"HalfWidthRel\":0.1,\"FrontAngle\":2.0,\"FrontScale\":0.7,\"XRel\":0.46,\"YRel\":0.59166666666666667,\"Number\":1},{\"StateId\":\"691f3970-1c9f-45a9-8217-d8687f841424\",\"FinalStateId\":\"d36569aa-cc0d-4b61-8e0d-66a080236d48\",\"InitialStateId\":\"691f3970-1c9f-45a9-8217-d8687f841424\",\"RotateAngle\":15.0,\"SubBeamsCoeff\":0.5,\"InnerCoeff\":0.3,\"IsSubBeams\":false,\"Beams\":6,\"HalfWidthRel\":0.12,\"FrontAngle\":2.0,\"FrontScale\":0.7,\"XRel\":0.7325,\"YRel\":0.27333333333333332,\"Number\":2}],\"Links\":[{\"From\":2,\"To\":1,\"Direction\":0},{\"From\":2,\"To\":0,\"Direction\":0}]}";
+		string json = "{\"Name\":null,\"Description\":null,\"Number\":0,\"StepsSilver\":0,\"StepsGold\":0,\"BestSolve\":[0,1,4],\"States\":[{\"Id\":\"8747147b-c2a6-4096-8b32-799d2480af87\",\"Color\":\"#FF000000\"},{\"Id\":\"b1d9070f-9e91-4efd-8743-949c2b4c5e5e\",\"Color\":\"#FFF0FFFF\"}],\"Stars\":[{\"StateId\":\"b1d9070f-9e91-4efd-8743-949c2b4c5e5e\",\"FinalStateId\":\"b1d9070f-9e91-4efd-8743-949c2b4c5e5e\",\"InitialStateId\":\"b1d9070f-9e91-4efd-8743-949c2b4c5e5e\",\"RotateAngle\":15.0,\"SubBeamsCoeff\":0.5,\"InnerCoeff\":0.3,\"IsSubBeams\":true,\"Beams\":6,\"HalfWidthRel\":0.1,\"FrontAngle\":2.0,\"FrontScale\":0.7,\"XRel\":0.5,\"YRel\":0.48333333333333334,\"Number\":0},{\"StateId\":\"8747147b-c2a6-4096-8b32-799d2480af87\",\"FinalStateId\":\"b1d9070f-9e91-4efd-8743-949c2b4c5e5e\",\"InitialStateId\":\"8747147b-c2a6-4096-8b32-799d2480af87\",\"RotateAngle\":0.0,\"SubBeamsCoeff\":0.5,\"InnerCoeff\":0.3,\"IsSubBeams\":false,\"Beams\":5,\"HalfWidthRel\":0.07,\"FrontAngle\":2.0,\"FrontScale\":0.7,\"XRel\":0.255,\"YRel\":0.62333333333333329,\"Number\":1},{\"StateId\":\"b1d9070f-9e91-4efd-8743-949c2b4c5e5e\",\"FinalStateId\":\"b1d9070f-9e91-4efd-8743-949c2b4c5e5e\",\"InitialStateId\":\"b1d9070f-9e91-4efd-8743-949c2b4c5e5e\",\"RotateAngle\":30.0,\"SubBeamsCoeff\":0.5,\"InnerCoeff\":0.3,\"IsSubBeams\":false,\"Beams\":5,\"HalfWidthRel\":0.07,\"FrontAngle\":2.0,\"FrontScale\":0.7,\"XRel\":0.8625,\"YRel\":0.36,\"Number\":2},{\"StateId\":\"8747147b-c2a6-4096-8b32-799d2480af87\",\"FinalStateId\":\"b1d9070f-9e91-4efd-8743-949c2b4c5e5e\",\"InitialStateId\":\"8747147b-c2a6-4096-8b32-799d2480af87\",\"RotateAngle\":15.0,\"SubBeamsCoeff\":0.5,\"InnerCoeff\":0.3,\"IsSubBeams\":false,\"Beams\":5,\"HalfWidthRel\":0.09,\"FrontAngle\":2.0,\"FrontScale\":0.7,\"XRel\":0.7225,\"YRel\":0.59,\"Number\":3},{\"StateId\":\"b1d9070f-9e91-4efd-8743-949c2b4c5e5e\",\"FinalStateId\":\"b1d9070f-9e91-4efd-8743-949c2b4c5e5e\",\"InitialStateId\":\"b1d9070f-9e91-4efd-8743-949c2b4c5e5e\",\"RotateAngle\":-15.0,\"SubBeamsCoeff\":0.5,\"InnerCoeff\":0.3,\"IsSubBeams\":false,\"Beams\":5,\"HalfWidthRel\":0.08,\"FrontAngle\":2.0,\"FrontScale\":0.7,\"XRel\":0.1825,\"YRel\":0.425,\"Number\":4}],\"Links\":[{\"From\":4,\"To\":1,\"Direction\":0},{\"From\":0,\"To\":1,\"Direction\":0},{\"From\":0,\"To\":3,\"Direction\":0},{\"From\":3,\"To\":2,\"Direction\":0}]}";
 		private void InitLevel()
 		{
 			// load current level
@@ -169,16 +169,19 @@ namespace StarBinder
 				Triangulator tris = new Triangulator(ccpts.ToArray());
 				int [] indices = tris.Triangulate();
 				CCPoint [] newVerts = new CCPoint[3];
+			
+				CCColor4B clr = Utils.GetColor(s.FinalState.Color);
 				for (int i = 0; i < indices.Length; i += 3)
 				{
 					newVerts[0] = ccpts[indices[i]];
 					newVerts[1] = ccpts[indices[i + 1]];
 					newVerts[2] = ccpts[indices[i + 2]];
-					pStar.DrawPolygon(newVerts, 3, CCColor4B.Gray, 0, CCColor4B.White);
+					pStar.DrawPolygon(newVerts, 3, clr, 0, CCColor4B.White);
 				}
 
 				tris = new Triangulator(ccpts2.ToArray());
 				indices = tris.Triangulate();
+				CCColor4B clr1 = Utils.GetColor(s.State.Color);
 				newVerts = new CCPoint[3];
 				for (int i = 0; i < indices.Length; i += 3)
 				{
@@ -186,42 +189,22 @@ namespace StarBinder
 					newVerts[1] = ccpts2[indices[i + 1]];
 					newVerts[2] = ccpts2[indices[i + 2]];
 		
-					pStar.DrawPolygon(newVerts, 3, CCColor4B.Green, 0, CCColor4B.White);
+					pStar.DrawPolygon(newVerts, 3, clr1, 0, CCColor4B.White);
 				}
 
 				_stars.Add (s.Number, pStar);
 
-				/*CCRect rect = ScreenResolutionManager.Instance.GetRect (new CCRect (s.X, s.Y, 0.1f, 0.1f));
-				CCDrawNode pStar = new CCDrawNode ();
-				float k = 3;
-				List<CCPoint> points = new List<CCPoint> ();
-				points.Add(new CCPoint (rect.MinX + 22 * k, rect.MinY + 12 * k));
-				points.Add(new CCPoint (rect.MinX + 36 * k, rect.MinY + 12 * k));
-				points.Add(new CCPoint (rect.MinX + 24 * k, rect.MinY + 22 * k));
-				points.Add(new CCPoint (rect.MinX + 28 * k, rect.MinY + 34 * k));
-				points.Add(new CCPoint (rect.MinX + 18 * k, rect.MinY + 24 * k));
-				points.Add(new CCPoint (rect.MinX + 8 * k, rect.MinY + 34 * k));
-				points.Add(new CCPoint (rect.MinX + 12 * k, rect.MinY + 22 * k));
-				points.Add(new CCPoint (rect.MinX + 0 * k, rect.MinY + 12 * k));
-				points.Add(new CCPoint (rect.MinX + 14 * k, rect.MinY + 12 * k));
-				points.Add(new CCPoint (rect.MinX + 18 * k, rect.MinY + 0 * k));
-
-				pStar.DrawPolygon (points.ToArray(), points.Count(), CCColor4B.Green, 2, CCColor4B.Gray);
-				_stars.Add (s.Number, pStar);
 	
 				foreach (Link link in _level.Links)
 				{
-					//M 18,0 L 14,12 L 0,12 L 12,22 L 8,34 L 18,24 L 28,34 L 24,22 L 36,12 L 22,12 L 18,0
-
-					var stars = _level.GetBindStars (bind);
 					CCDrawNode pBind = new CCDrawNode ();
 
-					CCRect rect1 = ScreenResolutionManager.Instance.GetRect (new CCRect (stars.First ().X, stars.First ().Y, 0.1f, 0.1f));
-					CCRect rect2 = ScreenResolutionManager.Instance.GetRect (new CCRect (stars.Last ().X, stars.Last ().Y, 0.1f, 0.1f));
+					CCPoint pt1 = new CCPoint (GameManager.Instance.Calculator.RelToAbsByMinSize (link.From.XRel), GameManager.Instance.Calculator.RelToAbsByMinSize (1-link.From.YRel));
+					CCPoint pt2 = new CCPoint (GameManager.Instance.Calculator.RelToAbsByMinSize (link.To.XRel), GameManager.Instance.Calculator.RelToAbsByMinSize (1-link.To.YRel));
 
-					pBind.DrawLine (new CCPoint(rect1.MinX, rect1.MinY), new CCPoint(rect2.MinX, rect2.MinY), 3.0f, CCColor4B.Green);
+					pBind.DrawLine (pt1, pt2, 3.0f, CCColor4B.Green);
 					_links.Add (pBind);
-				}*/
+				}
 			}
 
 			foreach (var path in _links) 
@@ -270,11 +253,6 @@ namespace StarBinder
 			return scene;
 		}
 
-
-		public CCRect GetRect(float x, float y, float width, float height)
-		{
-			return GameManager.Instance.Calculator.RectRelToAbsByMinSize (x, y, width, height).Convert (); 
-		}
 	}
 }
 

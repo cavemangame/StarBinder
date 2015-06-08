@@ -1,11 +1,15 @@
 ﻿<Properties StartupItem="StarBinder.AndroidPart\StarBinder.AndroidPart.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.Nexus 7 (KitKat)" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="StarBinder.Core\SizeCalculator.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="StarBinder\Scenes\GameLevelLayer.cs">
     <Files>
-      <File FileName="StarBinder\CCControlExtension\Triangulator.cs" Line="56" Column="10" />
-      <File FileName="StarBinder\Scenes\GameLevelLayer.cs" Line="183" Column="48" />
-      <File FileName="StarBinder\Scenes\GameStartLayer.cs" Line="6" Column="21" />
-      <File FileName="StarBinder.Core\SizeCalculator.cs" Line="111" Column="44" />
+      <File FileName="StarBinder\CCControlExtension\Triangulator.cs" Line="1" Column="1" />
+      <File FileName="StarBinder\Scenes\GameLevelLayer.cs" Line="122" Column="2340" />
+      <File FileName="StarBinder.Core\SizeCalculator.cs" Line="108" Column="32" />
+      <File FileName="StarBinder.Core\Galaxy.cs" Line="97" Column="31" />
+      <File FileName="StarBinder.Core\State.cs" Line="22" Column="5" />
+      <File FileName="StarBinder\Utils.cs" Line="17" Column="46" />
+      <File FileName="StarBinder\Scenes\GameStartLayer.cs" Line="35" Column="19" />
+      <File FileName="StarBinder\Controls\LevelNode.cs" Line="39" Column="44" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

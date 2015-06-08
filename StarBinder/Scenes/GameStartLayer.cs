@@ -32,7 +32,7 @@ namespace StarBinder
 
 			_logo = new CCSprite ("logo");
 			_logo.Position = VisibleBoundsWorldspace.Center.Offset(0f, 200f);
-			CCRect rect = GetRect (0.2f, 0.4f, 1f, 0.6f); 
+			CCRect rect = Utils.GetRect (0.2f, 0.4f, 1f, 0.6f); 
 			_logo.Scale = rect.Size.Width / _logo.BoundingBox.Size.Width;
 		
 
@@ -53,29 +53,29 @@ namespace StarBinder
 		private void AddButtons ()
 		{
 			_levelsBtn = new CCSprite ("levels");
-			CCRect rect = GetRect(0.1f, 0.1f, 0.14f, 0.14f); 
+			CCRect rect = Utils.GetRect(0.1f, 0.1f, 0.14f, 0.14f); 
 			_levelsBtn.Scale = rect.Size.Width / _levelsBtn.BoundingBox.Size.Width;
 			_levelsBtn.Position = new CCPoint (rect.MinX, rect.MinY);
 
 
 
 			_optionsBtn = new CCSprite ("options");
-			rect = GetRect(0.3f, 0.1f, 0.14f, 0.14f); 
+			rect = Utils.GetRect(0.3f, 0.1f, 0.14f, 0.14f); 
 			_optionsBtn.Scale = rect.Size.Width / _optionsBtn.BoundingBox.Size.Width;
 			_optionsBtn.Position = new CCPoint (rect.MinX, rect.MinY);
 
 			_achievementsBtn = new CCSprite ("star");
-			rect = GetRect(0.5f, 0.1f, 0.14f, 0.14f);
+			rect = Utils.GetRect(0.5f, 0.1f, 0.14f, 0.14f);
 			_achievementsBtn.Scale = rect.Size.Width / _achievementsBtn.BoundingBox.Size.Width;
 			_achievementsBtn.Position = new CCPoint (rect.MinX, rect.MinY);
 
 			_helpBtn = new CCSprite ("help");
-			rect = GetRect(0.7f, 0.1f, 0.14f, 0.14f);
+			rect = Utils.GetRect(0.7f, 0.1f, 0.14f, 0.14f);
 			_helpBtn.Scale = rect.Size.Width / _helpBtn.BoundingBox.Size.Width;
 			_helpBtn.Position = new CCPoint (rect.MinX, rect.MinY);
 
 			_exitBtn = new CCSprite ("close");
-			rect = GetRect(0.9f, 0.1f, 0.14f, 0.14f);
+			rect = Utils.GetRect(0.9f, 0.1f, 0.14f, 0.14f);
 			_exitBtn.Scale = rect.Size.Width / _exitBtn.BoundingBox.Size.Width;
 			_exitBtn.Position = new CCPoint (rect.MinX, rect.MinY);
 		}
@@ -131,11 +131,6 @@ namespace StarBinder
 
 			scene.AddChild (layer);
 			return scene;
-		}
-
-		public CCRect GetRect(float x, float y, float width, float height)
-		{
-			return GameManager.Instance.Calculator.RectRelToAbsByMinSize (x, y, width, height).Convert (); 
 		}
 	}
 }

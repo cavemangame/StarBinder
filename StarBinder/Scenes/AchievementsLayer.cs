@@ -44,7 +44,7 @@ namespace StarBinder
 		private void AddButtons()
 		{
 			_backBtn = new CCSprite ("back");
-			CCRect rect = GetRect(0.1f, 0.1f, 0.14f, 0.14f);
+			CCRect rect = Utils.GetRect(0.1f, 0.1f, 0.14f, 0.14f);
 			_backBtn.Scale = rect.Size.Width / _backBtn.BoundingBox.Size.Width;
 			_backBtn.Position = new CCPoint(rect.MinX, rect.MinY);
 		}
@@ -82,10 +82,6 @@ namespace StarBinder
 			return scene;
 		}
 
-		public CCRect GetRect(float x, float y, float width, float height)
-		{
-			return GameManager.Instance.Calculator.RectRelToAbsByMinSize (x, y, width, height).Convert (); 
-		}
 	}
 
 }

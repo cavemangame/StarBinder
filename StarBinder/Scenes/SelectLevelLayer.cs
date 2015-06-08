@@ -70,32 +70,32 @@ namespace StarBinder
 		private void AddButtons ()
 		{
 			_backBtn = new CCSprite ("back");
-			CCRect rect = GetRect(0.2f, 0.1f, 0.14f, 0.14f);
+			CCRect rect = Utils.GetRect(0.2f, 0.1f, 0.14f, 0.14f);
 			_backBtn.Scale = rect.Size.Width / _backBtn.BoundingBox.Size.Width;
 			_backBtn.Position = new CCPoint (rect.MinX, rect.MinY);
 
 			_optionsBtn = new CCSprite ("options");
-			rect = GetRect(0.4f, 0.1f, 0.14f, 0.14f);
+			rect = Utils.GetRect(0.4f, 0.1f, 0.14f, 0.14f);
 			_optionsBtn.Scale = rect.Size.Width / _optionsBtn.BoundingBox.Size.Width;
 			_optionsBtn.Position = new CCPoint (rect.MinX, rect.MinY);
 
 			_achievementsBtn = new CCSprite ("star");
-			rect = GetRect(0.6f, 0.1f, 0.14f, 0.14f);
+			rect = Utils.GetRect(0.6f, 0.1f, 0.14f, 0.14f);
 			_achievementsBtn.Scale = rect.Size.Width / _achievementsBtn.BoundingBox.Size.Width;
 			_achievementsBtn.Position = new CCPoint (rect.MinX, rect.MinY);
 
 			_helpBtn = new CCSprite ("help");
-			rect = GetRect(0.8f, 0.1f, 0.14f, 0.14f);
+			rect = Utils.GetRect(0.8f, 0.1f, 0.14f, 0.14f);
 			_helpBtn.Scale = rect.Size.Width / _helpBtn.BoundingBox.Size.Width;
 			_helpBtn.Position = new CCPoint (rect.MinX, rect.MinY);
 
 			_leftBtn = new CCSprite ("left");
-			rect = GetRect(0.1f, 0.2f, 0.12f, 0.12f);
+			rect = Utils.GetRect(0.1f, 0.2f, 0.12f, 0.12f);
 			_leftBtn.Scale = rect.Size.Width / _leftBtn.BoundingBox.Size.Width;
 			_leftBtn.Position = new CCPoint (rect.MinX, rect.MinY);
 
 			_rightBtn = new CCSprite ("right");
-			rect = GetRect(0.9f, 0.2f, 0.12f, 0.12f);
+			rect = Utils.GetRect(0.9f, 0.2f, 0.12f, 0.12f);
 			_rightBtn.Scale = rect.Size.Width / _rightBtn.BoundingBox.Size.Width;
 			_rightBtn.Position = new CCPoint (rect.MinX, rect.MinY);
 		}
@@ -226,12 +226,6 @@ namespace StarBinder
 		}
 
 		#endregion
-
-
-		public CCRect GetRect(float x, float y, float width, float height)
-		{
-			return GameManager.Instance.Calculator.RectRelToAbsByMinSize (x, y, width, height).Convert (); 
-		}
 	}
 }
 
