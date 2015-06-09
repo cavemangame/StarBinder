@@ -1,0 +1,39 @@
+﻿<store:VisualStateAwarePage
+    x:Class="StarBinder.Views.GamePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:view="using:StarBinder.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:store="using:Microsoft.Practices.Prism.StoreApps"
+    xmlns:mvvm="using:Microsoft.Practices.Prism.Mvvm"
+    mvvm:ViewModelLocator.AutoWireViewModel="true"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    </Grid>
+
+    <!--<store:VisualStateAwarePage.TopAppBar>
+        <AppBar>
+            <AppBarButton Icon="Back"/>
+        </AppBar>
+    </store:VisualStateAwarePage.TopAppBar>-->
+
+    <!--<store:VisualStateAwarePage.BottomAppBar >
+        <CommandBar IsSticky="True" >
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Icon="ViewAll"/>
+                <AppBarButton Icon="SolidStar"/>
+                <AppBarButton Icon="Setting"/>
+                <AppBarButton Icon="Help"/>
+            </CommandBar.PrimaryCommands>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Icon="RepeatAll"/>
+                <AppBarSeparator/>
+                <AppBarButton Icon="Undo" />
+                <AppBarButton Icon="Redo" />
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+    </store:VisualStateAwarePage.BottomAppBar>-->
+</store:VisualStateAwarePage>

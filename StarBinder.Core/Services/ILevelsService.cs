@@ -1,0 +1,11 @@
+﻿using System.Threading.Tasks;
+
+namespace StarBinder.Core.Services
+{
+    public interface ILevelsService
+    {
+        Task<Galaxy> GetLevelModel(int level);
+        Task<bool> IsNextLevel(Galaxy level);
+        Task UpdateHighScore(int chapter, int level, int steps);
+    }
+}

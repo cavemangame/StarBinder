@@ -9,28 +9,63 @@
     xmlns:local="using:StarBinder.Views"
     xmlns:vm="using:StarBinder.ViewModels"
     mvvm:ViewModelLocator.AutoWireViewModel="true"
-    mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:WellcomeViewModel}">
+    mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:WellcomePageViewModel}">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
             
-            <Button Content="" Grid.Column="0"/>
-            <Button Content="" Grid.Column="1"/>
-            <Button Content="" Grid.Column="2"/>
-            <Button Content="" Grid.Column="3"/>
-            <Button Content="" Grid.Column="4"/>
-        </Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <AppBarButton Icon="Play" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+                      Command="{Binding StartNewCommand}"/>
+        
+        <StackPanel x:Name="ButtonsPanel" Orientation="Vertical" 
+                    VerticalAlignment="Center" HorizontalAlignment="Center"
+                    Grid.Column="0" Grid.Row="0">
+            <AppBarButton Icon="ViewAll"/>
+            <AppBarButton Icon="SolidStar"/>
+            <AppBarButton Icon="Setting"/>
+            <AppBarButton Icon="Help"/>
+        </StackPanel>
+       
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="ApplicationViewStates">
+                <VisualState x:Name="DefaultLayout"/>
+            
+                <VisualState x:Name="PortraitLayout">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ButtonsPanel" Storyboard.TargetProperty="Orientation">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Horizontal" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ButtonsPanel" Storyboard.TargetProperty="(Grid.Row)">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="1" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ButtonsPanel" Storyboard.TargetProperty="(Grid.Column)">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="1" />
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+
+                <VisualState x:Name="MinimalLayout">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ButtonsPanel" Storyboard.TargetProperty="Orientation">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Horizontal" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ButtonsPanel" Storyboard.TargetProperty="(Grid.Row)">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="1" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ButtonsPanel" Storyboard.TargetProperty="(Grid.Column)">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="1" />
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </Grid>
 </store:VisualStateAwarePage>

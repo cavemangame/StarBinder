@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
@@ -19,6 +21,8 @@ using Windows.UI.Xaml.Navigation;
 using Microsoft.Practices.Prism.Mvvm;
 using Microsoft.Practices.Prism.Mvvm.Interfaces;
 using Microsoft.Practices.Unity;
+using StarBinder.Core.Services;
+using StarBinder.ViewModels;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
 
@@ -30,13 +34,26 @@ namespace StarBinder
 
         public App()
         {
-            this.InitializeComponent();
+            InitializeComponent();
+        }
+
+        protected override void OnLaunched(LaunchActivatedEventArgs args)
+        {
+#if WINDOWS_PHONE_APP
+            Resources["PhoneOnly"] = Visibility.Visible;
+            Resources["StoreOnly"] = Visibility.Collapsed;
+#else
+            Resources["PhoneOnly"] = Visibility.Collapsed;
+            Resources["StoreOnly"] = Visibility.Visible;
+#endif
+            
+            base.OnLaunched(args);
         }
 
         protected override Task OnLaunchApplicationAsync(LaunchActivatedEventArgs args)
         {
             //NavigationService.RestoreSavedNavigation();
-            NavigationService.Navigate("Main", null);
+            NavigationService.Navigate("Wellcome", null);
             return Task.FromResult<object>(null);
         }
 
@@ -44,8 +61,12 @@ namespace StarBinder
         {
             container.RegisterInstance(SessionStateService);
             container.RegisterInstance(NavigationService);
+            container.RegisterType<WellcomePageViewModel>(new ContainerControlledLifetimeManager());
+            container.RegisterType<GamePageViewModel>(new ContainerControlledLifetimeManager());
+            container.RegisterType<ILevelsService, MockLevelsService>(new ContainerControlledLifetimeManager());
 
             ViewModelLocationProvider.SetDefaultViewModelFactory(viewModelType => container.Resolve(viewModelType));
+
             return Task.FromResult<object>(null);
         }
     }

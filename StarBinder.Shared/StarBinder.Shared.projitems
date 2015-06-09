@@ -15,7 +15,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\WellcomeViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlatfromSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\GamePageViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\WellcomePageViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\GamePage.xaml.cs">
+      <DependentUpon>GamePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\WellcomePage.xaml.cs">
       <DependentUpon>WellcomePage.xaml</DependentUpon>
     </Compile>
@@ -25,6 +31,10 @@
     <Folder Include="$(MSBuildThisFileDirectory)Assets\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)Views\GamePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="$(MSBuildThisFileDirectory)Views\WellcomePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
