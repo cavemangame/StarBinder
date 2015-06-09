@@ -34,6 +34,11 @@ namespace StarBinder.Core
             Stars = new List<StarData>(galaxy.Stars.Select(star => new StarData(star)));
             Links = new List<LinkData>(galaxy.Links.Select(link => new LinkData(link)));
         }
+
+		public Galaxy CreateGalaxy()
+		{
+			return Galaxy.Create (this);
+		}
     }
 
 
