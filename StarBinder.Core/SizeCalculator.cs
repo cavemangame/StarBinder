@@ -72,14 +72,14 @@ namespace StarBinder.Core
             return abs/height;
         }
 
-        public int XRelToAbs(double abs)
+        public int XRelToAbs(double rel)
         {
-            return (int)(abs * width);
+            return (int)(rel * width);
         }
 
-        public int YRelToAbs(double abs)
+        public int YRelToAbs(double rel)
         {
-            return (int)(abs * height);
+            return (int)(rel * height);
         }
 
         public int RelToAbsByMinSize(double relative)
@@ -111,6 +111,11 @@ namespace StarBinder.Core
         public Point<int>[] GetWpfPoints(Star star, bool isBack)
         {
             return GetStarPoints(star, isBack).Select(p => new Point<int>(RelToAbsByMinSize(star.HalfWidthRel * p.X), RelToAbsByMinSize(star.HalfWidthRel * p.Y))).ToArray();
+        }
+
+        public Point<int>[] GetWinphonePoints(Star star, bool isBack)
+        {
+            return GetStarPoints(star, isBack).Select(p => new Point<int>(RelToAbsByMinSize(star.HalfWidthRel * (p.X + 1)), RelToAbsByMinSize(star.HalfWidthRel * (p.Y + 1)))).ToArray();
         }
 
         private IEnumerable<Point<double>> GetStarPoints(Star star, bool isBack)

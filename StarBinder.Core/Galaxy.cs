@@ -37,7 +37,7 @@ namespace StarBinder.Core
 
 		public Galaxy CreateGalaxy()
 		{
-			return Galaxy.Create (this);
+			return Galaxy.Create(this);
 		}
     }
 

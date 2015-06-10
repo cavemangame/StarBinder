@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
+using Windows.Foundation;
 using Windows.UI.Xaml.Navigation;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
@@ -15,23 +16,40 @@ namespace StarBinder.ViewModels
     {
         private readonly INavigationService navigation;
         private readonly ILevelsService levels;
+        private readonly SizeCalculator calculator;
         private Galaxy galaxy;
 
         public GamePageViewModel(INavigationService navigation, ILevelsService levels)
         {
             this.navigation = navigation;
             this.levels = levels;
+            calculator = new SizeCalculator(0, 0);
         }
 
-        private List<Star> stars;
-        public List<Star> Stars
+        private Size gameGridSize;
+        public Size GameGridSize
         {
-            get { return stars; }
+            get { return gameGridSize; }
+            set
+            {
+                SetProperty(ref gameGridSize, value);
+                calculator.Resize((int)value.Width, (int)value.Height);
+                foreach (var star in Stars)
+                {
+                    star.UpdatePosition();
+                }
+            }
+        }
+
+        private List<StarViewModel> stars;
+        public List<StarViewModel> Stars
+        {
+            get { return stars; } 
             set { SetProperty(ref stars, value); }
         }
 
-        private List<Link> links;
-        public List<Link> Links
+        private List<LinkViewModel> links;
+        public List<LinkViewModel> Links
         {
             get { return links; }
             set { SetProperty(ref links, value); }
@@ -59,16 +77,18 @@ namespace StarBinder.ViewModels
         private async void NewGame(int level)
         {
             galaxy = await levels.GetLevelModel(level);
-            Stars = galaxy.Stars.ToList();
-            Links = galaxy.Links.ToList();
+            Stars = galaxy.Stars.Select(s => new StarViewModel(s, calculator)).ToList();
+
+            var starsDictionary = Stars.ToDictionary(s => s.Model);
+            Links = galaxy.Links.Select(l => new LinkViewModel(starsDictionary[l.From], starsDictionary[l.To])).ToList();
         }
 
         private ICommand starClickCommand;
-        public ICommand StarClickCommand { get { return starClickCommand ?? (starClickCommand = new DelegateCommand<Star>(OnExecuteStarClick)); } }
+        public ICommand StarClickCommand { get { return starClickCommand ?? (starClickCommand = new DelegateCommand<StarViewModel>(OnExecuteStarClick)); } }
 
-        private async void OnExecuteStarClick(Star star)
+        private async void OnExecuteStarClick(StarViewModel star)
         {
-            star.ChangeAll();
+            star.Model.ChangeAll();
             
             if (!galaxy.IsComplete) return;
 

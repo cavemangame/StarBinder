@@ -2,22 +2,89 @@
     x:Class="StarBinder.Views.GamePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:view="using:StarBinder.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:store="using:Microsoft.Practices.Prism.StoreApps"
     xmlns:mvvm="using:Microsoft.Practices.Prism.Mvvm"
+    xmlns:vm="using:StarBinder.ViewModels"
+    xmlns:view="using:StarBinder.Views"
+    mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:GamePageViewModel}"
     mvvm:ViewModelLocator.AutoWireViewModel="true"
-    mc:Ignorable="d">
-
+    view:GamePage.GameBoardSize="{Binding GameGridSize, Mode=TwoWay}">
+    
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        
+        <Grid Grid.Row="1" Grid.Column="1" 
+              SizeChanged="GameGrid_OnSizeChanged"
+              Name="GameGrid">
+            <ItemsControl ItemsSource="{Binding Links}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Line X1="{Binding Source.X}" Y1="{Binding Source.Y}" 
+                              X2="{Binding Target.X}" Y2="{Binding Target.Y}" 
+                              StrokeThickness="2">
+                            <Line.Stroke>
+                                <LinearGradientBrush StartPoint="{Binding Source.Point}" 
+                                                     EndPoint="{Binding Target.Point}" 
+                                                     MappingMode="Absolute">
+                                    <GradientStopCollection>
+                                        <GradientStop Color="{Binding Source.Model.State.Color}" Offset="0"/>
+                                        <GradientStop Color="{Binding Target.Model.State.Color}" Offset="1"/>
+                                    </GradientStopCollection>
+                                </LinearGradientBrush>
+                            </Line.Stroke>
+                        </Line>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
+            <ItemsControl ItemsSource="{Binding Stars}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Command="{Binding DataContext.StarClickCommand, ElementName=GameGrid}" CommandParameter="{Binding}">
+                            <Button.RenderTransform>
+                                <TranslateTransform X="{Binding XStar}" Y="{Binding YStar}"/>
+                            </Button.RenderTransform>
+                            <Button.Template>
+                                <ControlTemplate>
+                                   <Grid>
+                                        <Path Data="{Binding GeometryBack}" Fill="{Binding Model.FinalState.Color}"/>
+                                        <Path Data="{Binding GeometryFront}" Fill="{Binding Model.State.Color}"/>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
     </Grid>
 
     <!--<store:VisualStateAwarePage.TopAppBar>
-        <AppBar>
+        <CommandBar>
             <AppBarButton Icon="Back"/>
-        </AppBar>
+        </CommandBar>
     </store:VisualStateAwarePage.TopAppBar>-->
 
     <!--<store:VisualStateAwarePage.BottomAppBar >

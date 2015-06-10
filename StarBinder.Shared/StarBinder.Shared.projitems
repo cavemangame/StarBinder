@@ -17,7 +17,10 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlatfromSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\GeometryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\GamePageViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\LinkViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\StarViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\WellcomePageViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\GamePage.xaml.cs">
       <DependentUpon>GamePage.xaml</DependentUpon>
