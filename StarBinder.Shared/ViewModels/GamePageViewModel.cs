@@ -17,6 +17,8 @@ namespace StarBinder.ViewModels
         private readonly INavigationService navigation;
         private readonly ILevelsService levels;
         private readonly SizeCalculator calculator;
+        private readonly Stack<Star> clicks = new Stack<Star>();
+        private readonly Stack<Star> redo = new Stack<Star>();
         private Galaxy galaxy;
 
         public GamePageViewModel(INavigationService navigation, ILevelsService levels)
@@ -76,6 +78,9 @@ namespace StarBinder.ViewModels
 
         private async void NewGame(int level)
         {
+            clicks.Clear();
+            redo.Clear();
+
             galaxy = await levels.GetLevelModel(level);
             Stars = galaxy.Stars.Select(s => new StarViewModel(s, calculator)).ToList();
 
@@ -88,6 +93,10 @@ namespace StarBinder.ViewModels
 
         private async void OnExecuteStarClick(StarViewModel star)
         {
+            clicks.Push(star.Model);
+            redo.Clear();
+            OnClicksChanged();
+
             star.Model.ChangeAll();
             
             if (!galaxy.IsComplete) return;
@@ -102,6 +111,64 @@ namespace StarBinder.ViewModels
             {
                 //todo выйти в главное меню или меню глав
             }
+        }
+
+        private DelegateCommand undoCommand;
+        public DelegateCommand UndoCommand { get { return undoCommand ?? (undoCommand = new DelegateCommand(OnExecuteUndo, CanExecuteUndo)); } }
+
+        private void OnExecuteUndo()
+        {
+            var star = clicks.Pop();
+            redo.Push(star);
+            star.RevertAll();
+            
+            OnClicksChanged();
+        }
+
+        private bool CanExecuteUndo()
+        {
+            return clicks.Count > 0;
+        }
+
+        private DelegateCommand redoCommand;
+        public DelegateCommand RedoCommand { get { return redoCommand ?? (redoCommand = new DelegateCommand(OnExecuteRedo, CanExecuteRedo)); } }
+
+        private void OnExecuteRedo()
+        {
+            var star = redo.Peek();
+            clicks.Push(star);
+            star.ChangeAll();
+            
+            OnClicksChanged();
+        }
+
+        private bool CanExecuteRedo()
+        {
+            return redo.Count > 0;
+        }
+
+        private DelegateCommand restartCommand;
+        public DelegateCommand RestartCommand { get { return restartCommand ?? (restartCommand = new DelegateCommand(OnExecuteRestart, CanExecuteRestart)); } }
+
+        private void OnExecuteRestart()
+        {
+            galaxy.ResetStarStates();
+            clicks.Clear();
+            redo.Clear();
+
+            OnClicksChanged();
+        }
+
+        private bool CanExecuteRestart()
+        {
+            return clicks.Count > 0;
+        }
+
+        private void OnClicksChanged()
+        {
+            RestartCommand.RaiseCanExecuteChanged();
+            UndoCommand.RaiseCanExecuteChanged();
+            RedoCommand.RaiseCanExecuteChanged();
         }
     }
 }

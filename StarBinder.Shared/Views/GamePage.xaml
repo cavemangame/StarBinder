@@ -23,10 +23,24 @@
             <ColumnDefinition/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
+
+        <StackPanel Name="GameButtons" VerticalAlignment="Center" HorizontalAlignment="Center"
+                    Orientation="Vertical" Grid.Column="2" Grid.Row="1">
+            <AppBarButton Icon="RepeatAll" Label="Restart" Command="{Binding RestartCommand}"/>
+            <AppBarButton Icon="Undo" Label="Undo" Command="{Binding UndoCommand}"/>
+            <AppBarButton Icon="Redo" Label="Redo" Command="{Binding RedoCommand}"/>
+        </StackPanel>
+
+        <StackPanel Name="NavigationButtons" VerticalAlignment="Center" HorizontalAlignment="Center"
+                    Orientation="Vertical" Grid.Column="0" Grid.Row="1" >
+            <AppBarButton Icon="ViewAll"/>
+            <AppBarButton Icon="SolidStar"/>
+            <AppBarButton Icon="Setting"/>
+            <AppBarButton Icon="Help"/>
+        </StackPanel>
         
-        <Grid Grid.Row="1" Grid.Column="1" 
-              SizeChanged="GameGrid_OnSizeChanged"
-              Name="GameGrid">
+        <Grid Name="GameGrid" Grid.Row="1" Grid.Column="1" 
+              SizeChanged="GameGrid_OnSizeChanged">
             <ItemsControl ItemsSource="{Binding Links}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -79,28 +93,60 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Grid>
+
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="ApplicationViewStates">
+                <VisualState x:Name="DefaultLayout"/>
+
+                <VisualState x:Name="PortraitLayout">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="NavigationButtons" Storyboard.TargetProperty="Orientation">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Horizontal" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="NavigationButtons" Storyboard.TargetProperty="(Grid.Row)">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="2" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="NavigationButtons" Storyboard.TargetProperty="(Grid.Column)">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="1" />
+                        </ObjectAnimationUsingKeyFrames>
+
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="GameButtons" Storyboard.TargetProperty="Orientation">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Horizontal" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="GameButtons" Storyboard.TargetProperty="(Grid.Row)">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="0" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="GameButtons" Storyboard.TargetProperty="(Grid.Column)">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="1" />
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+
+                <VisualState x:Name="MinimalLayout">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="NavigationButtons" Storyboard.TargetProperty="Orientation">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Horizontal" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="NavigationButtons" Storyboard.TargetProperty="(Grid.Row)">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="2" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="NavigationButtons" Storyboard.TargetProperty="(Grid.Column)">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="1" />
+                        </ObjectAnimationUsingKeyFrames>
+
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="GameButtons" Storyboard.TargetProperty="Orientation">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Horizontal" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="GameButtons" Storyboard.TargetProperty="(Grid.Row)">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="0" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="GameButtons" Storyboard.TargetProperty="(Grid.Column)">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="1" />
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </Grid>
-
-    <!--<store:VisualStateAwarePage.TopAppBar>
-        <CommandBar>
-            <AppBarButton Icon="Back"/>
-        </CommandBar>
-    </store:VisualStateAwarePage.TopAppBar>-->
-
-    <!--<store:VisualStateAwarePage.BottomAppBar >
-        <CommandBar IsSticky="True" >
-            <CommandBar.PrimaryCommands>
-                <AppBarButton Icon="ViewAll"/>
-                <AppBarButton Icon="SolidStar"/>
-                <AppBarButton Icon="Setting"/>
-                <AppBarButton Icon="Help"/>
-            </CommandBar.PrimaryCommands>
-            <CommandBar.SecondaryCommands>
-                <AppBarButton Icon="RepeatAll"/>
-                <AppBarSeparator/>
-                <AppBarButton Icon="Undo" />
-                <AppBarButton Icon="Redo" />
-            </CommandBar.SecondaryCommands>
-        </CommandBar>
-    </store:VisualStateAwarePage.BottomAppBar>-->
 </store:VisualStateAwarePage>
