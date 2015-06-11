@@ -44,7 +44,7 @@
             <ItemsControl ItemsSource="{Binding Links}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <Canvas/>
+                        <Canvas />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
@@ -53,12 +53,12 @@
                               X2="{Binding Target.X}" Y2="{Binding Target.Y}" 
                               StrokeThickness="2">
                             <Line.Stroke>
-                                <LinearGradientBrush StartPoint="{Binding Source.Point}" 
-                                                     EndPoint="{Binding Target.Point}" 
-                                                     MappingMode="Absolute">
+                                <LinearGradientBrush StartPoint="{Binding GradientStartPoint}" 
+                                                     EndPoint="{Binding GradientStopPoint}" 
+                                                     MappingMode="RelativeToBoundingBox">
                                     <GradientStopCollection>
-                                        <GradientStop Color="{Binding Source.Model.State.Color}" Offset="0"/>
-                                        <GradientStop Color="{Binding Target.Model.State.Color}" Offset="1"/>
+                                        <GradientStop Color="{Binding Source.Model.State.Color}" Offset="0.0"/>
+                                        <GradientStop Color="{Binding Target.Model.State.Color}" Offset="1.0"/>
                                     </GradientStopCollection>
                                 </LinearGradientBrush>
                             </Line.Stroke>

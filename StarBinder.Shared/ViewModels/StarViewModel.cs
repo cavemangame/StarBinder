@@ -22,7 +22,6 @@ namespace StarBinder.ViewModels
             OnPropertyChanged("Y");
             OnPropertyChanged("XStar");
             OnPropertyChanged("YStar");
-            OnPropertyChanged("Point");
             OnPropertyChanged("GeometryBack");
             OnPropertyChanged("GeometryFront");
         }
@@ -37,9 +36,6 @@ namespace StarBinder.ViewModels
         //В WPF и WinApp работает и без этого
         public int XStar { get { return calculator.XRelToAbs(Model.XRel) - calculator.RelToAbsByMinSize(Model.HalfWidthRel); } }
         public int YStar { get { return calculator.YRelToAbs(Model.YRel) - calculator.RelToAbsByMinSize(Model.HalfWidthRel); } }
-
-        public Point Point { get { return new Point(X, Y);} }
-
         public Geometry GeometryBack { get { return calculator.GetWinphonePoints(Model, true).ToPathGeometry(); } }
         public Geometry GeometryFront { get { return calculator.GetWinphonePoints(Model, false).ToPathGeometry(); } }
     }
