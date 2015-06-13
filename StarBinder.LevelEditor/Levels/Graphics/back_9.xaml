@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--This file is NOT compatible with Silverlight-->
+<Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Stretch="Uniform">
+  <Canvas Name="svg2" Width="800.00001" Height="1200">
+    <Canvas.RenderTransform>
+      <TranslateTransform X="0" Y="0"/>
+    </Canvas.RenderTransform>
+    <Canvas.Resources>
+      <LinearGradientBrush xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Key="linearGradient4175" MappingMode="RelativeToBoundingBox" StartPoint="0,0" EndPoint="1,1">
+        <LinearGradientBrush.GradientStops>
+          <GradientStopCollection>
+            <GradientStop Color="#FF999999" Offset="0"/>
+            <GradientStop Color="#00999999" Offset="1"/>
+          </GradientStopCollection>
+        </LinearGradientBrush.GradientStops>
+      </LinearGradientBrush>
+      <RadialGradientBrush xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Key="radialGradient4181" MappingMode="Absolute" Center="-157,733" GradientOrigin="-157,733" RadiusX="50.360673" RadiusY="50.360673">
+        <RadialGradientBrush.GradientStops>
+          <GradientStopCollection>
+            <GradientStop Color="#FF999999" Offset="0"/>
+            <GradientStop Color="#00999999" Offset="1"/>
+          </GradientStopCollection>
+        </RadialGradientBrush.GradientStops>
+        <RadialGradientBrush.Transform>
+          <MatrixTransform Matrix="1.6334861 1.6346025 -0.79906034 0.7985146 401.70448 96.88581"/>
+        </RadialGradientBrush.Transform>
+      </RadialGradientBrush>
+    </Canvas.Resources>
+    <!--Unknown tag: sodipodi:namedview-->
+    <!--Unknown tag: metadata-->
+    <Canvas Name="layer1">
+      <Canvas.RenderTransform>
+        <TranslateTransform X="0" Y="147.63784"/>
+      </Canvas.RenderTransform>
+      <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="0" Canvas.Top="-147.63783" Width="800" Height="1200" Name="rect3336" Fill="#FF1A1A1A"/>
+      <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="-35.312168" Canvas.Top="172.76758" Width="225.28262" Height="3" Name="rect3352" Fill="#608B8B8B" Opacity="0.5">
+        <Rectangle.RenderTransform>
+          <MatrixTransform Matrix="0.71776799 -0.69628235 0.69055706 0.72327792 0 0"/>
+        </Rectangle.RenderTransform>
+      </Rectangle>
+      <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path3346" Fill="#608B8B8B" Opacity="0.5">
+        <Path.Data>
+          <PathGeometry Figures="m 708.57142 855.21935 -6.47985 12.19414 11.70878 7.32051 -13.80036 0.48535 -0.48535 13.80036 -7.32051 -11.70878 -12.19414 6.47985 6.47986 -12.19414 -11.70879 -7.32051 13.80036 -0.48535 0.48535 -13.80036 7.32051 11.70879 z" FillRule="NonZero"/>
+        </Path.Data>
+      </Path>
+      <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path3348" Fill="#608B8B8B" Opacity="0.5">
+        <Path.Data>
+          <PathGeometry Figures="m 123.57143 425.3622 -13.07353 -3.7227 -9.78362 9.43699 3.7227 -13.07354 -9.436981 -9.78361 13.073531 3.7227 9.78361 -9.43698 -3.72269 13.07353 z" FillRule="NonZero"/>
+        </Path.Data>
+      </Path>
+      <Rectangle xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Canvas.Left="168.54285" Canvas.Top="973.34015" Width="352.57288" Height="3.0441577" Name="rect4166" Fill="#608B8B8B" Opacity="0.5">
+        <Rectangle.RenderTransform>
+          <MatrixTransform Matrix="0.9853819 -0.17035996 0.16434271 0.9864033 0 0"/>
+        </Rectangle.RenderTransform>
+      </Rectangle>
+      <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path4162" Fill="#608B8B8B" Opacity="0.5">
+        <Path.Data>
+          <PathGeometry Figures="m 95.000001 193.36218 -20.167609 -15.97864 -8.819746 24.1715 -0.08169 -25.73019 -24.397065 8.17513 L 61.599634 167.8936 39.996737 153.91632 65.1 159.56218 l -2.541307 -25.60452 11.237513 23.14666 18.433939 -17.95103 -11.090312 23.21755 25.528057 3.21995 -25.066911 5.80515 z" FillRule="NonZero"/>
+        </Path.Data>
+        <Path.RenderTransform>
+          <MatrixTransform Matrix="0.95485194 -0.29708209 0.29708209 0.95485194 -47.170146 29.769685"/>
+        </Path.RenderTransform>
+      </Path>
+      <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path4164" Fill="#608B8B8B" Opacity="0.5">
+        <Path.Data>
+          <PathGeometry Figures="m 523 -8.6378474 -14.05641 -5.5088746 -7.46094 13.1249661 0.89558 -15.0707761 -14.78814 -3.039939 14.60991 -3.805377 -1.67863 -15.003752 8.13384 12.718924 13.75068 -6.23289 -9.58292 11.666105 z" FillRule="NonZero"/>
+        </Path.Data>
+        <Path.RenderTransform>
+          <MatrixTransform Matrix="0.84722043 0 0 0.81257115 114.49381 -16.191507"/>
+        </Path.RenderTransform>
+      </Path>
+      <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path4178" StrokeThickness="3" Stroke="{StaticResource radialGradient4181}" StrokeMiterLimit="4" StrokeLineJoin="Miter" StrokeStartLineCap="Flat" StrokeEndLineCap="Flat" Opacity="0.5">
+        <Path.Data>
+          <PathGeometry Figures="m -441.34085 422.91845 c -1.98743 -2.26773 -0.20658 -5.60486 2.09801 -6.78864 4.06641 -2.08876 8.79326 0.66021 10.36674 4.61241 2.2957 5.76626 -1.52398 12.03249 -7.12682 13.94483 -7.44335 2.54054 -15.29135 -2.38479 -17.52292 -9.64121 -2.80233 -9.1124 3.24375 -18.55998 12.15561 -21.10102 10.77778 -3.07306 21.83419 4.10158 24.67911 14.67001 3.34906 12.44123 -4.95867 25.11191 -17.18441 28.2572 -14.10354 3.62839 -28.39197 -5.81527 -31.83529 -19.69881 -3.90998 -15.76513 6.67155 -31.67368 22.21321 -35.41338 17.42623 -4.19317 34.9566 7.52758 38.99147 24.72761 4.47753 19.087 -8.38342 38.24042 -27.242 42.56957 -20.74752 4.76276 -41.52494 -9.23914 -46.14766 -29.75641 -5.04869 -22.40784 10.09474 -44.81001 32.2708 -49.72575 24.06802 -5.33514 48.09551 10.95026 53.30385 34.7852 5.62202 25.72809 -11.80572 51.38137 -37.29961 56.88194 -27.38807 5.90926 -54.66753 -12.66112 -60.46003 -39.814 -6.19678 -29.04798 13.51648 -57.95393 42.3284 -64.03813 30.70782 -6.48454 61.24055 14.37179 67.61622 44.8428 6.77252 32.36761 -15.22707 64.52733 -47.3572 71.19431 -34.02736 7.06066 -67.81426 -16.08232 -74.7724 -49.8716 -7.34895 -35.68707 16.93756 -71.10133 52.386 -78.35049 37.34675 -7.63737 74.38851 17.79277 81.92859 54.9004 7.92589 39.00641 -18.64797 77.67579 -57.4148 85.50668 -27.50029 5.55505 -56.41703 -5.24005 -73.85742 -27.14638" FillRule="evenodd"/>
+        </Path.Data>
+        <Path.RenderTransform>
+          <ScaleTransform ScaleX="-1" ScaleY="1"/>
+        </Path.RenderTransform>
+      </Path>
+      <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path4150" StrokeThickness="3.53586626" Stroke="#40ECECEC" StrokeMiterLimit="4" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Opacity="0.5">
+        <Path.Data>
+          <PathGeometry Figures="m 650.73207 -19.63784 c 0 35.75053 4.94949 49.73206 -98.73207 49.73206 -103.68156 0 -135.0683 61.7489 -212.73207 -26.73206 C 315.68429 -23.506265 379.41084 -43.527832 479 -72.369904 575.68156 -100.3699 650.73207 -55.388372 650.73207 -19.63784 Z" FillRule="nonzero"/>
+        </Path.Data>
+      </Path>
+      <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path4153" StrokeThickness="2.91770816" Stroke="#40ECECEC" StrokeMiterLimit="4" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Opacity="0.5">
+        <Path.Data>
+          <PathGeometry Figures="m 630.04644 -20.616149 c 0 27.8034905 4.33347 38.677045 -86.44373 38.677045 -90.77719 0 -118.25749 48.022643 -186.25511 -20.78975 -20.64838 -20.895802 35.14666 -36.466744 122.34081 -58.897468 84.64842 -21.775835 150.35803 13.206681 150.35803 41.010173 z" FillRule="nonzero"/>
+        </Path.Data>
+      </Path>
+      <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path4155" StrokeThickness="2.29660988" Stroke="#40ECECEC" StrokeMiterLimit="4" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Opacity="0.5">
+        <Path.Data>
+          <PathGeometry Figures="m 616.36139 -21.061451 c 0 19.5860926 3.81135 27.2459377 -76.0284 27.2459377 -79.83971 0 -104.00899 33.8294193 -163.81379 -14.6452818 -18.16053 -14.7199909 30.91195 -25.6888969 107.60034 -41.4901589 74.44939 -15.339927 132.24185 9.303409 132.24185 28.889503 z" FillRule="nonzero"/>
+        </Path.Data>
+      </Path>
+      <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path4157" StrokeThickness="1.71185935" Stroke="#40ECECEC" StrokeMiterLimit="4" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Opacity="0.5">
+        <Path.Data>
+          <PathGeometry Figures="m 596.65942 -19.713401 c 0 12.9820587 3.19481 18.0591591 -63.7297 18.0591591 -66.92446 0 -87.18401 22.4228239 -137.31451 -9.7071891 -15.2228 -9.756708 25.91149 -17.02712 90.19441 -27.500517 62.40612 -10.167615 110.8498 6.166488 110.8498 19.148547 z" FillRule="nonzero"/>
+        </Path.Data>
+      </Path>
+      <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path4159" Fill="#40B3B3B3" StrokeThickness="3" StrokeMiterLimit="4" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Opacity="0.5">
+        <Path.Data>
+          <PathGeometry Figures="M 285 -5.6378397 273.56769 -16.421111 264.27757 -3.7455346 267.9 -19.03784 252.27757 -20.745535 267.33231 -25.25457 261 -39.637841 l 11.43231 10.783271 9.29012 -12.675576 -3.62243 15.292305 15.62243 1.707696 -15.05474 4.509034 z" FillRule="nonzero"/>
+        </Path.Data>
+      </Path>
+      <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path4163" Fill="#608B8B8B" Opacity="0.5">
+        <Path.Data>
+          <PathGeometry Figures="m 388.57142 161.3622 -12.32995 -3.97202 -5.69315 11.63583 -0.0326 -12.9539 -12.82561 -1.81884 12.30983 -4.03393 -2.23351 -12.75993 7.64044 10.46079 11.44523 -6.06723 -7.58778 10.49905 z" FillRule="NonZero"/>
+        </Path.Data>
+      </Path>
+      <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path4165" Fill="#608B8B8B" Opacity="0.5">
+        <Path.Data>
+          <PathGeometry Figures="m 734.57142 422.3622 -12.32995 -3.97202 -5.69315 11.63583 -0.0326 -12.9539 -12.82561 -1.81884 12.30983 -4.03393 -2.23351 -12.75993 7.64044 10.46079 11.44523 -6.06723 -7.58778 10.49905 z" FillRule="NonZero"/>
+        </Path.Data>
+      </Path>
+      <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path4183" Fill="#608B8B8B" Opacity="0.5">
+        <Path.Data>
+          <PathGeometry Figures="m 322.57142 944.3622 -13.07353 -3.7227 -9.78361 9.43699 3.72269 -13.07354 -9.43698 -9.78361 13.07353 3.7227 9.78361 -9.43698 -3.72269 13.07353 z" FillRule="NonZero"/>
+        </Path.Data>
+      </Path>
+      <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path4185" StrokeThickness="3" Stroke="#40999999" StrokeMiterLimit="4" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Opacity="0.5">
+        <Path.Data>
+          <PathGeometry Figures="m 678 752.86218 c -10.57978 32.27575 -60.02636 55.5 -102 55.5 -41.97364 0 -59 -6.53449 -59 -40.5 0 -33.96551 45.40363 -90.42531 85 -76.5 22.74785 8 11.7331 33.56908 26.08953 45.90268 0 0 60.91047 -17.96039 49.91047 15.59732 z" FillRule="nonzero"/>
+        </Path.Data>
+      </Path>
+      <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path4188" StrokeThickness="2.33989835" Stroke="#40999999" StrokeMiterLimit="4" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Opacity="0.5">
+        <Path.Data>
+          <PathGeometry Figures="m 663.56227 756.78775 c -8.73274 23.78776 -49.54687 40.90442 -84.19269 40.90442 -34.64582 0 -48.69969 -4.81603 -48.69969 -29.84917 0 -25.03314 37.47699 -66.64494 70.16057 -56.38176 18.7765 5.89613 9.68472 24.74097 21.53478 33.83104 0 0 50.27663 -13.23711 41.19703 11.49547 z" FillRule="nonzero"/>
+        </Path.Data>
+      </Path>
+      <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path4190" StrokeThickness="1.54804909" Stroke="#40999999" StrokeMiterLimit="4" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Opacity="0.5">
+        <Path.Data>
+          <PathGeometry Figures="m 644.23843 759.04626 c -6.50325 13.98136 -36.89741 24.04175 -62.69805 24.04175 -25.80064 0 -36.26652 -2.83065 -36.26652 -17.54398 0 -14.71334 27.90901 -39.17085 52.24838 -33.13862 13.9828 3.46547 7.21218 14.54161 16.03688 19.88433 0 0 37.44086 -7.78016 30.67931 6.75652 z" FillRule="nonzero"/>
+        </Path.Data>
+      </Path>
+      <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path4192" StrokeThickness="1.04086328" Stroke="#40999999" StrokeMiterLimit="4" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Opacity="0.5">
+        <Path.Data>
+          <PathGeometry Figures="m 626.73315 759.91213 c -4.58103 8.97291 -25.99138 15.42945 -44.16595 15.42945 -18.17455 0 -25.54695 -1.81665 -25.54695 -11.25934 0 -9.44268 19.65974 -25.13896 36.80494 -21.2676 9.84981 2.22406 5.08044 9.33247 11.29675 12.7613 0 0 26.3742 -4.99312 21.61121 4.33619 z" FillRule="nonzero"/>
+        </Path.Data>
+      </Path>
+    </Canvas>
+  </Canvas>
+</Viewbox>
