@@ -1,0 +1,14 @@
+﻿<Properties StartupItem="StarBinder.XF\StarBinder.Droid\StarBinder.Droid.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.AVD_GalaxyNexus_ToolsForApacheCordova" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="StarBinder.XF\StarBinder\App.xaml.cs">
+    <Files>
+      <File FileName="StarBinder.XF\XF.Core\XF.Core.csproj" Line="1" Column="1" />
+      <File FileName="StarBinder.XF\XF.Core\Bootstrapping\AutofacBootstrapper.cs" Line="1" Column="1" />
+      <File FileName="StarBinder.XF\StarBinder\App.xaml.cs" Line="21" Column="3" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

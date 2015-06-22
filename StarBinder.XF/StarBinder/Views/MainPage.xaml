@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StarBinder.Views.MainPage"
+             Title="Main">
+  <Grid VerticalOptions="Fill" HorizontalOptions="Fill" Padding="5">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    
+    <Button Text="Start" HorizontalOptions="Center" VerticalOptions="Center"
+            Command="{Binding GameCommand}"/>
+    
+    <StackLayout Orientation="Horizontal" Grid.Row="1" Spacing="10" HorizontalOptions="Center">
+      <Button Text="1" Command="{Binding TestClickCommand}" CommandParameter="1"/>
+      <Button Text="2" Command="{Binding TestClickCommand}" CommandParameter="2"/>
+      <Button Text="3" Command="{Binding TestClickCommand}" CommandParameter="3"/>
+    </StackLayout>
+  </Grid>
+</ContentPage>
