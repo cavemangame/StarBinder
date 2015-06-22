@@ -50,6 +50,10 @@ namespace StarBinder.Core
         private int width;
         private int height;
 
+        public SizeCalculator()
+        {
+        }
+
         public SizeCalculator(int width, int height)
         {
             this.width = width;

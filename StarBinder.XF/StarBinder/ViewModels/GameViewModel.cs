@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using StarBinder.Core;
 using StarBinder.Core.Services;
@@ -33,8 +34,15 @@ namespace StarBinder.ViewModels
             set { SetProperty(ref stars, value); }
         }
 
-        private ObservableCollection<LinkViewModel> links;
-        public ObservableCollection<LinkViewModel> Links
+        //private ObservableCollection<LinkViewModel> links;
+        //public ObservableCollection<LinkViewModel> Links
+        //{
+        //    get { return links; }
+        //    set { SetProperty(ref links, value); }
+        //}
+
+        private List<Link> links;
+        public List<Link> Links
         {
             get { return links; }
             set { SetProperty(ref links, value); }
@@ -50,7 +58,7 @@ namespace StarBinder.ViewModels
     
             currentLevel = cur;
 
-            Links = new ObservableCollection<LinkViewModel>(currentLevel.Links.Select(l => new LinkViewModel(l)));
+            Links = new List<Link>(currentLevel.Links);
             Stars = new ObservableCollection<StarViewModel>(currentLevel.Stars.Select(s => new StarViewModel(s)));
 
             IsBusy = false;
