@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using System.Windows.Input;
 using NControl.Abstractions;
 using NGraphics;
 using StarBinder.Core;
@@ -23,12 +24,28 @@ namespace StarBinder.Controls
         {
             calculator.Resize((int)rect.Width, (int)rect.Height);
             base.Draw(canvas, rect);
+
+            if (Links == null) return;
             
-            if (Links != null)
             foreach (var link in Links)
             {
                 canvas.ReDrawLink(link, calculator);
             }
+        }
+
+        public void OnStarPressed(Star star)
+        {
+            var command = Command as Command<Star>;
+            if (command == null) return;
+            if (command.CanExecute(star)) command.Execute(star);
+        }
+
+        public static BindableProperty CommandProperty = BindableProperty.Create<GameControl, ICommand>(p => p.Command, default(ICommand));
+        
+        public ICommand Command
+        {
+            get { return (ICommand)GetValue(CommandProperty); }
+            set { SetValue(CommandProperty, value); }
         }
 
         public static BindableProperty LinksProperty = BindableProperty.Create<GameControl, IEnumerable<Link>>(
@@ -54,7 +71,6 @@ namespace StarBinder.Controls
             ((GameControl)bindable).Invalidate();
         }
 
-
         private static void StarsChanged(BindableObject bindable, IEnumerable<Star> oldValue, IEnumerable<Star> newValue)
         {
             var ctrl = (GameControl) bindable;
@@ -65,11 +81,10 @@ namespace StarBinder.Controls
             
             foreach (var star in newValue)
             {
-				var starCtrl = new StarControl(star, ctrl.calculator);
-
-				var left = new Xamarin.Forms.Point(xfCalc.XRelToAbs(star.XRel) - xfCalc.RelToAbsByMinSize(star.HalfWidthRel), 
-												   xfCalc.YRelToAbs(star.YRel) - xfCalc.RelToAbsByMinSize(star.HalfWidthRel));
-				var size = new Xamarin.Forms.Size(xfCalc.RelToAbsByMinSize(star.HalfWidthRel * 2), xfCalc.RelToAbsByMinSize(star.HalfWidthRel * 2));
+				var starCtrl = new StarControl(star, ctrl.calculator, ctrl.OnStarPressed);
+                var hw = xfCalc.RelToAbsByMinSize(star.HalfWidthRel);
+                var left = new Xamarin.Forms.Point(xfCalc.XRelToAbs(star.XRel) - hw, xfCalc.YRelToAbs(star.YRel) - hw);
+				var size = new Xamarin.Forms.Size(hw * 2, hw * 2);
 				var rect = new Xamarin.Forms.Rectangle(left, size);
                 
                 AbsoluteLayout.SetLayoutBounds(starCtrl, rect);

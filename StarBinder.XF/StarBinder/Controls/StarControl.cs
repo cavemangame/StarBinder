@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using NControl.Abstractions;
 using NGraphics;
 using StarBinder.Core;
 using Xamarin.Forms;
 using Point = NGraphics.Point;
-using Size = NGraphics.Size;
 
 namespace StarBinder.Controls
 {
@@ -14,18 +14,26 @@ namespace StarBinder.Controls
     {
         private readonly Star star;
         private readonly SizeCalculator calculator;
-		        
-        public StarControl(Star star, SizeCalculator calculator)
+        private readonly Action<Star> onStarPressed;
+
+        public StarControl(Star star, SizeCalculator calculator, Action<Star> onStarPressed)
         {
             this.star = star;
             this.calculator = calculator;
+            this.onStarPressed = onStarPressed;
+            //star.PropertyChanged += StarOnPropertyChanged;
         }
+
+        //private void StarOnPropertyChanged(object sender, PropertyChangedEventArgs args)
+        //{
+        //    if (args.PropertyName != "State") return;
+
+        //    this.ScaleTo(1.0, 65, Easing.BounceOut);
+        //}
 
         public override void Draw(ICanvas canvas, Rect rect)
         {
 			base.Draw(canvas, rect);
-            Debug.WriteLine(rect);
-            canvas.DrawRectangle(rect, new Pen("Red"));
             DrawStar(canvas, true);
             DrawStar(canvas, false);
         }
@@ -51,6 +59,7 @@ namespace StarBinder.Controls
         {
             base.TouchesBegan(points);
             this.ScaleTo(0.8, 65, Easing.CubicInOut);
+            onStarPressed(star);
             return true;
         }
 

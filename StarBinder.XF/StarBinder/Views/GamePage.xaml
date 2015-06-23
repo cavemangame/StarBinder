@@ -9,8 +9,8 @@
       <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
 
-    <controls:GameControl Links="{Binding Links}" Stars="{Binding Stars}">
-      
-    </controls:GameControl>
+    <controls:GameControl Links="{Binding Links}" 
+                          Stars="{Binding Stars}"
+                          Command="{Binding StarTapCommand}"/>
   </Grid>
 </ContentPage>
