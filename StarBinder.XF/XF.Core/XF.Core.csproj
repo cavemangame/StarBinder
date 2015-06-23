@@ -52,7 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\StarBinder.Core\StarBinder.Core.csproj">
-      <Project>{18eaa6bb-dacc-4219-a52c-c4982e73ac00}</Project>
+      <Project>{18EAA6BB-DACC-4219-A52C-C4982E73AC00}</Project>
       <Name>StarBinder.Core</Name>
     </ProjectReference>
   </ItemGroup>

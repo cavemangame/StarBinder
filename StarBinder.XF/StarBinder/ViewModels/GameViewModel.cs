@@ -27,19 +27,12 @@ namespace StarBinder.ViewModels
             ChangeLevelIfNeed();
         }
 
-        private ObservableCollection<StarViewModel> stars;
-        public ObservableCollection<StarViewModel> Stars
+        private List<Star> stars;
+        public List<Star> Stars
         {
             get { return stars; }
             set { SetProperty(ref stars, value); }
         }
-
-        //private ObservableCollection<LinkViewModel> links;
-        //public ObservableCollection<LinkViewModel> Links
-        //{
-        //    get { return links; }
-        //    set { SetProperty(ref links, value); }
-        //}
 
         private List<Link> links;
         public List<Link> Links
@@ -59,7 +52,7 @@ namespace StarBinder.ViewModels
             currentLevel = cur;
 
             Links = new List<Link>(currentLevel.Links);
-            Stars = new ObservableCollection<StarViewModel>(currentLevel.Stars.Select(s => new StarViewModel(s)));
+            Stars = new List<Star>(currentLevel.Stars);
 
             IsBusy = false;
         }

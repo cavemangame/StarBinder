@@ -1,9 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:abstractions="clr-namespace:NControl.Abstractions;assembly=NControl"
              xmlns:controls="clr-namespace:StarBinder.Controls;assembly=StarBinder"
-             xmlns:core="clr-namespace:StarBinder.Core;assembly=StarBinder.Core"
              x:Class="StarBinder.Views.GamePage">
   <Grid>
     <Grid.RowDefinitions>
@@ -11,7 +9,7 @@
       <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
 
-    <controls:GameControl Links="{Binding Links}">
+    <controls:GameControl Links="{Binding Links}" Stars="{Binding Stars}">
       
     </controls:GameControl>
   </Grid>

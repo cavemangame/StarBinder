@@ -86,6 +86,9 @@ namespace StarBinder.Core
 
         public IEnumerable<Link> Links { get { return links; } }
 
+        public string Color { get { return State.Color; } }
+        public string BackColor { get { return FinalState.Color; } }
+
         public State State
         {
             get { return state; }
