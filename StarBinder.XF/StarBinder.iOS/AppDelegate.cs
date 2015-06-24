@@ -1,6 +1,8 @@
 ﻿using Foundation;
 using UIKit;
 
+using NControl.iOS;
+
 namespace StarBinder.iOS
 {
     // The UIApplicationDelegate for the application. This class is responsible for launching the 
@@ -19,6 +21,7 @@ namespace StarBinder.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
+			NControlViewRenderer.Init();
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);

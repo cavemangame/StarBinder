@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using StarBinder.Core;
 using StarBinder.Core.Services;
 using Xamarin.Forms;
@@ -49,6 +50,14 @@ namespace StarBinder.ViewModels
         private async void OnExecuteStarTap(Star star)
         {
             star.ChangeAll();
+
+            Device.OnPlatform(
+                iOS: () =>
+                {
+                    Links = new List<Link>(Links);
+                    Stars = new List<Star>(Stars);
+                    Debug.WriteLine("Refresh for iOS");
+                });
 
             if (!currentLevel.IsComplete) return;
             
