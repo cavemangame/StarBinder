@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.IO;
 using System.Windows.Input;
 using NControl.Abstractions;
 using NGraphics;
 using StarBinder.Core;
+using StarBinder.Resources;
 using Xamarin.Forms;
 using Point = Xamarin.Forms.Point;
 using Rectangle = Xamarin.Forms.Rectangle;
@@ -24,15 +25,9 @@ namespace StarBinder.Controls
         {
             calculator.Resize((int)rect.Width, (int)rect.Height);
             base.Draw(canvas, rect);
-
-            if (Links == null) return;
-#if __IOS__  
-#else
-            foreach (var link in Links)
-            {
-                canvas.ReDrawLink(link, calculator);
-            }
-#endif
+            if (backImage == null) return;
+            backImage.Size = rect.Size;
+            backImage.Draw(canvas);
         }
 
         public void OnStarPressed(Star star)
@@ -41,7 +36,7 @@ namespace StarBinder.Controls
             if (command == null) return;
             if (command.CanExecute(star)) command.Execute(star);
 
-            //Device.OnPlatform(iOS: Invalidate);
+            Device.OnPlatform(iOS: () => RedrawLevel(Level));
         }
 
         public static BindableProperty CommandProperty = BindableProperty.Create<GameControl, ICommand>(p => p.Command, default(ICommand));
@@ -52,71 +47,72 @@ namespace StarBinder.Controls
             set { SetValue(CommandProperty, value); }
         }
 
-        public static BindableProperty LinksProperty = BindableProperty.Create<GameControl, IEnumerable<Link>>(
-            p => p.Links, default(IEnumerable<Link>), BindingMode.OneWay, null, LinksChanged);
+        public static BindableProperty LevelProperty = BindableProperty.Create<GameControl, Galaxy>(
+            p => p.Level, default(Galaxy), BindingMode.OneWay, null, LevelChanged);
 
-        public IEnumerable<Link> Links
+        public Galaxy Level
         {
-            get { return (IEnumerable<Link>)GetValue(LinksProperty); }
-            set { SetValue(LinksProperty, value); }
+            get { return (Galaxy)GetValue(LevelProperty); }
+            set { SetValue(LevelProperty, value); }
+        }
+        private static void LevelChanged(BindableObject bindable, Galaxy oldValue, Galaxy newValue)
+        {
+            var ctrl = (GameControl)bindable;
+            ctrl.RedrawLevel(newValue);
         }
 
-        public static BindableProperty StarsProperty = BindableProperty.Create<GameControl, IEnumerable<Star>>(
-            p => p.Stars, default(IEnumerable<Star>), BindingMode.OneWay, null, StarsChanged);
 
-        public IEnumerable<Star> Stars
+        public static BindableProperty BackImageProperty = BindableProperty.Create<GameControl, string>(
+            p => p.BackImage, default(string), BindingMode.OneWay, null, BackImageChanged);
+
+        public string BackImage
         {
-            get { return (IEnumerable<Star>)GetValue(LinksProperty); }
-            set { SetValue(StarsProperty, value); }
+            get { return (string)GetValue(BackImageProperty); }
+            set { SetValue(BackImageProperty, value); }
         }
 
-        private static void LinksChanged(BindableObject bindable, IEnumerable<Link> oldValue, IEnumerable<Link> newValue)
+        private Graphic backImage;
+
+        private static void BackImageChanged(BindableObject bindable, string oldValue, string newValue)
         {
-            var ctrl = ((GameControl)bindable);
+            var ctrl = (GameControl)bindable;
+            using (var reader = new StringReader(newValue))
+            {
+                var svg = new SvgReaderEx(reader);
+                ctrl.backImage = svg.Graphic;
+            }
+
             ctrl.Invalidate();
-
-#if __IOS__
-            foreach (var link in ctrl.Links)
-            {
-                var linkCtrl = new LinkControl(link, ctrl.calculator);
-                ctrl.layout.Children.Add(linkCtrl);
-            }
-#endif
         }
 
-        private static void StarsChanged(BindableObject bindable, IEnumerable<Star> oldValue, IEnumerable<Star> newValue)
+        private void RedrawLevel(Galaxy galaxy)
         {
-            var ctrl = (GameControl) bindable;
-            ctrl.layout.Children.Clear();
+            layout.Children.Clear();
 
-			//By unknown reasons, NControls size and Xamarin.Forms size are different for the same area of display. 
-			var xfCalc = new SizeCalculator((int)ctrl.layout.Width, (int)ctrl.layout.Height);
+            if (galaxy == null) return;
 
-#if __IOS__
-            foreach (var link in ctrl.Links)
+            var xfCalc = new SizeCalculator((int)layout.Width, (int)layout.Height);
+
+            foreach (var link in galaxy.Links)
             {
-                var linkCtrl = new LinkControl(link, ctrl.calculator);
-                ctrl.layout.Children.Add(linkCtrl);
+                layout.Children.Add(new LinkControl(link, calculator));
             }
-#endif
-            foreach (var star in newValue)
+            
+            foreach (var star in galaxy.Stars)
             {
-				var starCtrl = new StarControl(star, ctrl.calculator, ctrl.OnStarPressed);
+                var starCtrl = new StarControl(star, calculator, OnStarPressed);
                 var hw = xfCalc.RelToAbsByMinSize(star.HalfWidthRel);
                 var left = new Point(xfCalc.XRelToAbs(star.XRel) - hw, xfCalc.YRelToAbs(star.YRel) - hw);
-				var size = new Size(hw * 2, hw * 2);
-				var rect = new Rectangle(left, size);
-                
+                var size = new Size(hw * 2, hw * 2);
+                var rect = new Rectangle(left, size);
+
                 AbsoluteLayout.SetLayoutBounds(starCtrl, rect);
-                                
-                ctrl.layout.Children.Add(starCtrl);
+
+                layout.Children.Add(starCtrl);
             }
         }
     }
 
-
-
-#if __IOS__
     public class LinkControl : NControlView
     {
         private readonly Link link;
@@ -126,6 +122,7 @@ namespace StarBinder.Controls
         {
             this.link = link;
             this.calculator = calculator;
+            IsEnabled = false;
         }
 
         public override void Draw(ICanvas canvas, Rect rect)
@@ -134,5 +131,4 @@ namespace StarBinder.Controls
             canvas.ReDrawLink(link, calculator);
         }
     }
-#endif
 }

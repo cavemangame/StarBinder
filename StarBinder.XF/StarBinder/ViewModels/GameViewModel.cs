@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using StarBinder.Core;
+﻿using StarBinder.Core;
 using StarBinder.Core.Services;
 using Xamarin.Forms;
 using XF.Core.Services;
@@ -11,13 +9,16 @@ namespace StarBinder.ViewModels
     class GameViewModel : ViewModelBase
     {
         private readonly IGameService gameService;
+        private readonly IResourcesService resources;
         private readonly IDialogService dialog;
-        private Galaxy currentLevel;
+        private readonly INavigator navigator;
 
-        public GameViewModel(IGameService gameService, IDialogService dialog)
+        public GameViewModel(IGameService gameService, IResourcesService resources, IDialogService dialog, INavigator navigator)
         {
             this.gameService = gameService;
+            this.resources = resources;
             this.dialog = dialog;
+            this.navigator = navigator;
         }
 
         public override void NavigatedFrom()
@@ -30,18 +31,18 @@ namespace StarBinder.ViewModels
             ChangeLevelIfNeed();
         }
 
-        private List<Star> stars;
-        public List<Star> Stars
+        private Galaxy currentLevel;
+        public Galaxy CurrentLevel
         {
-            get { return stars; }
-            set { SetProperty(ref stars, value); }
+            get { return currentLevel; }
+            set { SetProperty(ref currentLevel, value); }
         }
-
-        private List<Link> links;
-        public List<Link> Links
+        
+        private string backImageSvg;
+        public string BackImageSvg
         {
-            get { return links; }
-            set { SetProperty(ref links, value); }
+            get { return backImageSvg; }
+            set { SetProperty(ref backImageSvg, value); }
         }
 
         private Command<Star> starTapCommand;
@@ -50,38 +51,42 @@ namespace StarBinder.ViewModels
         private async void OnExecuteStarTap(Star star)
         {
             star.ChangeAll();
-#if __IOS__
-            Stars = new List<Star>(Stars);
-            Debug.WriteLine("Refresh for iOS");
-#endif
-            if (!currentLevel.IsComplete) return;
+
+            if (!CurrentLevel.IsComplete) return;
             
             //todo await gameService.SaveLevelState(currentLevel);
-                
-            if (await dialog.DisplayAlert("Success!", "Do you want restart?", "Yes", "No"))
+
+            Galaxy next;
+            if (await gameService.TryGetNextLevel(out next))
             {
-                currentLevel.ResetStarStates();
-                StartLevel(currentLevel);
+                next = await dialog.DisplayAlert("Success!", "Next level ? =)", "Next", "Restart") ? next : CurrentLevel;
+                StartLevel(next);
+            }
+            else
+            {
+                await dialog.DisplayAlert("Success!", "The End =(", "Ok");
+                await gameService.SetLevelNumber(1);
+                await navigator.PopAsync();
             }
         }
 
         private async void ChangeLevelIfNeed()
         {
-            var cur = await gameService.GetCurrentLevel();
+            var level = await gameService.GetCurrentLevel();
 
-            if (cur == currentLevel) return;
-            
-            StartLevel(cur);
+            if (level == CurrentLevel) return;
+
+            StartLevel(level);
         }
 
         private void StartLevel(Galaxy level)
         {
             IsBusy = true;
 
-            currentLevel = level;
-
-            Links = new List<Link>(currentLevel.Links);
-            Stars = new List<Star>(currentLevel.Stars);
+            CurrentLevel = null;
+            BackImageSvg = resources.GetLevelBack(level.Number);
+            level.ResetStarStates();
+            CurrentLevel = level;
 
             IsBusy = false;
         }

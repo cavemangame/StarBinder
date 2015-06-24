@@ -23,5 +23,10 @@ namespace StarBinder.Core.Services
         {
             throw new NotImplementedException();
         }
+
+        public Task SetLevelNumber(int number)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

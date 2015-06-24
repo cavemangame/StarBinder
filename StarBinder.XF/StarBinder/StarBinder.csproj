@@ -44,6 +44,8 @@
     <Compile Include="Controls\GameControl.cs" />
     <Compile Include="Controls\StarControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\ResourcesResolver.cs" />
+    <Compile Include="Resources\SvgReaderEx.cs" />
     <Compile Include="ViewModels\GameViewModel.cs" />
     <Compile Include="ViewModels\LevelsViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
@@ -104,6 +106,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <EmbeddedResource Include="Resources\Levels\level1" />
+    <EmbeddedResource Include="Resources\Levels\level10" />
+    <EmbeddedResource Include="Resources\Levels\level2" />
+    <EmbeddedResource Include="Resources\Levels\level3" />
+    <EmbeddedResource Include="Resources\Levels\level4" />
+    <EmbeddedResource Include="Resources\Levels\level5" />
+    <EmbeddedResource Include="Resources\Levels\level6" />
+    <EmbeddedResource Include="Resources\Levels\level7" />
+    <EmbeddedResource Include="Resources\Levels\level8" />
+    <EmbeddedResource Include="Resources\Levels\level9" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\StarBinder.Core\StarBinder.Core.csproj">
@@ -133,5 +145,17 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Graphics\back_1.svg" />
+    <EmbeddedResource Include="Resources\Graphics\back_10.svg" />
+    <EmbeddedResource Include="Resources\Graphics\back_2.svg" />
+    <EmbeddedResource Include="Resources\Graphics\back_3.svg" />
+    <EmbeddedResource Include="Resources\Graphics\back_4.svg" />
+    <EmbeddedResource Include="Resources\Graphics\back_5.svg" />
+    <EmbeddedResource Include="Resources\Graphics\back_6.svg" />
+    <EmbeddedResource Include="Resources\Graphics\back_7.svg" />
+    <EmbeddedResource Include="Resources\Graphics\back_8.svg" />
+    <EmbeddedResource Include="Resources\Graphics\back_9.svg" />
   </ItemGroup>
 </Project>

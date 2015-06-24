@@ -11,5 +11,6 @@ namespace StarBinder.Core.Services
         Task<Galaxy> GetCurrentLevel();
         Task<bool> TryGetNextLevel(out Galaxy level);
         Task SaveLevelState(Galaxy level);
+        Task SetLevelNumber(int number);
     }
 }

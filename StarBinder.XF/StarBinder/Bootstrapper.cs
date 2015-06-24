@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Core;
 using StarBinder.Core.Services;
+using StarBinder.Resources;
 using StarBinder.ViewModels;
 using StarBinder.Views;
 using Xamarin.Forms;
@@ -33,6 +34,7 @@ namespace StarBinder
             if (platform != null) builder.RegisterModule(platform);
 
             builder.RegisterType<StubGameService>().As<IGameService>().SingleInstance();
+            builder.RegisterType<ResourcesResolver>().As<IResourcesService>().SingleInstance();
 
             builder.RegisterType<MainViewModel>().SingleInstance();
             builder.RegisterType<GameViewModel>().SingleInstance();
