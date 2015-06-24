@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using System.Windows.Input;
 using NControl.Abstractions;
 using NGraphics;
 using StarBinder.Core;
 using Xamarin.Forms;
-using Color = NGraphics.Color;
-using Point = NGraphics.Point;
+using Point = Xamarin.Forms.Point;
+using Rectangle = Xamarin.Forms.Rectangle;
+using Size = Xamarin.Forms.Size;
 
 namespace StarBinder.Controls
 {
@@ -26,11 +26,13 @@ namespace StarBinder.Controls
             base.Draw(canvas, rect);
 
             if (Links == null) return;
-            
+#if __IOS__  
+#else
             foreach (var link in Links)
             {
                 canvas.ReDrawLink(link, calculator);
             }
+#endif
         }
 
         public void OnStarPressed(Star star)
@@ -38,6 +40,8 @@ namespace StarBinder.Controls
             var command = Command as Command<Star>;
             if (command == null) return;
             if (command.CanExecute(star)) command.Execute(star);
+
+            //Device.OnPlatform(iOS: Invalidate);
         }
 
         public static BindableProperty CommandProperty = BindableProperty.Create<GameControl, ICommand>(p => p.Command, default(ICommand));
@@ -68,7 +72,16 @@ namespace StarBinder.Controls
 
         private static void LinksChanged(BindableObject bindable, IEnumerable<Link> oldValue, IEnumerable<Link> newValue)
         {
-            ((GameControl)bindable).Invalidate();
+            var ctrl = ((GameControl)bindable);
+            ctrl.Invalidate();
+
+#if __IOS__
+            foreach (var link in ctrl.Links)
+            {
+                var linkCtrl = new LinkControl(link, ctrl.calculator);
+                ctrl.layout.Children.Add(linkCtrl);
+            }
+#endif
         }
 
         private static void StarsChanged(BindableObject bindable, IEnumerable<Star> oldValue, IEnumerable<Star> newValue)
@@ -78,14 +91,21 @@ namespace StarBinder.Controls
 
 			//By unknown reasons, NControls size and Xamarin.Forms size are different for the same area of display. 
 			var xfCalc = new SizeCalculator((int)ctrl.layout.Width, (int)ctrl.layout.Height);
-            
+
+#if __IOS__
+            foreach (var link in ctrl.Links)
+            {
+                var linkCtrl = new LinkControl(link, ctrl.calculator);
+                ctrl.layout.Children.Add(linkCtrl);
+            }
+#endif
             foreach (var star in newValue)
             {
 				var starCtrl = new StarControl(star, ctrl.calculator, ctrl.OnStarPressed);
                 var hw = xfCalc.RelToAbsByMinSize(star.HalfWidthRel);
-                var left = new Xamarin.Forms.Point(xfCalc.XRelToAbs(star.XRel) - hw, xfCalc.YRelToAbs(star.YRel) - hw);
-				var size = new Xamarin.Forms.Size(hw * 2, hw * 2);
-				var rect = new Xamarin.Forms.Rectangle(left, size);
+                var left = new Point(xfCalc.XRelToAbs(star.XRel) - hw, xfCalc.YRelToAbs(star.YRel) - hw);
+				var size = new Size(hw * 2, hw * 2);
+				var rect = new Rectangle(left, size);
                 
                 AbsoluteLayout.SetLayoutBounds(starCtrl, rect);
                                 
@@ -94,35 +114,25 @@ namespace StarBinder.Controls
         }
     }
 
-    static class DrawingExtensions
+
+
+#if __IOS__
+    public class LinkControl : NControlView
     {
-        public static Point LinkPoint(this Star star, SizeCalculator calculator)
+        private readonly Link link;
+        private readonly SizeCalculator calculator;
+
+        public LinkControl(Link link, SizeCalculator calculator)
         {
-            return new Point(calculator.XRelToAbs(star.XRel), calculator.YRelToAbs(star.YRel));
+            this.link = link;
+            this.calculator = calculator;
         }
 
-		public static Color ToColor(this string hexString)
-		{
-			return Color.FromRGB(int.Parse(hexString.Remove(0, 3), NumberStyles.HexNumber));
-		}
-
-        public static void ReDrawLink(this ICanvas canvas, Link link, SizeCalculator calculator)
+        public override void Draw(ICanvas canvas, Rect rect)
         {
-            var from = link.From.LinkPoint(calculator);
-            var to = link.To.LinkPoint(calculator);
-            canvas.DrawGradientLine(from, to, 4, link.From.Color.ToColor(), link.To.Color.ToColor());
-        }
-
-        public static void DrawGradientLine(this ICanvas canvas, Point from, Point to, double width, Color color1, Color color2)
-        {
-            var hw = width > 1 ? width/2 : 0.5;
-            var pt1 = new Point(from.X < to.X ? from.X - hw : from.X + hw, from.Y);
-            var pt2 = new Point(from.X, from.Y < to.Y ? from.Y - hw : from.Y + hw);
-            var pt3 = new Point(to.X < from.X ? to.X - hw : to.X + hw, to.Y);
-            var pt4 = new Point(to.X, to.Y < from.Y ? to.Y - hw : to.Y + hw);
-            var gradient = new LinearGradientBrush(from, to, color1, color2) { Absolute = true };
-
-            canvas.FillPath(new PathOp[] { new MoveTo(pt1), new LineTo(pt2), new LineTo(pt3), new LineTo(pt4), new ClosePath() }, gradient);
+            base.Draw(canvas, rect);
+            canvas.ReDrawLink(link, calculator);
         }
     }
+#endif
 }

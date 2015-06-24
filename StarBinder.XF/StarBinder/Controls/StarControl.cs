@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using NControl.Abstractions;
 using NGraphics;
@@ -21,16 +20,8 @@ namespace StarBinder.Controls
             this.star = star;
             this.calculator = calculator;
             this.onStarPressed = onStarPressed;
-            //star.PropertyChanged += StarOnPropertyChanged;
         }
-
-        //private void StarOnPropertyChanged(object sender, PropertyChangedEventArgs args)
-        //{
-        //    if (args.PropertyName != "State") return;
-
-        //    this.ScaleTo(1.0, 65, Easing.BounceOut);
-        //}
-
+        
         public override void Draw(ICanvas canvas, Rect rect)
         {
 			base.Draw(canvas, rect);

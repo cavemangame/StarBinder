@@ -40,6 +40,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Controls\DrawingExtensions.cs" />
     <Compile Include="Controls\GameControl.cs" />
     <Compile Include="Controls\StarControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

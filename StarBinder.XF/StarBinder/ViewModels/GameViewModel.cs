@@ -50,15 +50,10 @@ namespace StarBinder.ViewModels
         private async void OnExecuteStarTap(Star star)
         {
             star.ChangeAll();
-
-            Device.OnPlatform(
-                iOS: () =>
-                {
-                    Links = new List<Link>(Links);
-                    Stars = new List<Star>(Stars);
-                    Debug.WriteLine("Refresh for iOS");
-                });
-
+#if __IOS__
+            Stars = new List<Star>(Stars);
+            Debug.WriteLine("Refresh for iOS");
+#endif
             if (!currentLevel.IsComplete) return;
             
             //todo await gameService.SaveLevelState(currentLevel);
