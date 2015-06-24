@@ -61,7 +61,6 @@ namespace StarBinder.Controls
             ctrl.RedrawLevel(newValue);
         }
 
-
         public static BindableProperty BackImageProperty = BindableProperty.Create<GameControl, string>(
             p => p.BackImage, default(string), BindingMode.OneWay, null, BackImageChanged);
 
@@ -95,7 +94,9 @@ namespace StarBinder.Controls
 
             foreach (var link in galaxy.Links)
             {
-                layout.Children.Add(new LinkControl(link, calculator));
+				var linkCtrl = new LinkControl (link, calculator);
+				AbsoluteLayout.SetLayoutBounds(linkCtrl, new Rectangle(0, 0, layout.Width, layout.Height));
+				layout.Children.Add(linkCtrl);
             }
             
             foreach (var star in galaxy.Stars)

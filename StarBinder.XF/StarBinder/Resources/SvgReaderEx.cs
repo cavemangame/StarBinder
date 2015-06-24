@@ -486,33 +486,48 @@ namespace StarBinder.Resources
                 // Get the operation
                 //
                 var op = "";
-                if (a.Length == 1)
+				if (a.Length == 1)
                 {
-                    op = a;
-                    i++;
+					if (char.IsDigit(a[0])) 
+					{
+						op = "L";
+					} 
+					else 
+					{
+						op = a.ToUpper();
+						i++;
+					}
                 }
                 else
                 {
-                    op = a.Substring(0, 1);
-                    args[i] = a.Substring(1);
+					var fsybbol = a[0];
+					if (fsybbol == '-' || char.IsDigit(fsybbol)) 
+					{
+						op = "L";
+					} 
+					else 
+					{
+						op = a.Substring(0, 1).ToUpper();
+						args[i] = a.Substring(1);
+					}
                 }
 
                 //
                 // Execute
                 //
-                if (op == "M" || op == "m" && i + 1 < n)
+                if (op == "M" && i + 1 < n)
                 {
                     lastPoint = new Point(ReadNumber(args[i]), ReadNumber(args[i + 1]));
                     p.MoveTo(lastPoint);
                     i += 2;
                 }
-                else if (op == "L" || op == "l" && i + 1 < n)
+                else if (op == "L" && i + 1 < n)
                 {
                     lastPoint += new Point(ReadNumber(args[i]), ReadNumber(args[i + 1]));
                     p.LineTo(lastPoint);
                     i += 2;
                 }
-                else if (op == "C" || op == "c" && i + 5 < n)
+                else if (op == "C" && i + 5 < n)
                 {
                     var c1 = lastPoint + new Point(ReadNumber(args[i]), ReadNumber(args[i + 1]));
                     var c2 = lastPoint + new Point(ReadNumber(args[i + 2]), ReadNumber(args[i + 3]));
@@ -520,14 +535,14 @@ namespace StarBinder.Resources
                     p.CurveTo(c1, c2, lastPoint);
                     i += 6;
                 }
-                else if (op == "S" || op == "s" && i + 3 < n)
+                else if (op == "S" && i + 3 < n)
                 {
                     var c = lastPoint + new Point(ReadNumber(args[i]), ReadNumber(args[i + 1]));
                     lastPoint += new Point(ReadNumber(args[i + 2]), ReadNumber(args[i + 3]));
                     p.ContinueCurveTo(c, lastPoint);
                     i += 4;
                 }
-                else if (op == "A" || op == "a" && i + 6 < n)
+                else if (op == "A" && i + 6 < n)
                 {
                     var r = new Size(ReadNumber(args[i]), ReadNumber(args[i + 1]));
                     //					var xr = ReadNumber (args [i + 2]);
@@ -537,7 +552,7 @@ namespace StarBinder.Resources
                     p.ArcTo(r, laf, swf, lastPoint);
                     i += 7;
                 }
-                else if (op == "z" || op == "Z")
+                else if (op == "Z")
                 {
                     p.Close();
                 }
