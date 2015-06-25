@@ -471,90 +471,82 @@ namespace StarBinder.Resources
 
         static readonly char[] WSC = new char[] { ',', ' ', '\t', '\n', '\r' };
 
+
         void ReadPath(Path p, string pathDescriptor)
         {
             var args = pathDescriptor.Split(WSC, StringSplitOptions.RemoveEmptyEntries);
-
-            var i = 0;
+            var shift = new Point();
             var n = args.Length;
-            var lastPoint = new Point(0, 0);
+            var lastOp = 'L';
+            var i = 0;
 
             while (i < n)
             {
-                var a = args[i];
-                //
                 // Get the operation
-                //
-                var op = "";
-				if (a.Length == 1)
+                var op = lastOp;
+                var a = args[i];
+                if (a[0] != '-' && !char.IsDigit(a, 0))
                 {
-					if (char.IsDigit(a[0])) 
-					{
-						op = "L";
-					} 
-					else 
-					{
-						op = a.ToUpper();
-						i++;
-					}
+                    op = a[0];
+                    if (args[i].Length == 1) 
+                        i++;
+                    else 
+                        args[i] = a.Substring(1);
+                }
+
+                shift = char.IsLower(op) ? shift : new Point();
+                if (char.ToUpper(op) == 'M')
+                {
+                    lastOp = char.IsUpper(op) ? char.ToUpper(lastOp) : char.ToLower(lastOp);
                 }
                 else
                 {
-					var fsybbol = a[0];
-					if (fsybbol == '-' || char.IsDigit(fsybbol)) 
-					{
-						op = "L";
-					} 
-					else 
-					{
-						op = a.Substring(0, 1).ToUpper();
-						args[i] = a.Substring(1);
-					}
+                    lastOp = op;
                 }
+                
 
-                //
-                // Execute
-                //
-                if (op == "M" && i + 1 < n)
+                //Add the operation to the path
+                if (char.ToUpper(op) == 'M' && i + 1 < n)
                 {
-                    lastPoint = new Point(ReadNumber(args[i]), ReadNumber(args[i + 1]));
-                    p.MoveTo(lastPoint);
+                    shift += new Point(ReadNumber(args[i]), ReadNumber(args[i + 1]));
+                    p.MoveTo(shift);
                     i += 2;
                 }
-                else if (op == "L" && i + 1 < n)
+                else if (char.ToUpper(op) == 'L' && i + 1 < n)
                 {
-                    lastPoint += new Point(ReadNumber(args[i]), ReadNumber(args[i + 1]));
-                    p.LineTo(lastPoint);
+                    shift += new Point(ReadNumber(args[i]), ReadNumber(args[i + 1]));
+                    p.LineTo(shift);
                     i += 2;
                 }
-                else if (op == "C" && i + 5 < n)
+                else if (char.ToUpper(op) == 'C' && i + 5 < n)
                 {
-                    var c1 = lastPoint + new Point(ReadNumber(args[i]), ReadNumber(args[i + 1]));
-                    var c2 = lastPoint + new Point(ReadNumber(args[i + 2]), ReadNumber(args[i + 3]));
-                    lastPoint += new Point(ReadNumber(args[i + 4]), ReadNumber(args[i + 5]));
-                    p.CurveTo(c1, c2, lastPoint);
+                    var c1 = shift + new Point(ReadNumber(args[i]), ReadNumber(args[i + 1]));
+                    var c2 = shift + new Point(ReadNumber(args[i + 2]), ReadNumber(args[i + 3]));
+                    shift += new Point(ReadNumber(args[i + 4]), ReadNumber(args[i + 5]));
+                    p.CurveTo(c1, c2, shift);
                     i += 6;
                 }
-                else if (op == "S" && i + 3 < n)
+                else if (char.ToUpper(op) == 'S' && i + 3 < n)
                 {
-                    var c = lastPoint + new Point(ReadNumber(args[i]), ReadNumber(args[i + 1]));
-                    lastPoint += new Point(ReadNumber(args[i + 2]), ReadNumber(args[i + 3]));
-                    p.ContinueCurveTo(c, lastPoint);
+                    var c = shift + new Point(ReadNumber(args[i]), ReadNumber(args[i + 1]));
+                    shift += new Point(ReadNumber(args[i + 2]), ReadNumber(args[i + 3]));
+                    p.ContinueCurveTo(c, shift);
                     i += 4;
                 }
-                else if (op == "A" && i + 6 < n)
+                else if (char.ToUpper(op) == 'A' && i + 6 < n)
                 {
                     var r = new Size(ReadNumber(args[i]), ReadNumber(args[i + 1]));
-                    //					var xr = ReadNumber (args [i + 2]);
+                    //var xr = ReadNumber (args [i + 2]);
                     var laf = ReadNumber(args[i + 3]) != 0;
                     var swf = ReadNumber(args[i + 4]) != 0;
-                    lastPoint += new Point(ReadNumber(args[i + 5]), ReadNumber(args[i + 6]));
-                    p.ArcTo(r, laf, swf, lastPoint);
+                    shift += new Point(ReadNumber(args[i + 5]), ReadNumber(args[i + 6]));
+                    p.ArcTo(r, laf, swf, shift);
                     i += 7;
                 }
-                else if (op == "Z")
+                else if (char.ToUpper(op) == 'Z')
                 {
                     p.Close();
+                    break;
                 }
                 else
                 {
