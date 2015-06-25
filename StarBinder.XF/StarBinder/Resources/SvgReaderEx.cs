@@ -231,7 +231,7 @@ namespace StarBinder.Resources
             }
         }
 
-        Regex keyValueRe = new Regex(@"\s*(\w+)\s*:\s*(.*)");
+        Regex keyValueRe = new Regex(@"\s*(\S+)\s*:\s*(.*)");
 
         void ApplyStyle(string style, ref Pen pen, out bool hasPen, ref Brush brush, out bool hasBrush)
         {
@@ -386,6 +386,20 @@ namespace StarBinder.Resources
                     {
                         throw new NotSupportedException("Fill " + fill);
                     }
+                }
+            }
+
+            var opacity = GetString(style, "opacity");
+            if (!string.IsNullOrWhiteSpace(opacity))
+            {
+                var opacityValue = ReadNumber(opacity);
+                if (pen != null)
+                {
+                    pen.Color.Alpha *= opacityValue;
+                }
+                if (brush is SolidBrush)
+                {
+                    ((SolidBrush)brush).Color.Alpha *= opacityValue;
                 }
             }
         }
