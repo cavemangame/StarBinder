@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace StarBinder.Core.Services
 {
+    [Obsolete("удалить в проекте финфона")]
     public interface ILevelsService
     {
         Task<Galaxy> GetLevelModel(int level);
