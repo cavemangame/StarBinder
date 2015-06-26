@@ -21,12 +21,12 @@ namespace StarBinder.ViewModels
             this.navigator = navigator;
         }
 
-        public override void NavigatedFrom()
+        protected override void OnNavigatedFrom()
         {
             ChangeLevelIfNeed();
         }
 
-        public override void NavigatedTo()
+        protected override void OnNavigatedTo()
         {
             ChangeLevelIfNeed();
         }
@@ -54,18 +54,19 @@ namespace StarBinder.ViewModels
 
             if (!CurrentLevel.IsComplete) return;
             
-            //todo await gameService.SaveLevelState(currentLevel);
+            await gameService.SaveState();
 
-            Galaxy next;
-            if (await gameService.TryGetNextLevel(out next))
+            var next = await gameService.GetNextLevel();
+            
+            if (next != null)
             {
-                next = await dialog.DisplayAlert("Success!", "Next level ? =)", "Next", "Restart") ? next : CurrentLevel;
+                next = await dialog.DisplayAlert("Success!", "Next level?", "Next", "Restart") ? next : CurrentLevel;
                 StartLevel(next);
             }
             else
             {
-                await dialog.DisplayAlert("Success!", "The End =(", "Ok");
-                await gameService.SetLevelNumber(1);
+                await dialog.DisplayAlert("Success!", "The End", "Ok");
+                await gameService.GoToLevel(1);
                 await navigator.PopAsync();
             }
         }
@@ -84,7 +85,7 @@ namespace StarBinder.ViewModels
             IsBusy = true;
 
             CurrentLevel = null;
-            BackImageSvg = resources.GetLevelBack(level.Number);
+            BackImageSvg = resources.GetLevelBack(level);
             level.ResetStarStates();
             CurrentLevel = level;
 

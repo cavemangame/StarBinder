@@ -1,23 +1,17 @@
 ﻿<Properties StartupItem="StarBinder.XF\StarBinder.Droid\StarBinder.Droid.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.AVD_GalaxyNexus_ToolsForApacheCordova" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="StarBinder.XF\StarBinder\Resources\SvgReaderEx.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="d:\other\GitHub\StarBinder\StarBinder.XF\StarBinder\Controls\GameControl.cs">
     <Files>
-      <File FileName="StarBinder.Core\Galaxy.cs" Line="224" Column="38" />
       <File FileName="StarBinder.Core\Services\GameService.cs" Line="1" Column="1" />
       <File FileName="StarBinder.Core\Services\MockLevelsService.cs" Line="1" Column="1" />
       <File FileName="StarBinder.Core\Services\StubGameService.cs" Line="1" Column="1" />
-      <File FileName="StarBinder.XF\StarBinder\Resources\ResourcesResolver.cs" Line="23" Column="43" />
-      <File FileName="d:\other\GitHub\StarBinder\StarBinder.XF\StarBinder\Controls\GameControl.cs" Line="33" Column="45" />
-      <File FileName="d:\other\GitHub\StarBinder\StarBinder.XF\StarBinder\ViewModels\GameViewModel.cs" Line="28" Column="3" />
-      <File FileName="StarBinder.XF\StarBinder\Resources\SvgReaderEx.cs" Line="510" Column="18" />
+      <File FileName="StarBinder.XF\StarBinder\Resources\ResourcesResolver.cs" Line="1" Column="1" />
+      <File FileName="d:\other\GitHub\StarBinder\StarBinder.XF\StarBinder\Controls\GameControl.cs" Line="21" Column="150" />
+      <File FileName="d:\other\GitHub\StarBinder\StarBinder.XF\StarBinder\ViewModels\GameViewModel.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="D:\other\GitHub\StarBinder\StarBinder.XF\StarBinder\Resources\SvgReaderEx.cs" line="482" column="1" />
-      <Breakpoint file="D:\other\GitHub\StarBinder\StarBinder.XF\StarBinder\Resources\SvgReaderEx.cs" line="491" column="1" />
-      <Breakpoint file="D:\other\GitHub\StarBinder\StarBinder.XF\StarBinder\Resources\SvgReaderEx.cs" line="532" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

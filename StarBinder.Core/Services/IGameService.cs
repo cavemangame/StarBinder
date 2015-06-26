@@ -9,8 +9,11 @@ namespace StarBinder.Core.Services
     public interface IGameService
     {
         Task<Galaxy> GetCurrentLevel();
-        Task<bool> TryGetNextLevel(out Galaxy level);
-        Task SaveLevelState(Galaxy level);
-        Task SetLevelNumber(int number);
+        Task<Galaxy> GetNextLevel();
+
+        Task SaveState();
+        
+        Task<Galaxy> GoToLevel(int number);
+        Task<IEnumerable<Chapter>> GetAllChapters();
     }
 }

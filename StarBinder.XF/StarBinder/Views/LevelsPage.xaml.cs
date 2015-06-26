@@ -8,7 +8,7 @@ using Xamarin.Forms;
 
 namespace StarBinder.Views
 {
-    public partial class LevelsPage : ContentPage
+    public partial class LevelsPage : CarouselPage
     {
         public LevelsPage()
         {

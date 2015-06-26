@@ -33,8 +33,8 @@ namespace StarBinder
             base.ConfigureContainer(builder);
             if (platform != null) builder.RegisterModule(platform);
 
-            builder.RegisterType<StubGameService>().As<IGameService>().SingleInstance();
-            builder.RegisterType<ResourcesResolver>().As<IResourcesService>().SingleInstance();
+            builder.RegisterType<GameService>().As<IGameService>().SingleInstance();
+            builder.RegisterType<TestResourcesResolver>().As<IResourcesService>().SingleInstance();
 
             builder.RegisterType<MainViewModel>().SingleInstance();
             builder.RegisterType<GameViewModel>().SingleInstance();

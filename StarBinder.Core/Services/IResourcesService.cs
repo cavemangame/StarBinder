@@ -1,11 +1,12 @@
-﻿namespace StarBinder.Core.Services
+﻿using System.Collections.Generic;
+
+namespace StarBinder.Core.Services
 {
     public interface IResourcesService
     {
-        int GetLevelsCount();
-
-        string GetLevel(int level);
-
-        string GetLevelBack(int level);
+        int LastChapterIndex { get; set; }
+        IEnumerable<Chapter> AllChapters();
+        void UpdateChapter(Chapter chapter);
+        string GetLevelBack(Galaxy level);
     }
 }

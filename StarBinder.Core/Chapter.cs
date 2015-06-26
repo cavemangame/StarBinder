@@ -11,6 +11,7 @@ namespace StarBinder.Core
 		public string Description;
 		public StateData FinalState;
 		public List<GalaxyData> Levels;
+	    public int LastLevel;
 
 		public ChapterData()
 		{
@@ -24,6 +25,7 @@ namespace StarBinder.Core
 			Description = chapter.Description;
 			FinalState = new StateData(chapter.FinalState);
 			Levels = new List<GalaxyData>(chapter.Levels.Select(level => new GalaxyData(level)));
+            LastLevel = chapter.LastLevelIndex;
 		}
 	}
 
@@ -34,10 +36,13 @@ namespace StarBinder.Core
 		public int Number { get; set; }
 		public State FinalState { get; private set; }
 		public List<Galaxy> Levels { get; private set; }
+        public int LastLevelIndex { get; set; }
 
 		Chapter()
 		{
 		}
+
+        public Galaxy CurrentLevel { get { return Levels[LastLevelIndex]; } }
 
 		public Chapter Clone()
 		{
@@ -48,7 +53,8 @@ namespace StarBinder.Core
 		{
 			return new Chapter
 			{
-				Number = 1,
+                LastLevelIndex = 0,
+                Number = 1,
 				FinalState = State.CreateInitial(),
 				Levels = new List<Galaxy>(),
 			};
@@ -56,14 +62,16 @@ namespace StarBinder.Core
 
 		public static Chapter Create(ChapterData data)
 		{
-			var chapter = new Chapter
-			{
-				Name = data.Name, Number = data.Number, Description = data.Description, 
-			};
+		    var chapter = new Chapter
+		    {
+		        Name = data.Name,
+		        Number = data.Number,
+		        Description = data.Description,
+		        LastLevelIndex = data.LastLevel,
+		        Levels = new List<Galaxy>(data.Levels.Select(levelData => levelData.CreateGalaxy()))
+		    };
 
-
-			chapter.Levels = new List<Galaxy>(data.Levels.Select(levelData => levelData.CreateGalaxy()));
-			return chapter;
+		    return chapter;
 		}
 	}
 }

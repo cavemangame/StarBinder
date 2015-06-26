@@ -14,13 +14,27 @@ namespace XF.Core.ViewModels
         private bool isBusy;
         public bool IsBusy { get { return isBusy; } protected set { SetProperty(ref isBusy, value); } }
 
-        public virtual void NavigatedTo()
+        public void NavigatedTo()
         {
+            IsBusy = true;
+            
+            OnNavigatedTo();
+            
+            IsBusy = false;
         }
 
-        public virtual void NavigatedFrom()
+        protected virtual void OnNavigatedTo() { }
+
+        public void NavigatedFrom()
         {
+            IsBusy = true;
+
+            OnNavigatedFrom();
+
+            IsBusy = false;
         }
+
+        protected virtual void OnNavigatedFrom() { }
 
         protected virtual bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
         {

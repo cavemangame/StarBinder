@@ -48,7 +48,6 @@
     <Compile Include="Services\ILevelsService.cs" />
     <Compile Include="Services\IResourcesService.cs" />
     <Compile Include="Services\MockLevelsService.cs" />
-    <Compile Include="Services\StubGameService.cs" />
     <Compile Include="SizeCalculator.cs" />
     <Compile Include="Star.cs" />
     <Compile Include="State.cs" />

@@ -18,7 +18,9 @@ namespace StarBinder.Controls
         
         public GameControl()
         {
-            Content = layout = new AbsoluteLayout { VerticalOptions = LayoutOptions.FillAndExpand, HorizontalOptions = LayoutOptions.FillAndExpand };
+            Content = layout = new AbsoluteLayout { 
+                VerticalOptions = LayoutOptions.FillAndExpand, 
+                HorizontalOptions = LayoutOptions.FillAndExpand };			
         }
         
         public override void Draw(ICanvas canvas, Rect rect)

@@ -1,32 +1,71 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace StarBinder.Core.Services
 {
     public class GameService : IGameService
     {
-        public GameService()
+        private readonly IResourcesService resources;
+        
+        public GameService(IResourcesService resources)
         {
+            Debug.WriteLine("GameService ctor");
+			this.resources = resources;
+            chapters = new Lazy<List<Chapter>>(() => resources.AllChapters().ToList());
         }
+
+        private int LastChapterIndex
+        {
+            get { return resources.LastChapterIndex; }
+            set { resources.LastChapterIndex = value; }
+        }
+
+        private Galaxy CurrentLevel { get { return CurrentChapter.CurrentLevel; } }
+        private Chapter CurrentChapter { get { return Chapters[LastChapterIndex]; } }
+
+        private readonly Lazy<List<Chapter>> chapters;
+        private List<Chapter> Chapters { get { return chapters.Value; } }
+
         
         public Task<Galaxy> GetCurrentLevel()
         {
-            throw new NotImplementedException();
+            return Task.Run(() => CurrentLevel);
         }
 
-        public Task<bool> TryGetNextLevel(out Galaxy level)
+        public Task<Galaxy> GetNextLevel()
         {
-            throw new NotImplementedException();
+            return CurrentChapter.Levels.Count > CurrentLevel.Number ?
+                Task.FromResult<Galaxy>(null) :
+                Task.Run(() =>
+                {
+                    CurrentChapter.LastLevelIndex++;
+                    return CurrentLevel;
+                });
         }
 
-        public Task SaveLevelState(Galaxy level)
+        public Task SaveState()
         {
-            throw new NotImplementedException();
+            return Task.Run(() => { resources.UpdateChapter(CurrentChapter); });
         }
 
-        public Task SetLevelNumber(int number)
+        public Task<Galaxy> GoToLevel(int number)
         {
-            throw new NotImplementedException();
+            if (number < 1 && number > CurrentChapter.Levels.Count)
+                throw new ArgumentOutOfRangeException("number");
+
+            return Task.Run(() =>
+            {
+                CurrentChapter.LastLevelIndex = number - 1;
+                return CurrentLevel;
+            });
+        }
+
+        public Task<IEnumerable<Chapter>> GetAllChapters()
+        {
+            return Task.Run(() => Chapters.AsEnumerable());
         }
     }
 }

@@ -3,14 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:StarBinder.Controls;assembly=StarBinder"
              x:Class="StarBinder.Views.GamePage">
-  <Grid>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="*"/>
-      <RowDefinition Height="Auto"/>
-    </Grid.RowDefinitions>
-
-    <controls:GameControl Level="{Binding CurrentLevel}"
+  <StackLayout>
+    <controls:GameControl VerticalOptions="FillAndExpand"
+                          Level="{Binding CurrentLevel}"
                           BackImage="{Binding BackImageSvg}"
                           Command="{Binding StarTapCommand}"/>
-  </Grid>
+
+    <StackLayout Orientation="Horizontal">
+      <Button Text="12345"/>
+    </StackLayout>
+  </StackLayout>
 </ContentPage>

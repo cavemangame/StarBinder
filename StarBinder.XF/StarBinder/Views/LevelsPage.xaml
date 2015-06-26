@@ -1,7 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="StarBinder.Views.LevelsPage"
-             Title="Levels">
-  
-</ContentPage>
+<CarouselPage xmlns="http://xamarin.com/schemas/2014/forms"
+              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+              x:Class="StarBinder.Views.LevelsPage"
+              Title="Levels"
+              ItemsSource="{Binding Chapters}">
+  <CarouselPage.ItemTemplate>
+    <DataTemplate>
+      <ContentPage>
+        
+      </ContentPage>
+    </DataTemplate>
+  </CarouselPage.ItemTemplate>
+</CarouselPage>
