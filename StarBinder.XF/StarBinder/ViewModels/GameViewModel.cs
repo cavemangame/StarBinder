@@ -56,19 +56,19 @@ namespace StarBinder.ViewModels
             
             await gameService.SaveState();
 
-            var next = await gameService.GetNextLevel();
-            
-            if (next != null)
+            var next = await gameService.GetNextLevelInfo();
+            if (!next.HasNext && await dialog.DisplayAlert("Success!", "The End!", "Ok" ,"Restart"))
             {
-                next = await dialog.DisplayAlert("Success!", "Next level?", "Next", "Restart") ? next : CurrentLevel;
-                StartLevel(next);
-            }
-            else
-            {
-                await dialog.DisplayAlert("Success!", "The End", "Ok");
-                await gameService.GoToLevel(1);
                 await navigator.PopAsync();
+                CurrentLevel.ResetStarStates();
+                return;
             }
+
+            var noRestart = next.IsChapterComplete 
+                ? await dialog.DisplayAlert("Success!", "Chapter complete!\nStart new?", "Next", "Restart")
+                : await dialog.DisplayAlert("Success!", "Next level?", "Next", "Restart");
+
+            StartLevel(noRestart ? await next.Next() : CurrentLevel);
         }
 
         private async void ChangeLevelIfNeed()

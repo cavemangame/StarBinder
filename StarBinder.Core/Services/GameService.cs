@@ -28,6 +28,9 @@ namespace StarBinder.Core.Services
 
         private readonly Lazy<List<Chapter>> chapters;
         private List<Chapter> Chapters { get { return chapters.Value; } }
+		/*
+		private List<Chapter> chapters;
+		private List<Chapter> Chapters { get { return chapters ?? (chapters = resources.AllChapters().ToList());} }*/
 
         
         public Task<Galaxy> GetCurrentLevel()
@@ -35,16 +38,35 @@ namespace StarBinder.Core.Services
             return Task.Run(() => CurrentLevel);
         }
 
-        public Task<Galaxy> GetNextLevel()
-        {
-            return CurrentChapter.Levels.Count > CurrentLevel.Number ?
-                Task.FromResult<Galaxy>(null) :
-                Task.Run(() =>
-                {
-                    CurrentChapter.LastLevelIndex++;
-                    return CurrentLevel;
-                });
-        }
+		public Task<NextLevelInfo> GetNextLevelInfo()
+		{
+			return Task.Run(() =>
+			{
+				var isComplete = CurrentChapter.LastLevelIndex == CurrentChapter.Levels.Count - 1;
+				var hasNext = !isComplete || LastChapterIndex < Chapters.Count - 1;
+				Func<Galaxy> next = () => 
+				{
+					if (!hasNext)
+					{
+						LastChapterIndex = 0;
+						CurrentChapter.LastLevelIndex = 0;
+					}
+					else if (isComplete)
+					{
+						LastChapterIndex++;
+						CurrentChapter.LastLevelIndex = 0;
+					}
+					else
+					{
+						CurrentChapter.LastLevelIndex++;
+					}
+
+					return CurrentLevel;
+				};
+
+				return new NextLevelInfo(isComplete, hasNext, next);
+			});
+		}
 
         public Task SaveState()
         {
@@ -53,7 +75,7 @@ namespace StarBinder.Core.Services
 
         public Task<Galaxy> GoToLevel(int number)
         {
-            if (number < 1 && number > CurrentChapter.Levels.Count)
+            if (number < 1 || number > CurrentChapter.Levels.Count)
                 throw new ArgumentOutOfRangeException("number");
 
             return Task.Run(() =>

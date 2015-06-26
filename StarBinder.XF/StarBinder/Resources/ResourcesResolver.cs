@@ -36,10 +36,11 @@ namespace StarBinder.Resources
             
             Debug.WriteLine("All chapters call");
             var n = GetLevelsCount();
+
             var strings = new string[n];
             for (int i = 0; i < n; i++)
             {
-                strings[i] = GetLevel(i);
+                strings[i] = GetLevel(i + 1);
             }
             
             var chapters = new List<Chapter>();
