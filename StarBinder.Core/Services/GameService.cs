@@ -85,9 +85,24 @@ namespace StarBinder.Core.Services
             });
         }
 
+		public Task<Galaxy> GoToLevel(Galaxy level, Chapter chapter)
+		{
+			return Task.Run(() => 
+			{
+				chapter.CurrentLevel = level;
+				LastChapterIndex = Chapters.IndexOf(chapter);
+				return level;
+			});
+		}
+
         public Task<IEnumerable<Chapter>> GetAllChapters()
         {
             return Task.Run(() => Chapters.AsEnumerable());
         }
+
+		public Task<Chapter> GetCurrentChapter()
+		{
+			return Task.Run(() => CurrentChapter);
+		}
     }
 }

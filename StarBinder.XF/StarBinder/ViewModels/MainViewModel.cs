@@ -29,6 +29,12 @@ namespace StarBinder.ViewModels
 
         private async void OnExecuteTestClick(string arg)
         {
+            if (arg == "1")
+            {
+                await navigator.PushAsync<LevelsViewModel>();
+                return;
+            }
+
             await dialog.DisplayAlert("Test", arg, "Ok");
         }
     }

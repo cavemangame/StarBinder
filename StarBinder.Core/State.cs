@@ -23,7 +23,6 @@ namespace StarBinder.Core
     public class State : ViewObject
     {
         private string color;
-        private StateData data;
 
         State()
         {

@@ -2,13 +2,27 @@
 <CarouselPage xmlns="http://xamarin.com/schemas/2014/forms"
               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
               x:Class="StarBinder.Views.LevelsPage"
+              xmlns:ex="clr-namespace:XF.Core.Extensions;assembly=XF.Core"
               Title="Levels"
-              ItemsSource="{Binding Chapters}">
-  <CarouselPage.ItemTemplate>
-    <DataTemplate>
-      <ContentPage>
-        
-      </ContentPage>
-    </DataTemplate>
-  </CarouselPage.ItemTemplate>
+              ItemsSource="{Binding Chapters}"
+              SelectedItem="{Binding Selected}"
+              x:Name="LevelsPage">
+	<CarouselPage.Resources>
+		<ResourceDictionary>
+			<DataTemplate x:Key="LevelTemplate">
+				<TextCell Text="{Binding Number}"
+						  Command="{Binding StartCommand, Source={ex:BindingSource LevelsPage}}"
+						  CommandParameter = "{Binding .}"/>
+			</DataTemplate>
+		</ResourceDictionary>
+	</CarouselPage.Resources>
+
+	<CarouselPage.ItemTemplate>
+    	<DataTemplate>
+	      	<ContentPage>
+		        <ListView ItemsSource="{Binding Levels}"
+		        		  ItemTemplate="{StaticResource LevelTemplate}"/>
+	      	</ContentPage>
+    	</DataTemplate>
+	</CarouselPage.ItemTemplate>
 </CarouselPage>

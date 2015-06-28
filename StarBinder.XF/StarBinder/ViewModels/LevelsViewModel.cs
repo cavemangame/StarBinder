@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Xamarin.Forms;
+using System.Collections.Generic;
 using StarBinder.Core;
 using StarBinder.Core.Services;
 using XF.Core.Services;
@@ -24,14 +25,37 @@ namespace StarBinder.ViewModels
             set { SetProperty(ref chapters, value); }
         }
 
+        private Chapter selected;
+        public Chapter Selected 
+        {
+            get { return selected; }
+            set { SetProperty(ref selected, value); }
+        }
+
         protected override void OnNavigatedFrom()
         {
             base.OnNavigatedFrom();
         }
 
-        protected override void OnNavigatedTo()
+        protected async override void OnNavigatedTo()
         {
             base.OnNavigatedTo();
+
+            if (Chapters == null)
+            {
+                Chapters = await gameService.GetAllChapters();
+                Selected = await gameService.GetCurrentChapter();
+            }
         }
+
+        private Command<Galaxy> startCommand;
+        public Command<Galaxy> StartCommand { get { return startCommand ?? (startCommand = new Command<Galaxy>(OnExecuteStart)); } }  
+
+        private async void OnExecuteStart(Galaxy level)
+        {
+            await gameService.GoToLevel(level, Selected);
+            await navigator.PushAsync<GameViewModel>();
+        }
+
     }
 }

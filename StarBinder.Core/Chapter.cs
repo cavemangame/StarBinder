@@ -42,7 +42,11 @@ namespace StarBinder.Core
 		{
 		}
 
-        public Galaxy CurrentLevel { get { return Levels[LastLevelIndex]; } }
+        public Galaxy CurrentLevel 
+        { 
+            get { return Levels[LastLevelIndex]; } 
+            set { LastLevelIndex = Levels.IndexOf(value); }
+        }
 
 		public Chapter Clone()
 		{
