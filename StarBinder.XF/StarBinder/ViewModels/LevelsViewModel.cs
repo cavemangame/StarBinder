@@ -18,7 +18,7 @@ namespace StarBinder.ViewModels
             this.navigator = navigator;
         }
         
-        private IEnumerable<Chapter> chapters;
+		private IEnumerable<Chapter> chapters = new List<Chapter>{ Chapter.CreateNew() }; //without any page the application crashes on android
         public IEnumerable<Chapter> Chapters
         {
             get { return chapters; }
@@ -41,7 +41,7 @@ namespace StarBinder.ViewModels
         {
             base.OnNavigatedTo();
 
-            if (Chapters == null)
+            //if (Chapters == null)
             {
                 Chapters = await gameService.GetAllChapters();
                 Selected = await gameService.GetCurrentChapter();

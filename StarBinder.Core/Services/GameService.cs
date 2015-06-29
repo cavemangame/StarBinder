@@ -28,11 +28,7 @@ namespace StarBinder.Core.Services
 
         private readonly Lazy<List<Chapter>> chapters;
         private List<Chapter> Chapters { get { return chapters.Value; } }
-		/*
-		private List<Chapter> chapters;
-		private List<Chapter> Chapters { get { return chapters ?? (chapters = resources.AllChapters().ToList());} }*/
-
-        
+		
         public Task<Galaxy> GetCurrentLevel()
         {
             return Task.Run(() => CurrentLevel);

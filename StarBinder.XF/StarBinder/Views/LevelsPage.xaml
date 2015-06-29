@@ -3,26 +3,48 @@
               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
               x:Class="StarBinder.Views.LevelsPage"
               xmlns:ex="clr-namespace:XF.Core.Extensions;assembly=XF.Core"
+              xmlns:ctr="clr-namespace:XF.Core.Controls;assembly=XF.Core"
               Title="Levels"
               ItemsSource="{Binding Chapters}"
               SelectedItem="{Binding Selected}"
-              x:Name="LevelsPage">
-	<CarouselPage.Resources>
-		<ResourceDictionary>
-			<DataTemplate x:Key="LevelTemplate">
-				<TextCell Text="{Binding Number}"
-						  Command="{Binding StartCommand, Source={ex:BindingSource LevelsPage}}"
-						  CommandParameter = "{Binding .}"/>
-			</DataTemplate>
-		</ResourceDictionary>
-	</CarouselPage.Resources>
+              x:Name="Root">
+  <CarouselPage.Resources>
+    <ResourceDictionary>
+      <DataTemplate x:Key="LevelTemplate">
+        <!--<TextCell Text="{Binding Number}"
+                  Command="{Binding StartCommand, Source={ex:BindingSource Root}}"
+                  CommandParameter = "{Binding .}"/>-->
+        <BoxView Color="Yellow" HeightRequest="50" WidthRequest="50"/>
+      </DataTemplate>
+    </ResourceDictionary>
+  </CarouselPage.Resources>
 
-	<CarouselPage.ItemTemplate>
-    	<DataTemplate>
-	      	<ContentPage>
-		        <ListView ItemsSource="{Binding Levels}"
-		        		  ItemTemplate="{StaticResource LevelTemplate}"/>
-	      	</ContentPage>
-    	</DataTemplate>
-	</CarouselPage.ItemTemplate>
+  <CarouselPage.ItemTemplate>
+    <DataTemplate>
+      <ContentPage Title="{Binding Name}">
+        <StackLayout Spacing="10">
+          <Label XAlign="Center" Text="{Binding Description}"/>
+          <!--<ListView ItemsSource="{Binding Levels}" VerticalOptions="StartAndExpand"
+                    ItemTemplate="{StaticResource LevelTemplate}"
+                    SeparatorVisibility="None"/>-->
+          <ctr:ItemsControl ItemsSource="{Binding Levels}" 
+                            ItemTemplate="{StaticResource LevelTemplate}"
+                            VerticalOptions="StartAndExpand" >
+              <ctr:ItemsControl.Layout>
+                <ctr:WrapLayout Spacing="10" Orientation="Horizontal"/>
+              </ctr:ItemsControl.Layout>
+          </ctr:ItemsControl>
+            <!--<ctr:WrapLayout Spacing="10">
+            <BoxView Color="Aqua" WidthRequest="100" HeightRequest="100"/>
+            <BoxView Color="Red" WidthRequest="100" HeightRequest="100"/>
+            <BoxView Color="Gray" WidthRequest="100" HeightRequest="100"/>
+            <BoxView Color="Green" WidthRequest="100" HeightRequest="100"/>
+            <BoxView Color="Blue" WidthRequest="100" HeightRequest="100"/>
+            <BoxView Color="Yellow" WidthRequest="100" HeightRequest="100"/>
+            <BoxView Color="White" WidthRequest="100" HeightRequest="100"/>
+          </ctr:WrapLayout>-->
+        </StackLayout>
+      </ContentPage>
+    </DataTemplate>
+  </CarouselPage.ItemTemplate>
 </CarouselPage>

@@ -37,6 +37,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Bootstrapping\AutofacBootstrapper.cs" />
+    <Compile Include="Controls\WarpLayout.cs" />
+    <Compile Include="Controls\ItemsControl.cs" />
     <Compile Include="Extensions\ElementSource.cs" />
     <Compile Include="Factories\IViewFactory.cs" />
     <Compile Include="Factories\ViewFactory.cs" />
