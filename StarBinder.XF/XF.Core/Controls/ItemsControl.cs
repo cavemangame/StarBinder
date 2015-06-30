@@ -100,11 +100,9 @@ namespace XF.Core.Controls
             }
             else if (args.Action == NotifyCollectionChangedAction.Replace)
             {
-                for (int i = 0; i < args.OldItems.Count; i++)
+                for (int i = 0; i < args.NewItems.Count; i++)
                 {
-                    var temp = Layout.Children[args.NewStartingIndex + i];
-                    Layout.Children[args.NewStartingIndex + i] = Layout.Children[args.OldStartingIndex + i];
-                    Layout.Children[args.OldStartingIndex + i] = temp;
+                    Layout.Children[args.NewStartingIndex + i] = CreateControl(args.NewItems[i]);
                 }
             }
             else if (args.Action == NotifyCollectionChangedAction.Reset)
