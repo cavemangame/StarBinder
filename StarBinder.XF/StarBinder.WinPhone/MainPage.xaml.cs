@@ -18,6 +18,7 @@ namespace StarBinder.WinPhone
             SupportedOrientations = SupportedPageOrientation.PortraitOrLandscape;
 
             global::Xamarin.Forms.Forms.Init();
+            NControl.WP80.NControlViewRenderer.Init();
             LoadApplication(new StarBinder.App());
         }
     }
