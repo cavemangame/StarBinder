@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Xamarin.Forms;
 
@@ -9,23 +10,22 @@ namespace XF.Core.Controls
     {
         public ItemsControl()
         {
-            Content = new StackLayout() { Spacing = 10 };
+            Content = layout = new StackLayout() { Spacing = 10 };
         }
 
+        private Layout<View> layout;
         public Layout<View> Layout
         {
-            get { return (Layout<View>) Content; }
+            get { return layout; }
             set
             {
-                if (value == Content) return;
-                
-                foreach (var child in Layout.Children)
+                if (value == layout) return;
+
+                foreach (var child in layout.Children)
                 {
                     value.Children.Add(child);
                 }
-                
-                Content = value;
-                ForceLayout();
+                Content = layout = value;
             }
         }
 
@@ -40,7 +40,7 @@ namespace XF.Core.Controls
 
         private static void ItemsSourceChanged(BindableObject bindable, IEnumerable<object> oldValue, IEnumerable<object> newValue)
         {
-            var ctrl = (ItemsControl) bindable;
+            var ctrl = (ItemsControl)bindable;
             ctrl.OnItemsSourceChanged(oldValue, newValue);
         }
 
@@ -64,12 +64,13 @@ namespace XF.Core.Controls
             {
                 Layout.Children.Add(CreateControl(item));
             }
-
-            ForceLayout();
         }
 
         private void OnItemsCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
         {
+            if (args.NewItems != null && args.OldItems != null && args.NewItems.Count != args.OldItems.Count)
+                throw new ArgumentException("args.NewItems.Count != args.OldItems.Count");
+            
             if (args.Action == NotifyCollectionChangedAction.Add)
             {
                 for (int i = 0; i < args.NewItems.Count; i++)
@@ -79,25 +80,37 @@ namespace XF.Core.Controls
             }
             else if (args.Action == NotifyCollectionChangedAction.Move)
             {
-                throw new NotImplementedException("Move not implemented");
+                if (sender.GetType().GetGenericTypeDefinition() == typeof(ObservableCollection<>) && args.NewStartingIndex < args.OldStartingIndex)
+                    throw new NotImplementedException("In .net ObservableCollection.Move(graterIndex, leserIndex) has unexpetable behaviour, not tested on xamarin");
+                
+                for (int i = 0; i < args.OldItems.Count; i++)
+                {
+                    var index = args.NewStartingIndex < args.OldStartingIndex ? args.OldStartingIndex + 1 : args.OldStartingIndex;
+                    var moved = Layout.Children[index];
+                    Layout.Children.RemoveAt(index);
+                    Layout.Children.Insert(args.NewStartingIndex + i, moved);
+                }
             }
             else if (args.Action == NotifyCollectionChangedAction.Remove)
             {
                 for (int i = 0; i < args.OldItems.Count; i++)
                 {
-                    Layout.Children.RemoveAt(args.OldStartingIndex + i);
+                    Layout.Children.RemoveAt(args.OldStartingIndex);
                 }
             }
             else if (args.Action == NotifyCollectionChangedAction.Replace)
             {
-                throw new NotImplementedException("Replace not implemented");
+                for (int i = 0; i < args.OldItems.Count; i++)
+                {
+                    var temp = Layout.Children[args.NewStartingIndex + i];
+                    Layout.Children[args.NewStartingIndex + i] = Layout.Children[args.OldStartingIndex + i];
+                    Layout.Children[args.OldStartingIndex + i] = temp;
+                }
             }
             else if (args.Action == NotifyCollectionChangedAction.Reset)
             {
-                throw new NotImplementedException("Reset not implemented");
+                Layout.Children.Clear();
             }
-            
-            ForceLayout();
         }
 
         private View CreateControl(object viewModel)
@@ -126,6 +139,5 @@ namespace XF.Core.Controls
             get { return (DataTemplate)GetValue(ItemTemplateProperty); }
             set { SetValue(ItemTemplateProperty, value); }
         }
-
     }
 }
