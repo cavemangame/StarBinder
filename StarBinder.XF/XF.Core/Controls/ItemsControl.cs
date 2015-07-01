@@ -10,22 +10,22 @@ namespace XF.Core.Controls
     {
         public ItemsControl()
         {
-            Content = layout = new StackLayout() { Spacing = 10 };
+            Content = panel = new StackLayout() { Spacing = 10 };
         }
 
-        private Layout<View> layout;
-        public Layout<View> Layout
+        private Layout<View> panel;
+        public Layout<View> Panel
         {
-            get { return layout; }
+            get { return panel; }
             set
             {
-                if (value == layout) return;
+                if (value == panel) return;
 
-                foreach (var child in layout.Children)
+                foreach (var child in panel.Children)
                 {
                     value.Children.Add(child);
                 }
-                Content = layout = value;
+                Content = panel = value;
             }
         }
 
@@ -58,11 +58,11 @@ namespace XF.Core.Controls
                 observable.CollectionChanged += OnItemsCollectionChanged;
             }
 
-            Layout.Children.Clear();
+            Panel.Children.Clear();
 
             foreach (var item in newValue)
             {
-                Layout.Children.Add(CreateControl(item));
+                Panel.Children.Add(CreateControl(item));
             }
         }
 
@@ -75,7 +75,7 @@ namespace XF.Core.Controls
             {
                 for (int i = 0; i < args.NewItems.Count; i++)
                 {
-                    Layout.Children.Insert(args.NewStartingIndex + i, CreateControl(args.NewItems[i]));
+                    Panel.Children.Insert(args.NewStartingIndex + i, CreateControl(args.NewItems[i]));
                 }
             }
             else if (args.Action == NotifyCollectionChangedAction.Move)
@@ -86,28 +86,28 @@ namespace XF.Core.Controls
                 for (int i = 0; i < args.OldItems.Count; i++)
                 {
                     var index = args.NewStartingIndex < args.OldStartingIndex ? args.OldStartingIndex + 1 : args.OldStartingIndex;
-                    var moved = Layout.Children[index];
-                    Layout.Children.RemoveAt(index);
-                    Layout.Children.Insert(args.NewStartingIndex + i, moved);
+                    var moved = Panel.Children[index];
+                    Panel.Children.RemoveAt(index);
+                    Panel.Children.Insert(args.NewStartingIndex + i, moved);
                 }
             }
             else if (args.Action == NotifyCollectionChangedAction.Remove)
             {
                 for (int i = 0; i < args.OldItems.Count; i++)
                 {
-                    Layout.Children.RemoveAt(args.OldStartingIndex);
+                    Panel.Children.RemoveAt(args.OldStartingIndex);
                 }
             }
             else if (args.Action == NotifyCollectionChangedAction.Replace)
             {
                 for (int i = 0; i < args.NewItems.Count; i++)
                 {
-                    Layout.Children[args.NewStartingIndex + i] = CreateControl(args.NewItems[i]);
+                    Panel.Children[args.NewStartingIndex + i] = CreateControl(args.NewItems[i]);
                 }
             }
             else if (args.Action == NotifyCollectionChangedAction.Reset)
             {
-                Layout.Children.Clear();
+                Panel.Children.Clear();
             }
         }
 

@@ -1,13 +1,15 @@
-﻿using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Input;
-using System.Windows.Input;
-using Windows.Devices.Input;
-using Windows.UI.Core;
+﻿using System;
+using System.ComponentModel;
+using System.IO;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Imaging;
 using NControl.Abstractions;
+using NGraphics;
 using StarBinder.WindowsApp.NControls;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.WinRT;
+
 
 [assembly: ExportRenderer(typeof(NControlView), typeof(NControlViewRenderer))]
 namespace StarBinder.WindowsApp.NControls
@@ -17,21 +19,14 @@ namespace StarBinder.WindowsApp.NControls
     /// </summary>
     public class NControlViewRenderer : ViewRenderer<NControlView, NControlNativeView>
     {
-        /// <summary>
-        /// Canvas element
-        /// </summary>
-        protected Canvas Canvas;
-
-        /// <summary>
-        /// Border element
-        /// </summary>
-        protected Border Border;
-
+        private readonly Windows.UI.Xaml.Controls.Image image;
+        
         /// <summary>
         /// Constructor
         /// </summary>
         public NControlViewRenderer() : base()
         {
+            image = new Windows.UI.Xaml.Controls.Image() { VerticalAlignment = VerticalAlignment.Stretch, HorizontalAlignment = HorizontalAlignment.Stretch };
         }
 
         public static void Init() { }
@@ -59,13 +54,7 @@ namespace StarBinder.WindowsApp.NControls
             if (Control == null)
             {
                 var ctrl = new NControlNativeView();
-                Canvas = new Canvas();
-                Border = new Border
-                {
-                    Child = Canvas,                    
-                };                
-                
-                ctrl.Children.Add(Border);
+                ctrl.Children.Add(image);
 
                 SetNativeControl(ctrl);
 
@@ -91,7 +80,7 @@ namespace StarBinder.WindowsApp.NControls
         /// </summary>
         /// <param name="sender">Sender.</param>
         /// <param name="e">E.</param>
-        protected override void OnElementPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             base.OnElementPropertyChanged(sender, e);
 
@@ -116,21 +105,24 @@ namespace StarBinder.WindowsApp.NControls
         
         #region Drawing
 
-        /// <summary>
-        /// Redraws the control by clearing the canvas element and adding new elements
-        /// </summary>
         private void RedrawControl()
         {
             if (Element.Width.Equals(-1) || Element.Height.Equals(-1))
                 return;
 
-            if (Canvas == null)
-                return;
+            //var sis = new SurfaceImageSource(200,200);//((int)Element.Width, (int)Element.Height);
+            //var canvas = new SurfaceImageSourceCanvas(sis, new Rect(0, 0, 200, 200));//(int)Element.Width, (int)Element.Height));
 
-            Canvas.Children.Clear();
-            var canvas = new CanvasCanvas(Canvas);
+            var canvas = new WICBitmapCanvas(new NGraphics.Size((int)Element.Width, (int)Element.Height));
 
-            Element.Draw(canvas, new NGraphics.Rect(0, 0, Element.Width, Element.Height));
+            Element.Draw(canvas, new Rect(0, 0, Element.Width, Element.Height));
+            var stream = new MemoryStream();
+            canvas.GetImage().SaveAsPng(stream);
+            stream.Position = 0;
+            var bmp = new BitmapImage();
+            bmp.SetSource(stream.AsRandomAccessStream());
+            image.Source = bmp;
+            stream.Dispose();
         }
 
         #endregion
@@ -161,7 +153,7 @@ namespace StarBinder.WindowsApp.NControls
         /// </summary>
         /// <param name="sender">Sender.</param>
         /// <param name="args">Arguments.</param>
-        private void HandleInvalidate(object sender, System.EventArgs args)
+        private void HandleInvalidate(object sender, EventArgs args)
         {
             // Invalidate control
             RedrawControl();

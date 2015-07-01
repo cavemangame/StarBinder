@@ -30,9 +30,9 @@
           <ctr:ItemsControl ItemsSource="{Binding Levels}" 
                             ItemTemplate="{StaticResource LevelTemplate}"
                             VerticalOptions="StartAndExpand" >
-              <ctr:ItemsControl.Layout>
+              <ctr:ItemsControl.Panel>
                 <ctr:WrapLayout Spacing="10" Orientation="Horizontal"/>
-              </ctr:ItemsControl.Layout>
+              </ctr:ItemsControl.Panel>
           </ctr:ItemsControl>
             <!--<ctr:WrapLayout Spacing="10">
             <BoxView Color="Aqua" WidthRequest="100" HeightRequest="100"/>
