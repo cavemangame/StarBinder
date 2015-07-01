@@ -37,8 +37,6 @@ namespace StarBinder.Controls
             var command = Command as Command<Star>;
             if (command == null) return;
             if (command.CanExecute(star)) command.Execute(star);
-
-            Device.OnPlatform(iOS: () => RedrawLevel(Level));
         }
 
         public static BindableProperty CommandProperty = BindableProperty.Create<GameControl, ICommand>(p => p.Command, default(ICommand));

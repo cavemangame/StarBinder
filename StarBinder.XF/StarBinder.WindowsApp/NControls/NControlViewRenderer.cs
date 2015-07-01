@@ -1,8 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using NControl.Abstractions;
 using NGraphics;
@@ -19,14 +22,14 @@ namespace StarBinder.WindowsApp.NControls
     /// </summary>
     public class NControlViewRenderer : ViewRenderer<NControlView, NControlNativeView>
     {
-        private readonly Windows.UI.Xaml.Controls.Image image;
-        
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public NControlViewRenderer() : base()
+        //private readonly Windows.UI.Xaml.Controls.Image image;
+        private readonly ImageBrush brush = new ImageBrush();
+        //private readonly static ViewToRendererConverter converter = new ViewToRendererConverter();
+        private readonly NControlNativeView nativeView;
+
+        public NControlViewRenderer()
         {
-            image = new Windows.UI.Xaml.Controls.Image() { VerticalAlignment = VerticalAlignment.Stretch, HorizontalAlignment = HorizontalAlignment.Stretch };
+            nativeView = new NControlNativeView { Background = brush };
         }
 
         public static void Init() { }
@@ -40,11 +43,16 @@ namespace StarBinder.WindowsApp.NControls
             base.OnElementChanged(e);
 
             if (e.OldElement != null)
+            {
                 e.OldElement.OnInvalidate -= HandleInvalidate;
+                e.OldElement.SizeChanged -= OnSizeChanged;
+            }
 
             if (e.NewElement != null)
             {
                 e.NewElement.OnInvalidate += HandleInvalidate;
+                e.NewElement.SizeChanged += OnSizeChanged;
+                //nativeView.Content = (UIElement)converter.Convert(e.NewElement.Content, typeof(UIElement), null, Language);
             }
             else
             {
@@ -53,15 +61,24 @@ namespace StarBinder.WindowsApp.NControls
 
             if (Control == null)
             {
-                var ctrl = new NControlNativeView();
-                ctrl.Children.Add(image);
-
-                SetNativeControl(ctrl);
-
+                SetNativeControl(nativeView);
                 UpdateClip();
                 UpdateInputTransparent();
-            }
 
+                nativeView.PointerPressed += OnPointerPressed;
+                nativeView.PointerMoved += OnPointerMoved;
+                nativeView.PointerCanceled += OnPointerCancelled;
+                nativeView.PointerReleased += OnPointerEnded;
+            }
+        }
+
+        private double preWidth = -1;
+        private double preHeight = -1;
+        private void OnSizeChanged(object sender, EventArgs eventArgs)
+        {
+            if (Element.Width.Equals(preWidth) && Element.Height.Equals(preHeight)) 
+                return;
+            
             RedrawControl();
         }
 
@@ -84,22 +101,17 @@ namespace StarBinder.WindowsApp.NControls
         {
             base.OnElementPropertyChanged(sender, e);
 
-            if (Control == null)
-                return;
+            if (Control == null)return;
 
-            if (e.PropertyName == Layout.IsClippedToBoundsProperty.PropertyName)
-                UpdateClip();
-
-            else if (e.PropertyName == VisualElement.HeightProperty.PropertyName ||
+            if (e.PropertyName == Layout.IsClippedToBoundsProperty.PropertyName ||
+                e.PropertyName == VisualElement.HeightProperty.PropertyName ||
                 e.PropertyName == VisualElement.WidthProperty.PropertyName)
             {
-                // Redraw when height/width changes
                 UpdateClip();
-                RedrawControl();
             }
-            else if (e.PropertyName == NControlView.BackgroundColorProperty.PropertyName)
+            else if (e.PropertyName == VisualElement.BackgroundColorProperty.PropertyName)
                 RedrawControl();
-            else if (e.PropertyName == NControlView.InputTransparentProperty.PropertyName)
+            else if (e.PropertyName == VisualElement.InputTransparentProperty.PropertyName)
                 UpdateInputTransparent();
         }
         
@@ -110,19 +122,29 @@ namespace StarBinder.WindowsApp.NControls
             if (Element.Width.Equals(-1) || Element.Height.Equals(-1))
                 return;
 
-            //var sis = new SurfaceImageSource(200,200);//((int)Element.Width, (int)Element.Height);
-            //var canvas = new SurfaceImageSourceCanvas(sis, new Rect(0, 0, 200, 200));//(int)Element.Width, (int)Element.Height));
+            preWidth = Element.Width;
+            preHeight = Element.Height;
 
-            var canvas = new WICBitmapCanvas(new NGraphics.Size((int)Element.Width, (int)Element.Height));
+            var size = new NGraphics.Size(Element.Width, Element.Height);
 
-            Element.Draw(canvas, new Rect(0, 0, Element.Width, Element.Height));
-            var stream = new MemoryStream();
-            canvas.GetImage().SaveAsPng(stream);
-            stream.Position = 0;
-            var bmp = new BitmapImage();
-            bmp.SetSource(stream.AsRandomAccessStream());
-            image.Source = bmp;
-            stream.Dispose();
+            //var sis = new SurfaceImageSource(size);
+            //var canvas = new SurfaceImageSourceCanvas(sis, new Rect(size));
+            //Element.Draw(canvas, new Rect(size));
+            //brush.ImageSource = sis;
+            
+            var canvas = new WICBitmapCanvas(size);
+
+            Element.Draw(canvas, new Rect(size));
+            using (var stream = new MemoryStream())
+            {
+                canvas.GetImage().SaveAsPng(stream);
+                stream.Position = 0;
+                var bmp = new BitmapImage();
+                bmp.SetSource(stream.AsRandomAccessStream());
+                brush.ImageSource = bmp;
+            }
+
+            Debug.WriteLine("redrawing: " + Element);
         }
 
         #endregion
@@ -161,56 +183,47 @@ namespace StarBinder.WindowsApp.NControls
 
         #endregion
 
-        #region Static Touch Handler
 
-        /// <summary>
-        /// Touch handler
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        //protected static void Touch_FrameReported(object sender, MouseEventArgs e)
-        //{
-        //    // Get the primary touch point. We do not track multitouch at the moment.
-        //    var primaryTouchPoint = e.(Windows.UI.Xaml.Window.Current.Content);
+        #region Pointer events
 
-        //    var uiElements = VisualTreeHelper.FindElementsInHostCoordinates(primaryTouchPoint.Position, System.Windows.Application.Current.RootVisual);
-        //    foreach(var uiElement in uiElements)
-        //    {
-        //        // Are we interested?
-        //        //var renderer = uiElement as NControlViewRenderer;
-        //        //if (renderer == null)
-        //        //    continue;
+        private void OnPointerPressed(object sender, PointerRoutedEventArgs args)
+        {
+            nativeView.CapturePointer(args.Pointer);
+            Element.TouchesBegan(new[] { args.GetCurrentPoint(nativeView).ToPoint() });
+            args.Handled = true;
+        }
 
-        //        //// Get NControlView element
-        //        //var element = renderer.Element;
-            
-        //        //// Get this' position on screen
-        //        //var transform = System.Windows.Application.Current.RootVisual.TransformToVisual(renderer.Control);
+        private void OnPointerMoved(object sender, PointerRoutedEventArgs args)
+        {
+            if (args.Pointer.IsInContact)
+            {
+                Element.TouchesMoved(new[] { args.GetCurrentPoint(nativeView).ToPoint() });
+                args.Handled = true;
+            }
+        }
 
-        //        //// Transform touches
-        //        //var touchPoints = e.GetTouchPoints(System.Windows.Application.Current.RootVisual);
-        //        //var touches = touchPoints
-        //        //    .Select(t => transform.Transform(new System.Windows.Point(t.Position.X, t.Position.Y)))
-        //        //    .Select(t => new NGraphics.Point(t.X, t.Y)).ToList();
-                
-        //        //var result = false;
-        //        //if (primaryTouchPoint.Action == TouchAction.Move)
-        //        //{
-        //        //    result = element.TouchesMoved(touches);
-        //        //}
-        //        //else if (primaryTouchPoint.Action == TouchAction.Down)
-        //        //{
-        //        //    result = element.TouchesBegan(touches);
-        //        //}
-        //        //else if (primaryTouchPoint.Action == TouchAction.Up)
-        //        //{
-        //        //    result = element.TouchesEnded(touches);
-        //        //}
+        private void OnPointerEnded(object sender, PointerRoutedEventArgs args)
+        {
+            nativeView.ReleasePointerCapture(args.Pointer);
+            Element.TouchesEnded(new[] { args.GetCurrentPoint(nativeView).ToPoint() });
+            args.Handled = true;
+        }
 
-        //        //if (result)
-        //        //    break;
-        //    }
-        //}
+        private void OnPointerCancelled(object sender, PointerRoutedEventArgs args)
+        {
+            nativeView.ReleasePointerCapture(args.Pointer);
+            Element.TouchesCancelled(new[] { args.GetCurrentPoint(nativeView).ToPoint() });
+            args.Handled = true;
+        }
+
         #endregion
+    }
+
+    static class WinToNGraphicsExtensions
+    {
+        public static NGraphics.Point ToPoint(this Windows.UI.Input.PointerPoint point)
+        {
+            return new NGraphics.Point(point.Position.X, point.Position.Y);
+        }
     }
 }
