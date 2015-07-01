@@ -30,6 +30,11 @@ namespace StarBinder.Controls
             if (backImage == null) return;
             backImage.Size = rect.Size;
             backImage.Draw(canvas);
+
+            foreach (NControlView v in layout.Children)
+            {
+                v.Draw(canvas, rect);
+            }
         }
 
         public void OnStarPressed(Star star)
@@ -108,9 +113,10 @@ namespace StarBinder.Controls
                 var rect = new Rectangle(left, size);
 
                 AbsoluteLayout.SetLayoutBounds(starCtrl, rect);
-
                 layout.Children.Add(starCtrl);
             }
+
+            Invalidate();
         }
     }
 

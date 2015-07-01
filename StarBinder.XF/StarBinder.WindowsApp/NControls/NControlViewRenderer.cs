@@ -127,13 +127,14 @@ namespace StarBinder.WindowsApp.NControls
 
             var size = new NGraphics.Size(Element.Width, Element.Height);
 
-            //var sis = new SurfaceImageSource(size);
-            //var canvas = new SurfaceImageSourceCanvas(sis, new Rect(size));
-            //Element.Draw(canvas, new Rect(size));
-            //brush.ImageSource = sis;
+          /*  var sis = new SurfaceImageSource((int)preWidth, (int)preHeight, false);
+            var canvas = new SurfaceImageSourceCanvas(sis, new Rect(size));
+           
+            Element.Draw(canvas, new Rect(size));
+            brush.ImageSource = sis;*/
             
             var canvas = new WICBitmapCanvas(size);
-
+     
             Element.Draw(canvas, new Rect(size));
             using (var stream = new MemoryStream())
             {
