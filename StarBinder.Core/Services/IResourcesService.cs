@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace StarBinder.Core.Services
 {
@@ -7,6 +8,6 @@ namespace StarBinder.Core.Services
         int LastChapterIndex { get; set; }
         IEnumerable<Chapter> AllChapters();
         void UpdateChapter(Chapter chapter);
-        string GetLevelBack(Galaxy level);
+        Task<string> GetLevelBack(Galaxy level);
     }
 }

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using StarBinder.Core;
 using StarBinder.Core.Services;
@@ -16,14 +17,13 @@ namespace StarBinder.Resources
             LastChapterIndex = 0;
         }
         
-        
-        public string GetLevelBack(Galaxy level)
+        public Task<string> GetLevelBack(Galaxy level)
         {
             var assembly = typeof(TestResourcesResolver).GetTypeInfo().Assembly;
             var fname = string.Format("StarBinder.Resources.Graphics.back_{0}.svg", level.Number);
             using (var reader = new StreamReader(assembly.GetManifestResourceStream(fname)))
             {
-                return reader.ReadToEnd();
+                return reader.ReadToEndAsync();
             }
         }
 

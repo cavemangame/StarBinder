@@ -80,12 +80,13 @@ namespace StarBinder.ViewModels
             StartLevel(level);
         }
 
-        private void StartLevel(Galaxy level)
+        private async void StartLevel(Galaxy level)
         {
             IsBusy = true;
 
-            CurrentLevel = null;
-            BackImageSvg = resources.GetLevelBack(level);
+            if (level != CurrentLevel) 
+                BackImageSvg = await resources.GetLevelBack(level);
+            
             level.ResetStarStates();
             CurrentLevel = level;
 

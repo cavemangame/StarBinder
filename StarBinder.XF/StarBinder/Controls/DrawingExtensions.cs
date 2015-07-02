@@ -6,9 +6,17 @@ namespace StarBinder.Controls
 {
     static class DrawingExtensions
     {
-        public static Point LinkPoint(this Star star, SizeCalculator calculator)
+        public static Point GetPoint(this Star star, SizeCalculator calculator)
         {
             return new Point(calculator.XRelToAbs(star.XRel), calculator.YRelToAbs(star.YRel));
+        }
+
+        public static Xamarin.Forms.Rectangle GetXfRectangle(this Star star, SizeCalculator calculator)
+        {
+            var hw = calculator.RelToAbsByMinSize(star.HalfWidthRel);
+            var left = new Xamarin.Forms.Point(calculator.XRelToAbs(star.XRel) - hw, calculator.YRelToAbs(star.YRel) - hw);
+            var size = new Xamarin.Forms.Size(hw * 2, hw * 2);
+            return new Xamarin.Forms.Rectangle(left, size);
         }
 
         public static Color ToColor(this string hexString)
@@ -18,8 +26,8 @@ namespace StarBinder.Controls
 
         public static void ReDrawLink(this ICanvas canvas, Link link, SizeCalculator calculator)
         {
-            var from = link.From.LinkPoint(calculator);
-            var to = link.To.LinkPoint(calculator);
+            var from = link.From.GetPoint(calculator);
+            var to = link.To.GetPoint(calculator);
             canvas.DrawGradientLine(from, to, 4, link.From.Color.ToColor(), link.To.Color.ToColor());
         }
 

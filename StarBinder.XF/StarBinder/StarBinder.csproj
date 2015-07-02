@@ -41,9 +41,7 @@
     </Compile>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Controls\DrawingExtensions.cs" />
-    <Compile Include="Controls\GameControl.cs" />
-    <Compile Include="Controls\NGraphicsImage.cs" />
-    <Compile Include="Controls\StarControl.cs" />
+    <Compile Include="Controls\GameLayout.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\ResourcesResolver.cs" />
     <Compile Include="Resources\SvgReaderEx.cs" />

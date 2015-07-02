@@ -4,7 +4,7 @@
              xmlns:controls="clr-namespace:StarBinder.Controls;assembly=StarBinder"
              x:Class="StarBinder.Views.GamePage">
   <StackLayout>
-    <controls:GameControl VerticalOptions="FillAndExpand"
+    <controls:GameLayout VerticalOptions="FillAndExpand"
                           Level="{Binding CurrentLevel}"
                           BackImage="{Binding BackImageSvg}"
                           Command="{Binding StarTapCommand}"/>

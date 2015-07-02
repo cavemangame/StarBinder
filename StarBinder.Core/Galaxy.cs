@@ -117,11 +117,15 @@ namespace StarBinder.Core
         
         public bool IsComplete { get { return Stars.All(s => s.State == s.FinalState); } }
 
+        public event EventHandler StateReseted = (sender, args) => { };
+
+
         public void ResetStarStates()
         {
             foreach (var star in Stars)
             {
                 star.Reset();
+                StateReseted(this, null);
             }
         }
 
