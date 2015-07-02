@@ -119,7 +119,7 @@ namespace StarBinder.WindowsApp.NControls
 
         private void RedrawControl()
         {
-            if (Element.Width.Equals(-1) || Element.Height.Equals(-1))
+            if (Element.Width < 1 || Element.Height < 1)
                 return;
 
             preWidth = Element.Width;
@@ -144,7 +144,7 @@ namespace StarBinder.WindowsApp.NControls
                 bmp.SetSource(stream.AsRandomAccessStream());
                 brush.ImageSource = bmp;
             }
-
+            
             Debug.WriteLine("redrawing: " + Element);
         }
 

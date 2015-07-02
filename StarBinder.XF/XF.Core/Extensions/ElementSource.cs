@@ -34,6 +34,7 @@ namespace XF.Core.Extensions
             var root = rootProvider.RootObject as Element;
             if (root == null)
                 return null;
+            
             return root.FindByName<Element>(ElementName).BindingContext;
         }
     }

@@ -142,47 +142,29 @@ namespace StarBinder.Controls
         public override void Draw(ICanvas canvas, Rect rect)
         {
             base.Draw(canvas, rect);
-            DrawStar(canvas, true);
-            DrawStar(canvas, false);
+            canvas.DrawStar(star, calculator);
         }
-
-        private void DrawStar(ICanvas canvas, bool isBack)
-        {
-            var pts = calculator.GetWinphonePoints(star, isBack).Select(p => new Point(p.X, p.Y)).ToArray();
-            var pathOps = new PathOp[pts.Length];
-            pathOps[0] = new MoveTo(pts[0]);
-
-            for (int i = 1; i < pts.Length - 1; i++)
-            {
-                pathOps[i] = new LineTo(pts[i]);
-            }
-
-            pathOps[pts.Length - 1] = new ClosePath();
-
-            canvas.FillPath(pathOps, isBack ? star.BackColor.ToColor() : star.Color.ToColor());
-        }
-
 
         public override bool TouchesBegan(IEnumerable<Point> points)
         {
-            base.TouchesBegan(points);
+            var res = base.TouchesBegan(points);
             this.ScaleTo(0.8, 65, Easing.CubicInOut);
             onStarPressed(star);
-            return true;
+            return res;
         }
 
         public override bool TouchesCancelled(IEnumerable<Point> points)
         {
-            base.TouchesCancelled(points);
+            var res = base.TouchesCancelled(points);
             TouchesEnded(points);
-            return true;
+            return res;
         }
 
         public override bool TouchesEnded(IEnumerable<Point> points)
         {
-            base.TouchesEnded(points);
+            var res = base.TouchesEnded(points);
             this.ScaleTo(1.0, 65, Easing.CubicInOut);
-            return true;
+            return res;
         }
     }
 
@@ -205,9 +187,11 @@ namespace StarBinder.Controls
         public override void Draw(ICanvas canvas, Rect rect)
         {
             base.Draw(canvas, rect);
+            calculator.Resize(rect.Width, rect.Height);
+
             foreach (var link in links)
             {
-                canvas.ReDrawLink(link, calculator);
+                canvas.DrawLink(link, calculator, 4);
             }
         }
     }
@@ -230,7 +214,7 @@ namespace StarBinder.Controls
 
         public override void Draw(ICanvas canvas, Rect rect)
         {
-            calculator.Resize((int) rect.Width, (int) rect.Height);
+            calculator.Resize(rect.Width, rect.Height);
             base.Draw(canvas, rect);
             back.Size = rect.Size;
             back.Draw(canvas);

@@ -66,6 +66,12 @@ namespace StarBinder.Core
             this.height = height;
         }
 
+        public void Resize(double width, double height)
+        {
+            this.width = (int)width;
+            this.height = (int)height;
+        }
+
         public double XAbsToRel(double abs)
         {
             return abs/width;
@@ -112,14 +118,26 @@ namespace StarBinder.Core
                     .ToArray();
         }
 
+        public Point<double>[] GetAbsoluteStarPoints(Star star, bool isBack)
+        {
+            return GetStarPoints(star, isBack).Select(p => new Point<double>(
+                    RelToAbsByMinSize(star.HalfWidthRel * p.X) + XRelToAbs(star.XRel),
+                    RelToAbsByMinSize(star.HalfWidthRel * p.Y) + YRelToAbs(star.YRel)
+                )).ToArray();
+        }
+
         public Point<int>[] GetWpfPoints(Star star, bool isBack)
         {
-            return GetStarPoints(star, isBack).Select(p => new Point<int>(RelToAbsByMinSize(star.HalfWidthRel * p.X), RelToAbsByMinSize(star.HalfWidthRel * p.Y))).ToArray();
+            return GetStarPoints(star, isBack).Select(p => new Point<int>(
+                RelToAbsByMinSize(star.HalfWidthRel * p.X), 
+                RelToAbsByMinSize(star.HalfWidthRel * p.Y))).ToArray();
         }
 
         public Point<int>[] GetWinphonePoints(Star star, bool isBack)
         {
-            return GetStarPoints(star, isBack).Select(p => new Point<int>(RelToAbsByMinSize(star.HalfWidthRel * (p.X + 1)), RelToAbsByMinSize(star.HalfWidthRel * (p.Y + 1)))).ToArray();
+            return GetStarPoints(star, isBack).Select(p => new Point<int>(
+                RelToAbsByMinSize(star.HalfWidthRel * (p.X + 1)), 
+                RelToAbsByMinSize(star.HalfWidthRel * (p.Y + 1)))).ToArray();
         }
 
         private IEnumerable<Point<double>> GetStarPoints(Star star, bool isBack)

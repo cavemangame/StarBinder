@@ -56,6 +56,5 @@ namespace StarBinder.ViewModels
             await gameService.GoToLevel(level, Selected);
             await navigator.PushAsync<GameViewModel>();
         }
-
     }
 }
