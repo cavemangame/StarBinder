@@ -5,7 +5,7 @@ using Windows.UI.Xaml.Media;
 
 namespace StarBinder.WindowsApp.NControls
 {
-    public class NControlNativeView : Panel
+    public class NControlNativeView : Grid
     {
         public NControlNativeView()
         {

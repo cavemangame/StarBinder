@@ -119,7 +119,9 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="NControls\NControlNativeView.cs" />
+    <Compile Include="NControls\NControlsUtils.cs" />
     <Compile Include="NControls\NControlViewRenderer.cs" />
+    <Compile Include="NControls\WinRTCanvas.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

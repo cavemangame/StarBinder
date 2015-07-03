@@ -9,6 +9,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using NControl.Abstractions;
 using NGraphics;
+using SharpDX;
 using StarBinder.WindowsApp.NControls;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.WinRT;
@@ -22,14 +23,13 @@ namespace StarBinder.WindowsApp.NControls
     /// </summary>
     public class NControlViewRenderer : ViewRenderer<NControlView, NControlNativeView>
     {
-        //private readonly Windows.UI.Xaml.Controls.Image image;
-        private readonly ImageBrush brush = new ImageBrush();
-        //private readonly static ViewToRendererConverter converter = new ViewToRendererConverter();
         private readonly NControlNativeView nativeView;
+        private readonly WinRTCanvas canvas;
 
         public NControlViewRenderer()
         {
-            nativeView = new NControlNativeView { Background = brush };
+            nativeView = new NControlNativeView();
+            canvas = new WinRTCanvas(nativeView);
         }
 
         public static void Init() { }
@@ -52,7 +52,6 @@ namespace StarBinder.WindowsApp.NControls
             {
                 e.NewElement.OnInvalidate += HandleInvalidate;
                 e.NewElement.SizeChanged += OnSizeChanged;
-                //nativeView.Content = (UIElement)converter.Convert(e.NewElement.Content, typeof(UIElement), null, Language);
             }
             else
             {
@@ -124,27 +123,17 @@ namespace StarBinder.WindowsApp.NControls
 
             preWidth = Element.Width;
             preHeight = Element.Height;
+            
+            canvas.Clear();
 
-            var size = new NGraphics.Size(Element.Width, Element.Height);
+            //var graph = new NGraphics.Graphic(new NGraphics.Size(Element.Width, Element.Height), new Rect(0, 0, 1920, 400));
+            //var ellipse = new Ellipse(new Rect(300, 350, 50, 50), null, new SolidBrush(NGraphics.Colors.Blue));
+            //ellipse.Transform = new NGraphics.Transform(0.5, 0, 0, 0.5, 0, 0);
+            //graph.Children.Add(ellipse);
+            //graph.Draw(canvas);
 
-          /*var sis = new SurfaceImageSource((int)preWidth, (int)preHeight, false);
-            var canvas = new SurfaceImageSourceCanvas(sis, new Rect(size));
+            Element.Draw(canvas, new Rect(0, 0, Element.Width, Element.Height));
            
-            Element.Draw(canvas, new Rect(size));
-            brush.ImageSource = sis;*/
-            
-            var canvas = new WICBitmapCanvas(size);
-     
-            Element.Draw(canvas, new Rect(size));
-            using (var stream = new MemoryStream())
-            {
-                canvas.GetImage().SaveAsPng(stream);
-                stream.Position = 0;
-                var bmp = new BitmapImage();
-                bmp.SetSource(stream.AsRandomAccessStream());
-                brush.ImageSource = bmp;
-            }
-            
             Debug.WriteLine("redrawing: " + Element);
         }
 
