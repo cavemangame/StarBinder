@@ -12,6 +12,7 @@ namespace StarBinder.Core
         public int Number;
         public int StepsSilver;
         public int StepsGold;
+        public string BackPath;
         public List<int> BestSolve;
         public List<StateData> States;
         public List<StarData> Stars;
@@ -29,6 +30,7 @@ namespace StarBinder.Core
             Number = galaxy.Number;
             StepsSilver = galaxy.StepsSilver;
             StepsGold = galaxy.StepsGold;
+            BackPath = galaxy.BackPath;
             BestSolve = galaxy.BestSolve.ToList();
             States = new List<StateData>(galaxy.States.Select(state => new StateData(state)));
             Stars = new List<StarData>(galaxy.Stars.Select(star => new StarData(star)));
@@ -73,7 +75,7 @@ namespace StarBinder.Core
         {
             var galaxy = new Galaxy
             {
-                Name = data.Name, Number = data.Number, Description = data.Description, 
+                Name = data.Name, Number = data.Number, Description = data.Description, BackPath = data.BackPath,
                 StepsGold = data.StepsGold, StepsSilver = data.StepsSilver, solve = data.BestSolve
             };
 
@@ -92,8 +94,9 @@ namespace StarBinder.Core
             return galaxy;
         }
 
-        public string Name { get; private set; }
-        public string Description { get; private set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string BackPath { get; set; }
         public int Number { get; set; }
         public int StepsSilver { get; private set; }
         public int StepsGold { get; private set; }

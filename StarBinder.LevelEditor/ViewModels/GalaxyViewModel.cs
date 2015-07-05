@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -31,6 +32,8 @@ namespace StarBinder.LevelEditor.ViewModels
             InitStars();
             InitLinks();
         }
+
+        public Galaxy Galaxy { get { return galaxy; } }
 
         private bool isEnabled = true;
         public bool IsEnabled
@@ -119,6 +122,25 @@ namespace StarBinder.LevelEditor.ViewModels
                     MessageBox.Show("Не удалось загрузить рисунок", "Ошибка!", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
+        }
+
+        private ICommand loadBackSVGCommand;
+        public ICommand LoadBackSVGCommand { get { return loadBackSVGCommand ?? (loadBackSVGCommand = new DelegateCommand(OnLoadBackSVGCommandExecuted)); } }
+        private void OnLoadBackSVGCommandExecuted()
+        {
+            var dlg = new OpenFileDialog { CheckFileExists = true, DefaultExt = ".svg", Filter = "SVG Files|*.svg", Multiselect = false };
+            if (dlg.ShowDialog() == true)
+            {
+                galaxy.BackPath = dlg.FileName;
+                BackPath = dlg.FileName;
+            }
+        }
+
+        private string backPath;
+        public string BackPath
+        {
+            get { return galaxy.BackPath; }
+            set { SetProperty(ref backPath, value); }
         }
 
         private ICommand testCommand;

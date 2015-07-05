@@ -50,7 +50,6 @@ namespace StarBinder.Resources
                 var ch = new ChapterData();
                 ch.Name = "Chapter " + (i + 1);
                 ch.Description = "Chapter Description " + (i + 1);
-                ch.LastLevel = i*2;
                 ch.Levels = new List<GalaxyData>();
                 for (int j = 0; j < n; j++)
                 {

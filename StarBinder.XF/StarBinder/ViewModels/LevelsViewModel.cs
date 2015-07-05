@@ -53,7 +53,9 @@ namespace StarBinder.ViewModels
 
         private async void OnExecuteStart(Galaxy level)
         {
-            await gameService.GoToLevel(level, Selected);
+            await gameService.GoToLevel(Selected.Levels.IndexOf(level) < 0 
+                ? Selected.AdditionalLevels.IndexOf(level)
+                : Selected.Levels.IndexOf(level));
             await navigator.PushAsync<GameViewModel>();
         }
     }

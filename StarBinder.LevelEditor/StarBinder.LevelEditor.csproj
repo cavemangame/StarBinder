@@ -91,10 +91,14 @@
     <Compile Include="Utils\EnumExtensions.cs" />
     <Compile Include="Utils\GeometryExtensions.cs" />
     <Compile Include="Utils\InteractiveCommand.cs" />
+    <Compile Include="ViewModels\ChapterViewModel.cs" />
     <Compile Include="ViewModels\GalaxyViewModel.cs" />
     <Compile Include="ViewModels\LinkViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\StarViewModel.cs" />
+    <Compile Include="Views\ChapterView.xaml.cs">
+      <DependentUpon>ChapterView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\GalaxyView.xaml.cs">
       <DependentUpon>GalaxyView.xaml</DependentUpon>
     </Compile>
@@ -136,6 +140,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Controls\StarControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ChapterView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

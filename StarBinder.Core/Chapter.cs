@@ -9,9 +9,10 @@ namespace StarBinder.Core
 		public int Number;
 		public string Name;
 		public string Description;
+	    public string BackPath;
 		public StateData FinalState;
 		public List<GalaxyData> Levels;
-	    public int LastLevel;
+        public List<GalaxyData> AdditionalLevels;
 
 		public ChapterData()
 		{
@@ -23,30 +24,26 @@ namespace StarBinder.Core
 			Name = chapter.Name;
 			Number = chapter.Number;
 			Description = chapter.Description;
+		    BackPath = chapter.BackPath;
 			FinalState = new StateData(chapter.FinalState);
 			Levels = new List<GalaxyData>(chapter.Levels.Select(level => new GalaxyData(level)));
-            LastLevel = chapter.LastLevelIndex;
+            Levels = new List<GalaxyData>(chapter.AdditionalLevels.Select(level => new GalaxyData(level)));
 		}
 	}
 
 	public class Chapter : ViewObject
 	{
-		public string Name { get; private set; }
-		public string Description { get; private set; }
+		public string Name { get; set; }
+		public string Description { get; set; }
 		public int Number { get; set; }
-		public State FinalState { get; private set; }
-		public List<Galaxy> Levels { get; private set; }
-        public int LastLevelIndex { get; set; }
+        public string BackPath { get; set; }
+		public State FinalState { get; set; }
+		public List<Galaxy> Levels { get; set; }
+        public List<Galaxy> AdditionalLevels { get; set; }
 
 		Chapter()
 		{
 		}
-
-        public Galaxy CurrentLevel 
-        { 
-            get { return Levels[LastLevelIndex]; } 
-            set { LastLevelIndex = Levels.IndexOf(value); }
-        }
 
 		public Chapter Clone()
 		{
@@ -57,10 +54,11 @@ namespace StarBinder.Core
 		{
 			return new Chapter
 			{
-                LastLevelIndex = 0,
                 Number = 1,
+                BackPath = "",
 				FinalState = State.CreateInitial(),
 				Levels = new List<Galaxy>(),
+                AdditionalLevels = new List<Galaxy>()
 			};
 		}
 
@@ -71,8 +69,9 @@ namespace StarBinder.Core
 		        Name = data.Name,
 		        Number = data.Number,
 		        Description = data.Description,
-		        LastLevelIndex = data.LastLevel,
-		        Levels = new List<Galaxy>(data.Levels.Select(levelData => levelData.CreateGalaxy()))
+                BackPath = data.BackPath,
+		        Levels = new List<Galaxy>(data.Levels.Select(levelData => levelData.CreateGalaxy())),
+                AdditionalLevels = new List<Galaxy>(data.AdditionalLevels.Select(levelData => levelData.CreateGalaxy()))
 		    };
 
 		    return chapter;

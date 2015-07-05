@@ -14,5 +14,16 @@ namespace StarBinder.Core
             var data = JsonConvert.DeserializeObject<GalaxyData>(json);
             return Galaxy.Create(data);
         }
+
+        public static string ToJson(this Chapter chapter)
+        {
+            return JsonConvert.SerializeObject(new ChapterData(chapter));
+        }
+
+        public static Chapter ChapterFromJson(string json)
+        {
+            var data = JsonConvert.DeserializeObject<ChapterData>(json);
+            return Chapter.Create(data);
+        }
     }
 }

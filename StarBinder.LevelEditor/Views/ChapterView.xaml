@@ -1,0 +1,116 @@
+﻿<UserControl x:Class="StarBinder.LevelEditor.Views.ChapterView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:vm="clr-namespace:StarBinder.LevelEditor.ViewModels"
+             xmlns:u="clr-namespace:StarBinder.LevelEditor.Utils"
+             xmlns:ctr="clr-namespace:StarBinder.LevelEditor.Controls"
+             xmlns:core="clr-namespace:StarBinder.Core;assembly=StarBinder.Core"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:ChapterViewModel}"
+             d:DesignHeight="300" d:DesignWidth="800">
+    <Grid>
+        <Grid.Resources>
+            <Style TargetType="Button">
+                <Setter Property="Margin" Value="3"/>
+                <Setter Property="Width" Value="90"/>
+                <Setter Property="Height" Value="20"></Setter>
+            </Style>
+            <Style TargetType="TextBlock">
+                <Setter Property="Margin" Value="5"/>
+            </Style>
+        </Grid.Resources>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+ 
+        <Grid Grid.Row="0" Grid.Column="0" Margin="0 10 0 0" IsEnabled="{Binding IsEnabled}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Column="0" Grid.Row="0" Text="Number" />
+            <TextBox  Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Text="{Binding Chapter.Number, UpdateSourceTrigger=PropertyChanged}" Margin="3" Width="50"/>
+            <TextBlock Grid.Column="0" Grid.Row="1" Text="Name"/>
+            <TextBox Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Text="{Binding Chapter.Name, UpdateSourceTrigger=PropertyChanged}" Margin="3" Width="150"/>
+            <TextBlock Grid.Column="0" Grid.Row="2" Text="Decription"/>
+            <TextBox Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" Text="{Binding Chapter.Description, UpdateSourceTrigger=PropertyChanged}" Margin="3" Width="150"
+                     TextWrapping="Wrap" Height="40"/>
+            <TextBlock Grid.Column="0" Grid.Row="3" Text="Back" />
+            <Button Grid.Column="1" Grid.Row="3" Content="..." HorizontalAlignment="Left" ToolTip="Выбрать файл SVG для фона" Command="{Binding LoadBackCommand}"/>
+            <TextBlock Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" Text="{Binding Chapter.BackPath, UpdateSourceTrigger=PropertyChanged}" />
+
+            <TextBlock Grid.Column="0" Grid.Row="5" Text="Level count" />
+            <TextBox  Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left" Text="{Binding LevelCount, UpdateSourceTrigger=PropertyChanged}" Margin="3" Width="50"/>
+
+            <TextBlock Grid.Column="0" Grid.Row="6" Text="Additional" />
+            <TextBox  Grid.Column="1" Grid.Row="6" HorizontalAlignment="Left" Text="{Binding AddLevelCount, UpdateSourceTrigger=PropertyChanged}" Margin="3" Width="50"/>
+            <Button Grid.Column="1" Grid.Row="7" Content="Refresh" HorizontalAlignment="Left" ToolTip="Обновить списки" Command="{Binding RefreshListsCommand}"/>
+        </Grid>
+        
+        <Grid Grid.Row="0" Grid.Column="1" Margin="0 10 0 0" IsEnabled="{Binding IsEnabled}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <TextBlock Grid.Row="0" HorizontalAlignment="Center">Standart levels</TextBlock>
+            <ItemsControl Grid.Row="1" ItemsSource="{Binding Chapter.Levels}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Номер"/>
+                            <TextBlock Margin="10 0 0 0" Text="{Binding Number}" />
+
+                            <Button Margin="10 0 0 0" Content="Загрузить" Command="{Binding DataContext.LoadLevelCommand, 
+                                RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding}"/>
+                            <TextBlock  Margin="10 0 0 0" Text="{Binding Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+
+        <Grid Grid.Row="0" Grid.Column="2" Margin="0 10 0 0" IsEnabled="{Binding IsEnabled}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" HorizontalAlignment="Center">Additional levels</TextBlock>
+            <ItemsControl Grid.Row="1" ItemsSource="{Binding Chapter.AdditionalLevels}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Номер"/>
+                            <TextBlock  Margin="10 0 0 0" Text="{Binding Number}" />
+
+                            <Button  Margin="10 0 0 0"  Content="Load" Command="{Binding DataContext.LoadAddLevelCommand, 
+                                RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding}"/>
+                            <TextBlock  Margin="10 0 0 0" Text="{Binding Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+
+    </Grid>
+</UserControl>

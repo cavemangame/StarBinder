@@ -12,11 +12,11 @@ namespace StarBinder.Core.Services
 
         Task<NextLevelInfo> GetNextLevelInfo();
 
-        Task SaveState();
+        Task SaveState(int steps);
         
         Task<Galaxy> GoToLevel(int number);
 
-        Task<Galaxy> GoToLevel(Galaxy level, Chapter chapter);
+        Task<Galaxy> GoToLevel(Chapter chapter, int number);
 
         Task<IEnumerable<Chapter>> GetAllChapters();
 

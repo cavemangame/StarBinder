@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Input;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
@@ -12,9 +14,12 @@ namespace StarBinder.LevelEditor.ViewModels
     {
         private Galaxy galaxy;
 
+        private Chapter chapter;
+
         public MainWindowViewModel()
         {
-            OnNewCommandExecuted();
+            OnNewLevelCommandExecuted();
+            OnNewChapterCommandExecuted();
         }
 
         private GalaxyViewModel galaxyViewModel;
@@ -24,10 +29,92 @@ namespace StarBinder.LevelEditor.ViewModels
             set { SetProperty(ref galaxyViewModel, value); }
         }
 
-        private ICommand newCommand;
-        public ICommand NewCommand { get { return newCommand ?? (newCommand = new DelegateCommand(OnNewCommandExecuted)); } }
+        private ChapterViewModel chapterViewModel;
+        public ChapterViewModel ChapterViewModel
+        {
+            get { return chapterViewModel; }
+            set { SetProperty(ref chapterViewModel, value); }
+        }
 
-        private void OnNewCommandExecuted()
+
+        #region Chapters
+        private ICommand newChapterCommand;
+        public ICommand NewChapterCommand { get { return newChapterCommand ?? (newChapterCommand = new DelegateCommand(OnNewChapterCommandExecuted)); } }
+
+        private void OnNewChapterCommandExecuted()
+        {
+            chapter = Chapter.CreateNew();
+            var vm = new ChapterViewModel(chapter);
+            vm.OnNewChapterCommandExecuted();
+            ChapterViewModel = vm;
+        }
+
+        private ICommand saveChapterCommand;
+        public ICommand SaveChapterCommand { get { return saveChapterCommand ?? (saveChapterCommand = new DelegateCommand(OnSaveChapterCommandExecuted)); } }
+
+        private void OnSaveChapterCommandExecuted()
+        {
+            var json = chapter.ToJson();
+            var dlg = new SaveFileDialog();
+
+
+            if (dlg.ShowDialog() == true)
+            {
+                ReplaceBack(Path.GetDirectoryName(dlg.FileName));
+                ResolvePaths();
+                using (var writer = new StreamWriter(dlg.FileName, false))
+                {
+                    writer.Write(json);
+                }
+            }
+        }
+
+        private void ResolvePaths()
+        {
+            chapter.BackPath = Path.GetFileName(chapter.BackPath);
+
+            foreach (var level in chapter.Levels.Union(chapter.AdditionalLevels))
+            {
+                level.BackPath = Path.GetFileName(level.BackPath);
+            }
+        }
+
+        private void ReplaceBack(string dir)
+        {
+            if (!String.IsNullOrEmpty(chapter.BackPath.Trim()))
+            {
+                File.Copy(chapter.BackPath, Path.Combine(dir, Path.GetFileName(chapter.BackPath)), true);
+            } 
+        }
+
+        private ICommand loadChapterCommand;
+        public ICommand LoadChapterCommand { get { return loadChapterCommand ?? (loadChapterCommand = new DelegateCommand(OnLoadChapterExecuted)); } }
+
+        private void OnLoadChapterExecuted()
+        {
+            var dlg = new OpenFileDialog();
+
+            if (dlg.ShowDialog() == true)
+            {
+                string json;
+                using (var reader = new StreamReader(dlg.FileName))
+                {
+                    json = reader.ReadToEnd();
+                }
+
+                chapter = SerializationHelper.ChapterFromJson(json);
+                ChapterViewModel = new ChapterViewModel(chapter);
+            }
+        }
+        #endregion
+
+
+        #region Level
+
+        private ICommand newLevelCommand;
+        public ICommand NewLevelCommand { get { return newLevelCommand ?? (newLevelCommand = new DelegateCommand(OnNewLevelCommandExecuted)); } }
+
+        private void OnNewLevelCommandExecuted()
         {
             galaxy = Galaxy.CreateNew();
             var vm = new GalaxyViewModel(galaxy);
@@ -40,16 +127,17 @@ namespace StarBinder.LevelEditor.ViewModels
             GalaxyViewModel = vm;
         }
 
-        private ICommand saveCommand;
-        public ICommand SaveCommand { get { return saveCommand ?? (saveCommand = new DelegateCommand(OnSaveCommandExecuted)); } }
+        private ICommand saveLevelCommand;
+        public ICommand SaveLevelCommand { get { return saveLevelCommand ?? (saveLevelCommand = new DelegateCommand(OnSaveLevelCommandExecuted)); } }
 
-        private void OnSaveCommandExecuted()
+        private void OnSaveLevelCommandExecuted()
         {
             var json = galaxy.ToJson();
             var dlg = new SaveFileDialog();
 
             if (dlg.ShowDialog() == true)
             {
+                CopyBackIfNeeded(Path.GetDirectoryName(dlg.FileName));
                 using (var writer = new StreamWriter(dlg.FileName, false))
                 {
                     writer.Write(json);
@@ -57,10 +145,18 @@ namespace StarBinder.LevelEditor.ViewModels
             }
         }
 
-        private ICommand loadCommand;
-        public ICommand LoadCommand { get { return loadCommand ?? (loadCommand = new DelegateCommand(OnExecuteLoad)); } }
+        private void CopyBackIfNeeded(string dir)
+        {
+            if (!String.IsNullOrEmpty(galaxy.BackPath.Trim()))
+            {
+                File.Copy(galaxy.BackPath, Path.Combine(dir, Path.GetFileName(galaxy.BackPath)), true);
+            }
+        }
 
-        private void OnExecuteLoad()
+        private ICommand loadLevelCommand;
+        public ICommand LoadLevelCommand { get { return loadLevelCommand ?? (loadLevelCommand = new DelegateCommand(OnLoadLevelExecuted)); } }
+
+        private void OnLoadLevelExecuted()
         {
             var dlg = new OpenFileDialog();
 
@@ -81,5 +177,8 @@ namespace StarBinder.LevelEditor.ViewModels
                 };
             }
         }
+
+        #endregion
+
     }
 }

@@ -8,44 +8,68 @@ namespace StarBinder.Core.Services
 {
     public class GameService : IGameService
     {
-        private readonly IResourcesService resources;
-        
-        public GameService(IResourcesService resources)
+        private readonly Player player;
+
+        private readonly Lazy<List<Chapter>> chapters;
+
+    
+        public GameService(IResourcesService resources, Player player)
         {
             Debug.WriteLine("GameService ctor");
-			this.resources = resources;
+            this.player = player;
             chapters = new Lazy<List<Chapter>>(() => resources.AllChapters().ToList());
         }
 
-        private int LastChapterIndex
-        {
-            get { return resources.LastChapterIndex; }
-            set { resources.LastChapterIndex = value; }
+        private Galaxy CurrentLevel {
+            get
+            {
+                return CurrentChapter.Levels.Count() >= player.CurrentLevelIndex
+                    ? CurrentChapter.Levels[player.CurrentLevelIndex]
+                    : CurrentChapter.AdditionalLevels[player.CurrentLevelIndex - CurrentChapter.Levels.Count() - 1];
+            } 
         }
 
-        private Galaxy CurrentLevel { get { return CurrentChapter.CurrentLevel; } }
-        private Chapter CurrentChapter { get { return Chapters[LastChapterIndex]; } }
+        private Galaxy LastLevel
+        {
+            get
+            {
+                return LastChapter.Levels.Count() >= player.LastChapterIndex
+                    ? LastChapter.Levels[player.LastChapterIndex]
+                    : LastChapter.AdditionalLevels[player.LastChapterIndex - LastChapter.Levels.Count() - 1];
+            }
+        }
+        private Chapter CurrentChapter { get { return Chapters[player.CurrentChapterIndex]; } }
+        private Chapter LastChapter { get { return Chapters[player.LastChapterIndex]; } }
 
-        private readonly Lazy<List<Chapter>> chapters;
+
+
         private List<Chapter> Chapters { get { return chapters.Value; } }
-		
+
+        public Player Player { get { return player; } }
+
         public Task<Galaxy> GetCurrentLevel()
         {
             return Task.Run(() => CurrentLevel);
         }
 
+        public Task<Galaxy> GetLastLevel()
+        {
+            return Task.Run(() => LastLevel);
+        }
+
+
 		public Task<NextLevelInfo> GetNextLevelInfo()
 		{
-			return Task.Run(() =>
+		/*	return Task.Run(() =>
 			{
-				var isComplete = CurrentChapter.LastLevelIndex == CurrentChapter.Levels.Count - 1;
+				var isComplete = CurrentLevelIndex == CurrentChapter.Levels.Count + CurrentChapter.AdditionalLevels.Count - 1; // is chapter complete?
 				var hasNext = !isComplete || LastChapterIndex < Chapters.Count - 1;
 				Func<Galaxy> next = () => 
 				{
 					if (!hasNext)
 					{
 						LastChapterIndex = 0;
-						CurrentChapter.LastLevelIndex = 0;
+						LastLevelIndex = 0;
 					}
 					else if (isComplete)
 					{
@@ -61,33 +85,34 @@ namespace StarBinder.Core.Services
 				};
 
 				return new NextLevelInfo(isComplete, hasNext, next);
-			});
+			});*/
+		    return null;
 		}
 
-        public Task SaveState()
+        public Task SaveState(int steps)
         {
-            return Task.Run(() => { resources.UpdateChapter(CurrentChapter); });
+            return Task.Run(() => player.UpdateSteps(steps));
         }
 
         public Task<Galaxy> GoToLevel(int number)
         {
-            if (number < 1 || number > CurrentChapter.Levels.Count)
+            if (number < 1 || number > CurrentChapter.Levels.Count + CurrentChapter.AdditionalLevels.Count)
                 throw new ArgumentOutOfRangeException("number");
 
             return Task.Run(() =>
             {
-                CurrentChapter.LastLevelIndex = number - 1;
+                player.CurrentLevelIndex = number - 1;
                 return CurrentLevel;
             });
         }
 
-		public Task<Galaxy> GoToLevel(Galaxy level, Chapter chapter)
+        public Task<Galaxy> GoToLevel(Chapter chapter, int number)
 		{
 			return Task.Run(() => 
 			{
-				chapter.CurrentLevel = level;
-				LastChapterIndex = Chapters.IndexOf(chapter);
-				return level;
+                player.CurrentChapterIndex = Chapters.IndexOf(chapter);
+                player.CurrentLevelIndex = number;
+				return CurrentLevel;
 			});
 		}
 

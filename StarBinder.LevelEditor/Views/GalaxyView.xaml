@@ -271,6 +271,30 @@
                     </ItemsControl>
                 </ScrollViewer>
             </GroupBox>
+
+            <GroupBox Header="Level data" Margin="5" Width="250">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Name"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Galaxy.Name}" Width="150"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Description"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Galaxy.Description}" Width="150" Height="40"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Back SVG File"/>
+                    <Button Grid.Row="2" Grid.Column="1" Width="40" HorizontalAlignment="Left" Command="{Binding LoadBackSVGCommand}">...</Button>
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding BackPath}" Width="200" MaxWidth="200" Height="80" TextWrapping="Wrap"/>
+                </Grid>       
+            </GroupBox>
         </StackPanel>
     </StackPanel>
 </UserControl>

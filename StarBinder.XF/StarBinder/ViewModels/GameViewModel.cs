@@ -12,6 +12,7 @@ namespace StarBinder.ViewModels
         private readonly IResourcesService resources;
         private readonly IDialogService dialog;
         private readonly INavigator navigator;
+        private int steps;
 
         public GameViewModel(IGameService gameService, IResourcesService resources, IDialogService dialog, INavigator navigator)
         {
@@ -51,10 +52,11 @@ namespace StarBinder.ViewModels
         private async void OnExecuteStarTap(Star star)
         {
             star.ChangeAll();
+            steps++;
 
             if (!CurrentLevel.IsComplete) return;
-            
-            await gameService.SaveState();
+
+            await gameService.SaveState(steps);
 
             var next = await gameService.GetNextLevelInfo();
             if (!next.HasNext && await dialog.DisplayAlert("Success!", "The End!", "Ok" ,"Restart"))
@@ -89,6 +91,7 @@ namespace StarBinder.ViewModels
             
             level.ResetStarStates();
             CurrentLevel = level;
+            steps = 0;
 
             IsBusy = false;
         }
