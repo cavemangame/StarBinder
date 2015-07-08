@@ -96,7 +96,7 @@ namespace StarBinder.LevelEditor.ViewModels
                 Galaxy galaxy = SerializationHelper.GalaxyFromJson(json);
                 galaxy.Number = gal.Number;
 
-                Chapter.Levels[Chapter.Levels.IndexOf(gal)] = galaxy;
+                Chapter.Levels[gal.Number - 1] = galaxy;
             }
         }
 
@@ -117,7 +117,7 @@ namespace StarBinder.LevelEditor.ViewModels
                 Galaxy galaxy = SerializationHelper.GalaxyFromJson(json);
                 galaxy.Number = gal.Number;
 
-                Chapter.AdditionalLevels[Chapter.AdditionalLevels.IndexOf(gal)] = galaxy;
+                Chapter.AdditionalLevels[gal.Number - LevelCount - 1] = galaxy;
             }
         }
 

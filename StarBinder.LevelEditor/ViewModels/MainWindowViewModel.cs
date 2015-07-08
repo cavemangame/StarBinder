@@ -83,7 +83,10 @@ namespace StarBinder.LevelEditor.ViewModels
         {
             if (!String.IsNullOrEmpty(chapter.BackPath.Trim()))
             {
-                File.Copy(chapter.BackPath, Path.Combine(dir, Path.GetFileName(chapter.BackPath)), true);
+                if (dir != Path.GetDirectoryName(chapter.BackPath))
+                {
+                    File.Copy(chapter.BackPath, Path.Combine(dir, Path.GetFileName(chapter.BackPath)), true);
+                }
             } 
         }
 
@@ -104,6 +107,7 @@ namespace StarBinder.LevelEditor.ViewModels
 
                 chapter = SerializationHelper.ChapterFromJson(json);
                 ChapterViewModel = new ChapterViewModel(chapter);
+                ChapterViewModel.IsEnabled = true;
             }
         }
         #endregion

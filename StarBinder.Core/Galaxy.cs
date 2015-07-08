@@ -98,8 +98,8 @@ namespace StarBinder.Core
         public string Description { get; set; }
         public string BackPath { get; set; }
         public int Number { get; set; }
-        public int StepsSilver { get; private set; }
-        public int StepsGold { get; private set; }
+        public int StepsSilver { get; set; }
+        public int StepsGold { get; set; }
 
         public IEnumerable<Star> Stars { get { return stars; } }
         public IEnumerable<Link> Links { get { return links; } }

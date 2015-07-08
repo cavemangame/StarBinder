@@ -279,6 +279,8 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -289,10 +291,17 @@
 
                     <TextBlock Grid.Row="1" Grid.Column="0" Text="Description"/>
                     <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Galaxy.Description}" Width="150" Height="40"/>
-                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Back SVG File"/>
-                    <Button Grid.Row="2" Grid.Column="1" Width="40" HorizontalAlignment="Left" Command="{Binding LoadBackSVGCommand}">...</Button>
 
-                    <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding BackPath}" Width="200" MaxWidth="200" Height="80" TextWrapping="Wrap"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Steps silver"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Galaxy.StepsSilver}" Width="50" HorizontalAlignment="Left"/>
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Steps gold"/>
+                    <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Galaxy.StepsGold}" Width="50" HorizontalAlignment="Left"/>
+                    
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Back SVG File"/>
+                    <Button Grid.Row="4" Grid.Column="1" Width="40" HorizontalAlignment="Left" Command="{Binding LoadBackSVGCommand}">...</Button>
+
+                    <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding BackPath}" Width="200" MaxWidth="200" Height="80" TextWrapping="Wrap"/>
                 </Grid>       
             </GroupBox>
         </StackPanel>
