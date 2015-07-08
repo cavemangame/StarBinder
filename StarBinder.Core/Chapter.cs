@@ -71,7 +71,7 @@ namespace StarBinder.Core
 		        Description = data.Description,
                 BackPath = data.BackPath,
 		        Levels = new List<Galaxy>(data.Levels.Select(levelData => levelData.CreateGalaxy())),
-                AdditionalLevels = new List<Galaxy>(data.AdditionalLevels.Select(levelData => levelData.CreateGalaxy()))
+                //AdditionalLevels = new List<Galaxy>(data.AdditionalLevels.Select(levelData => levelData.CreateGalaxy()))
 		    };
 
 		    return chapter;

@@ -62,27 +62,24 @@ namespace StarBinder.Controls
 
         public override bool TouchesBegan(IEnumerable<Point> points)
         {
-            var res = base.TouchesBegan(points);
             this.ScaleTo(0.8, 65, Easing.CubicInOut);
-            return res;
+            return true;
         }
 
         public override bool TouchesCancelled(IEnumerable<Point> points)
         {
-            var res = base.TouchesCancelled(points);
             this.ScaleTo(1, 65, Easing.CubicInOut);
-            return res;
+            return true;
         }
 
         public override bool TouchesEnded(IEnumerable<Point> points)
         {
-            var res = base.TouchesEnded(points);
-            this.ScaleTo(1, 65, Easing.CubicInOut);
+            this.ScaleTo(1.2, 65, Easing.CubicInOut);
 
-            if (Command == null) return res;
-            if (Command.CanExecute(Level)) Command.Execute(Level);
+            if (Command != null && Command.CanExecute(Level)) 
+                Command.Execute(Level);
             
-            return res;
+            return true;
         }
     }
 }

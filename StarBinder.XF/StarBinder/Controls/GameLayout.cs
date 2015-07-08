@@ -105,10 +105,10 @@ namespace StarBinder.Controls
             Children.Add(links);
 
             stars = new List<StarControl>();
-
+            //Device.OnPlatform(iOS: () => links.Invalidate());
             foreach (var star in galaxy.Stars)
             {
-                var starCtrl = new StarControl(star, calculator, OnStarPressed);
+                var starCtrl = new StarControl(star, OnStarPressed);
                 stars.Add(starCtrl);
                 SetLayoutBounds(starCtrl, star.GetXfRectangle(xfCalc));
                 Children.Add(starCtrl);
@@ -132,39 +132,39 @@ namespace StarBinder.Controls
         private readonly SizeCalculator calculator;
         private readonly Action<Star> onStarPressed;
 
-        public StarControl(Star star, SizeCalculator calculator, Action<Star> onStarPressed)
+        public StarControl(Star star, Action<Star> onStarPressed)
         {
             this.star = star;
-            this.calculator = calculator;
+            calculator = new SizeCalculator();
             this.onStarPressed = onStarPressed;
         }
 
         public override void Draw(ICanvas canvas, Rect rect)
         {
             base.Draw(canvas, rect);
+            calculator.Resize(rect.Width, rect.Height);
             canvas.DrawStar(star, calculator);
         }
 
         public override bool TouchesBegan(IEnumerable<Point> points)
         {
-            var res = base.TouchesBegan(points);
+            //var res = base.TouchesBegan(points);
             this.ScaleTo(0.8, 65, Easing.CubicInOut);
-            onStarPressed(star);
-            return res;
+            return true;
         }
 
         public override bool TouchesCancelled(IEnumerable<Point> points)
         {
-            var res = base.TouchesCancelled(points);
-            TouchesEnded(points);
-            return res;
+            //var res = base.TouchesCancelled(points);
+            return TouchesEnded(points);
         }
 
         public override bool TouchesEnded(IEnumerable<Point> points)
         {
-            var res = base.TouchesEnded(points);
+            //var res = base.TouchesEnded(points);
             this.ScaleTo(1.0, 65, Easing.CubicInOut);
-            return res;
+            onStarPressed(star);
+            return true;
         }
     }
 

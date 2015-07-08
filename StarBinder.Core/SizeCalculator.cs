@@ -126,6 +126,13 @@ namespace StarBinder.Core
                 )).ToArray();
         }
 
+        public Point<double>[] GetStreachedStarPoints(Star star, bool isBack)
+        {
+            return GetStarPoints(star, isBack).Select(p => new Point<double> (
+                width * (p.X + 1)/2, height * (p.Y + 1)/2
+            )).ToArray();
+        }
+
         public Point<int>[] GetWpfPoints(Star star, bool isBack)
         {
             return GetStarPoints(star, isBack).Select(p => new Point<int>(

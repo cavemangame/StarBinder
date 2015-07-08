@@ -8,24 +8,23 @@ namespace StarBinder.Core.Services
 {
     public class GameService : IGameService
     {
-        private readonly Player player;
-
+        private readonly Lazy<Player> player;
         private readonly Lazy<List<Chapter>> chapters;
 
     
-        public GameService(IResourcesService resources, Player player)
+        public GameService(IResourcesService resources)
         {
             Debug.WriteLine("GameService ctor");
-            this.player = player;
             chapters = new Lazy<List<Chapter>>(() => resources.AllChapters().ToList());
+            player = new Lazy<Player>(() => new Player("test player"));
         }
 
         private Galaxy CurrentLevel {
             get
             {
-                return CurrentChapter.Levels.Count() >= player.CurrentLevelIndex
-                    ? CurrentChapter.Levels[player.CurrentLevelIndex]
-                    : CurrentChapter.AdditionalLevels[player.CurrentLevelIndex - CurrentChapter.Levels.Count() - 1];
+                return CurrentChapter.Levels.Count() >= Player.CurrentLevelIndex
+                    ? CurrentChapter.Levels[Player.CurrentLevelIndex]
+                    : CurrentChapter.AdditionalLevels[Player.CurrentLevelIndex - CurrentChapter.Levels.Count() - 1];
             } 
         }
 
@@ -33,19 +32,19 @@ namespace StarBinder.Core.Services
         {
             get
             {
-                return LastChapter.Levels.Count() >= player.LastChapterIndex
-                    ? LastChapter.Levels[player.LastChapterIndex]
-                    : LastChapter.AdditionalLevels[player.LastChapterIndex - LastChapter.Levels.Count() - 1];
+                return LastChapter.Levels.Count() >= Player.LastChapterIndex
+                    ? LastChapter.Levels[Player.LastChapterIndex]
+                    : LastChapter.AdditionalLevels[Player.LastChapterIndex - LastChapter.Levels.Count() - 1];
             }
         }
-        private Chapter CurrentChapter { get { return Chapters[player.CurrentChapterIndex]; } }
-        private Chapter LastChapter { get { return Chapters[player.LastChapterIndex]; } }
+        private Chapter CurrentChapter { get { return Chapters[Player.CurrentChapterIndex]; } }
+        private Chapter LastChapter { get { return Chapters[Player.LastChapterIndex]; } }
 
 
 
         private List<Chapter> Chapters { get { return chapters.Value; } }
 
-        public Player Player { get { return player; } }
+        private Player Player { get { return player.Value; } }
 
         public Task<Galaxy> GetCurrentLevel()
         {
@@ -91,7 +90,7 @@ namespace StarBinder.Core.Services
 
         public Task SaveState(int steps)
         {
-            return Task.Run(() => player.UpdateSteps(steps));
+            return Task.Run(() => Player.UpdateSteps(steps));
         }
 
         public Task<Galaxy> GoToLevel(int number)
@@ -101,7 +100,7 @@ namespace StarBinder.Core.Services
 
             return Task.Run(() =>
             {
-                player.CurrentLevelIndex = number - 1;
+                Player.CurrentLevelIndex = number - 1;
                 return CurrentLevel;
             });
         }
@@ -110,8 +109,8 @@ namespace StarBinder.Core.Services
 		{
 			return Task.Run(() => 
 			{
-                player.CurrentChapterIndex = Chapters.IndexOf(chapter);
-                player.CurrentLevelIndex = number;
+                Player.CurrentChapterIndex = Chapters.IndexOf(chapter);
+                Player.CurrentLevelIndex = number;
 				return CurrentLevel;
 			});
 		}

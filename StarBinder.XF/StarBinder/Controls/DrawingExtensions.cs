@@ -54,7 +54,7 @@ namespace StarBinder.Controls
         {
             var pts = isAbsolute
                 ? calculator.GetAbsoluteStarPoints(star, isBack).Select(p => new Point(p.X, p.Y)).ToArray()
-                : calculator.GetWinphonePoints(star, isBack).Select(p => new Point(p.X, p.Y)).ToArray();
+                : calculator.GetStreachedStarPoints(star, isBack).Select(p => new Point(p.X, p.Y)).ToArray();
 
             var pathOps = new PathOp[pts.Length];
             pathOps[0] = new MoveTo(pts[0]);
