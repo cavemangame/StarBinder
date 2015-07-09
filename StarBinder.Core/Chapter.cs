@@ -10,7 +10,6 @@ namespace StarBinder.Core
 		public string Name;
 		public string Description;
 	    public string BackPath;
-		public StateData FinalState;
 		public List<GalaxyData> Levels;
         public List<GalaxyData> AdditionalLevels;
 
@@ -25,7 +24,6 @@ namespace StarBinder.Core
 			Number = chapter.Number;
 			Description = chapter.Description;
 		    BackPath = chapter.BackPath;
-			FinalState = new StateData(chapter.FinalState);
 			Levels = new List<GalaxyData>(chapter.Levels.Select(level => new GalaxyData(level)));
             AdditionalLevels = new List<GalaxyData>(chapter.AdditionalLevels.Select(level => new GalaxyData(level)));
 		}
@@ -37,7 +35,6 @@ namespace StarBinder.Core
 		public string Description { get; set; }
 		public int Number { get; set; }
         public string BackPath { get; set; }
-		public State FinalState { get; set; }
 		public List<Galaxy> Levels { get; set; }
         public List<Galaxy> AdditionalLevels { get; set; }
 
@@ -56,7 +53,6 @@ namespace StarBinder.Core
 			{
                 Number = 1,
                 BackPath = "",
-				FinalState = State.CreateInitial(),
 				Levels = new List<Galaxy>(),
                 AdditionalLevels = new List<Galaxy>()
 			};
