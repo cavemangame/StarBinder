@@ -29,5 +29,12 @@ namespace XF.Core.Services
 
         Task<TViewModel> PushModalAsync<TViewModel>(TViewModel viewModel) 
             where TViewModel : class, IViewModel;
+
+
+        Task<TViewModel> SetDetail<TViewModel>(Action<TViewModel> setStateAction = null)
+            where TViewModel : class, IViewModel;
+
+        Task<TViewModel> SetDetail<TViewModel>(TViewModel viewModel)
+            where TViewModel : class, IViewModel;
     }
 }

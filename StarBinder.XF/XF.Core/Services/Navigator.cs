@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using XF.Core.Factories;
@@ -8,19 +9,16 @@ namespace XF.Core.Services
 {
     public class Navigator : INavigator
     {
-        private readonly Lazy<INavigation> navigation;
         private readonly IViewFactory viewFactory;
+        private readonly Func<Page> getPage;
 
-        public Navigator(Lazy<INavigation> navigation, IViewFactory viewFactory)
+        public Navigator(IViewFactory viewFactory, Func<Page> getPage)
         {
-            this.navigation = navigation;
             this.viewFactory = viewFactory;
+            this.getPage = getPage;
         }
 
-        private INavigation Navigation
-        {
-            get { return navigation.Value; }
-        }
+        private INavigation Navigation { get { return getPage().Navigation; } }
 
         public async Task<IViewModel> PopAsync()
         {
@@ -46,11 +44,12 @@ namespace XF.Core.Services
         public async Task<TViewModel> ChangeRootAsync<TViewModel>(Action<TViewModel> setStateAction = null)
             where TViewModel : class, IViewModel
         {
+
             TViewModel viewModel;
             var view = viewFactory.Resolve<TViewModel>(out viewModel, setStateAction);
-            Navigation.InsertPageBefore(view, Navigation.NavigationStack[0]);
-            await Navigation.PopToRootAsync();
+            Application.Current.MainPage = view;
             viewModel.NavigatedTo();
+
             return viewModel;
         }
 
@@ -58,48 +57,129 @@ namespace XF.Core.Services
             where TViewModel : class, IViewModel
         {
             var view = viewFactory.Resolve(viewModel);
-            Navigation.InsertPageBefore(view, Navigation.NavigationStack[0]);
-            await Navigation.PopToRootAsync();
+            Application.Current.MainPage = view;
             viewModel.NavigatedTo();
+
             return viewModel;
         }
 
-
-        public async Task<TViewModel> PushAsync<TViewModel>(Action<TViewModel> setStateAction = null) 
+        public async Task<TViewModel> PushAsync<TViewModel>(Action<TViewModel> setStateAction = null)
             where TViewModel : class, IViewModel
         {
             TViewModel viewModel;
             var view = viewFactory.Resolve<TViewModel>(out viewModel, setStateAction);
+            
+            var canNavigate = viewModel as ICanNavigatableViewModel;
+            if (canNavigate != null && !await canNavigate.CheckCanNavigate())
+            {
+                return viewModel;
+            }
+
             await Navigation.PushAsync(view);
             viewModel.NavigatedTo();
+
+            var md = Application.Current.MainPage as MasterDetailPage;
+            if (md != null) md.IsPresented = false;
+
             return viewModel;
         }
 
-        public async Task<TViewModel> PushAsync<TViewModel>(TViewModel viewModel) 
+        public async Task<TViewModel> PushAsync<TViewModel>(TViewModel viewModel)
             where TViewModel : class, IViewModel
         {
+            var canNavigate = viewModel as ICanNavigatableViewModel;
+            if (canNavigate != null && !await canNavigate.CheckCanNavigate())
+            {
+                return viewModel;
+            }
+            
             var view = viewFactory.Resolve(viewModel);
             await Navigation.PushAsync(view);
             viewModel.NavigatedTo();
+
+            var md = Application.Current.MainPage as MasterDetailPage;
+            if (md != null) md.IsPresented = false;
+
             return viewModel;
         }
 
-        public async Task<TViewModel> PushModalAsync<TViewModel>(Action<TViewModel> setStateAction = null) 
+        public async Task<TViewModel> PushModalAsync<TViewModel>(Action<TViewModel> setStateAction = null)
             where TViewModel : class, IViewModel
         {
             TViewModel viewModel;
             var view = viewFactory.Resolve<TViewModel>(out viewModel, setStateAction);
+
+            var canNavigate = viewModel as ICanNavigatableViewModel;
+            if (canNavigate != null && !await canNavigate.CheckCanNavigate())
+            {
+                return viewModel;
+            }
+
             await Navigation.PushModalAsync(view);
             viewModel.NavigatedTo();
             return viewModel;
         }
 
-        public async Task<TViewModel> PushModalAsync<TViewModel>(TViewModel viewModel) 
+        public async Task<TViewModel> PushModalAsync<TViewModel>(TViewModel viewModel)
             where TViewModel : class, IViewModel
         {
+            var canNavigate = viewModel as ICanNavigatableViewModel;
+            if (canNavigate != null && !await canNavigate.CheckCanNavigate())
+            {
+                return viewModel;
+            }
+            
             var view = viewFactory.Resolve(viewModel);
             await Navigation.PushModalAsync(view);
             viewModel.NavigatedTo();
+            return viewModel;
+        }
+
+        public async Task<TViewModel> SetDetail<TViewModel>(TViewModel viewModel)
+            where TViewModel : class, IViewModel
+        {
+            var md = Application.Current.MainPage as MasterDetailPage;
+            if (md == null)
+            {
+                throw new InvalidOperationException("App.MainPage is not master detail");
+            }
+
+            var canNavigate = viewModel as ICanNavigatableViewModel;
+            if (canNavigate != null && !await canNavigate.CheckCanNavigate())
+            {
+                return viewModel;
+            }
+
+            var view = viewFactory.Resolve(viewModel);
+            viewModel.NavigatedTo();
+            md.Detail = new NavigationPage(view);
+            md.IsPresented = false;
+
+            return viewModel;
+        }
+
+        public async Task<TViewModel> SetDetail<TViewModel>(Action<TViewModel> setStateAction = null)
+            where TViewModel : class, IViewModel
+        {
+            var md = Application.Current.MainPage as MasterDetailPage;
+            if (md == null)
+            {
+                throw new InvalidOperationException("App.MainPage is not master detail");
+            }
+
+            TViewModel viewModel;
+            var view = viewFactory.Resolve(out viewModel, setStateAction);
+
+            var canNavigate = viewModel as ICanNavigatableViewModel;
+            if (canNavigate != null && !await canNavigate.CheckCanNavigate())
+            {
+                return viewModel;
+            }
+
+            viewModel.NavigatedTo();
+            md.Detail = new NavigationPage(view);
+            md.IsPresented = false;
+
             return viewModel;
         }
     }

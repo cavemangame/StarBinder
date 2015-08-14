@@ -25,11 +25,9 @@ namespace XF.Core.Bootstrapping
         protected virtual void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterType<ViewFactory>().As<IViewFactory>().SingleInstance();
-            builder.RegisterType<Navigator>().As<INavigator>().SingleInstance();
             builder.RegisterType<DialogService>().As<IDialogService>().SingleInstance();
-
-            // navigation registration
-            builder.Register<INavigation>(context => Application.Current.MainPage.Navigation).SingleInstance();
+            
+            RegisterNavigation(builder);
 
             // default page resolver
             builder.RegisterInstance<Func<Page>>(() =>
@@ -45,6 +43,11 @@ namespace XF.Core.Bootstrapping
                     return navigationPage != null ? navigationPage.CurrentPage : page;
                 }
             );
+        }
+
+        protected virtual void RegisterNavigation(ContainerBuilder builder)
+        {
+            builder.RegisterType<Navigator>().As<INavigator>().SingleInstance();
         }
 
         protected abstract void RegisterViews(IViewFactory viewFactory);
