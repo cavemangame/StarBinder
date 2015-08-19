@@ -151,7 +151,7 @@ namespace StarBinder.LevelEditor.ViewModels
 
         private void CopyBackIfNeeded(string dir)
         {
-            if (!String.IsNullOrEmpty(galaxy.BackPath.Trim()))
+            if (galaxy.BackPath != null && !String.IsNullOrEmpty(galaxy.BackPath.Trim()))
             {
                 File.Copy(galaxy.BackPath, Path.Combine(dir, Path.GetFileName(galaxy.BackPath)), true);
             }
